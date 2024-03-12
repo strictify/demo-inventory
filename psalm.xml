@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<psalm
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    phpVersion="8.3"
+    errorLevel="1"
+    memoizeMethodCallResults="true"
+    resolveFromConfigFile="true"
+    findUnusedBaselineEntry="false"
+    findUnusedCode="false"
+    findUnusedPsalmSuppress="true"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+    <forbiddenFunctions>
+        <function name="dd"/>
+        <function name="dump"/>
+        <function name="echo"/>
+    </forbiddenFunctions>
+
+    <projectFiles>
+        <directory name="src"/>
+        <!--        <file name="functions.php"/>-->
+        <!--        <directory name="tests"/>-->
+        <ignoreFiles>
+            <directory name="vendor"/>
+            <file name="src/Kernel.php"/>
+        </ignoreFiles>
+    </projectFiles>
+
+    <stubs>
+        <file name="stubs/Symfony/Component/DependencyInjection/ServiceLocator.stubphp"/>
+        <file name="stubs/Symfony/Contracts/Cache/CacheInterface.stubphp"/>
+        <file name="stubs/Symfony/Contracts/Cache/TagAwareCacheInterface.stubphp"/>
+        <file name="stubs/Symfony/Contracts/Service/ServiceProviderInterface.stubphp"/>
+        <file name="stubs/Symfony/Form/Extension/Core/Type/TextType.stubphp"/>
+        <file name="stubs/Symfony/FrameworkBundle/Controller/AbstractController.stubphp"/>
+    </stubs>
+
+    <issueHandlers>
+        <!--        <UndefinedAttributeClass>-->
+        <!--            <errorLevel type="suppress">-->
+        <!--                <referencedClass name="JetBrains\PhpStorm\ExpectedValues"/>-->
+        <!--            </errorLevel>-->
+        <!--        </UndefinedAttributeClass>-->
+
+        <!-- START: rules for framework-specific suppression of unused code -->
+        <TooManyArguments>
+            <!--            <errorLevel type="suppress">-->
+            <!--                &lt;!&ndash; This is a bug in the library itself &ndash;&gt;-->
+            <!--                <referencedFunction name="LongitudeOne\Spatial\PHP\Types\Geometry\Point::__construct"/>-->
+            <!--            </errorLevel>-->
+        </TooManyArguments>
+
+        <RiskyTruthyFalsyComparison errorLevel="suppress"/>
+        <!-- > Issue with vendor/doctrine/doctrine-bundle/Repository/ServiceEntityRepository.php -->
+        <!--        <InternalMethod>-->
+        <!--            <errorLevel type="suppress">-->
+        <!--                <directory name="src/Repository"/>-->
+        <!--                <referencedMethod name="*::__construct"/>-->
+        <!--            </errorLevel>-->
+        <!--        </InternalMethod>-->
+
+        <!--        <UnusedPsalmSuppress>-->
+        <!--            <errorLevel type="suppress">-->
+        <!--                <file name="src/Repository/AbstractRepository.php"/>-->
+        <!--            </errorLevel>-->
+        <!--        </UnusedPsalmSuppress>-->
+        <!-- < Issue with vendor/doctrine/doctrine-bundle/Repository/ServiceEntityRepository.php -->
+
+        <!-- END: rules for framework-specific suppression of unused code -->
+    </issueHandlers>
+
+    <plugins>
+        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">
+            <containerXml>var/cache/dev/App_KernelDevDebugContainer.xml</containerXml>
+            <containerXml>var/cache/dev/App_KernelTestDebugContainer.xml</containerXml>
+        </pluginClass>
+    </plugins>
+</psalm>

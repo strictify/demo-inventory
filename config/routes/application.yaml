@@ -1,0 +1,6 @@
+entry:
+    resource: ../../src/Controller/routes.yaml
+
+#kernel:
+#    resource: ../../src/Kernel.php
+#    type: annotation

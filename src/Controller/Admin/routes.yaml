@@ -1,0 +1,13 @@
+base:
+    resource: .
+    type: attribute
+    prefix: /admin
+
+children:
+    resource: './*/routes.yaml'
+    prefix: /admin
+
+# Use below syntax for automapping entities to controller
+#    defaults:
+#        map:
+#            App\Entity\TestLocation\TestLocation: 'location_id'

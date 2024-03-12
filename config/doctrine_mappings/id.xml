@@ -1,0 +1,4 @@
+<id name="id" column="id" type="uuid">
+    <generator strategy="CUSTOM"/>
+    <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+</id>
