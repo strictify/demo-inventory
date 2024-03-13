@@ -1,11 +1,11 @@
 base:
     resource: .
     type: attribute
-    prefix: /users
+    prefix: /products
 
 children:
     resource: './*/routes.yaml'
-    prefix: /users
+    prefix: /products
 
 # Use below syntax for automapping entities to controller
 #    defaults:

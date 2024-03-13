@@ -156,6 +156,15 @@
             "config/packages/monolog.yaml"
         ]
     },
+    "symfony/panther": {
+        "version": "2.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "292a3236e81f55b545b09b9954ab097248972ab3"
+        }
+    },
     "symfony/routing": {
         "version": "7.0",
         "recipe": {
@@ -235,6 +244,18 @@
         "files": [
             "config/packages/web_profiler.yaml",
             "config/routes/web_profiler.yaml"
+        ]
+    },
+    "tbbc/money-bundle": {
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "4.0",
+            "ref": "e97ae40ca09c6fa35e69accec8833d1e10445a06"
+        },
+        "files": [
+            "config/packages/tbbc_money.yaml"
         ]
     },
     "twig/extra-bundle": {

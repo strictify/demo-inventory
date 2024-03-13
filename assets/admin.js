@@ -16,18 +16,22 @@ import './styles/admin.css';
 
 import './vendor/bootstrap/js/bootstrap.bundle.js';
 
-document.addEventListener('turbo:submit-end', (event) => {
-  let response = event?.detail?.fetchResponse?.response;
-  let status = response?.status ?? null;
-  let url = response?.headers?.get('Location') ?? null;
-  let frame = response?.headers?.get('Frame') ?? null;
-
-  if (status === 204 && url) {
-    Turbo.visit(url, {action: 'advance', frame: frame})
-    event.preventDefault();
-
-    return false;
-  }
-});
+// document.addEventListener('turbo:submit-end', (event) => {
+//   console.log(event);
+//   event.preventDefault();
+//
+//   return;
+//   let response = event?.detail?.fetchResponse?.response;
+//   let status = response?.status ?? null;
+//   let url = response?.headers?.get('Location') ?? null;
+//   let frame = response?.headers?.get('Frame') ?? null;
+//
+//   if (status === 204 && url) {
+//     Turbo.visit(url, {action: 'advance', frame: frame})
+//     event.preventDefault();
+//
+//     return false;
+//   }
+// });
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');

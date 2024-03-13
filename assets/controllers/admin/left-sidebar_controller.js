@@ -5,11 +5,12 @@ export default class extends Controller {
   }
 
   select(el) {
-    document.querySelector('#sidebar-nav a.active')?.classList.remove('active');
+    let previousClassList = document.querySelector('#sidebar-nav .active')?.classList;
+    previousClassList?.remove('active');
+    previousClassList?.add('collapsed');
     let parentElement = el.srcElement.parentElement;
 
+    parentElement?.classList.remove('collapsed');
     parentElement?.classList.add('active');
-
-    console.log(parentElement);
   }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller\Admin\Users;
@@ -7,8 +8,6 @@ use App\Entity\User\User;
 use App\Form\User\UserType;
 use App\Attribute\TurboFrame;
 use App\Repository\User\UserRepository;
-use App\Response\TurboRedirectResponse;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,7 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class UsersController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $em,
         private UserRepository $userRepository,
     )
     {
@@ -38,14 +36,11 @@ class UsersController extends AbstractController
         $form = $this->createForm(UserType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid() && $data = $form->getData()) {
-            $this->em->persist($data);
-            $this->em->flush();
+            $this->userRepository->persistAndFlush($data);
 
-            return new TurboRedirectResponse(
-                $this->generateUrl('admin_users_list'),
-                $frame,
-            );
+            return $this->redirectToRoute('admin_users_list');
         }
+
         return $this->render('admin/users/form.html.twig', [
             '_block' => $frame,
             'form' => $form,
@@ -58,12 +53,9 @@ class UsersController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->flush();
+            $this->userRepository->flush();
 
-            return new TurboRedirectResponse(
-                $this->generateUrl('admin_users_list'),
-                $frame,
-            );
+            return $this->redirectToRoute('admin_users_list');
         }
 
         return $this->render('admin/users/form.html.twig', [

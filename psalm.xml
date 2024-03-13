@@ -52,22 +52,6 @@
         </TooManyArguments>
 
         <RiskyTruthyFalsyComparison errorLevel="suppress"/>
-        <!-- > Issue with vendor/doctrine/doctrine-bundle/Repository/ServiceEntityRepository.php -->
-        <!--        <InternalMethod>-->
-        <!--            <errorLevel type="suppress">-->
-        <!--                <directory name="src/Repository"/>-->
-        <!--                <referencedMethod name="*::__construct"/>-->
-        <!--            </errorLevel>-->
-        <!--        </InternalMethod>-->
-
-        <!--        <UnusedPsalmSuppress>-->
-        <!--            <errorLevel type="suppress">-->
-        <!--                <file name="src/Repository/AbstractRepository.php"/>-->
-        <!--            </errorLevel>-->
-        <!--        </UnusedPsalmSuppress>-->
-        <!-- < Issue with vendor/doctrine/doctrine-bundle/Repository/ServiceEntityRepository.php -->
-
-        <!-- END: rules for framework-specific suppression of unused code -->
     </issueHandlers>
 
     <plugins>

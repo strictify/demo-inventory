@@ -129,7 +129,14 @@
                     <i class="bi bi-person"></i>
                     <span>Users</span>
                 </a>
-            </li><!-- End Profile Page Nav -->
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ path('admin_products_list') }}" data-turbo-frame="main" data-turbo-action="advance" {{ stimulus_action('admin/left-sidebar', 'select') }}>
+                    <i class="bi bi-person"></i>
+                    <span>Products</span>
+                </a>
+            </li>
         </ul>
     </turbo-frame><!-- End Sidebar-->
 {%- endblock %}

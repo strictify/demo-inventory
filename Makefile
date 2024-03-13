@@ -21,6 +21,9 @@ help: ## Outputs this help screen
 build: ## Builds the Docker images
 	@$(DOCKER_COMP) build --pull --no-cache
 
+bq: ## Builds quickly
+	@$(DOCKER_COMP) build --pull
+
 perm: ## Set permissions
 	@$(DOCKER_COMP) run --rm php chown -R $(id -u):$(id -g) .
 
