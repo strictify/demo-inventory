@@ -8,7 +8,7 @@ export default class extends Controller {
     let previousClassList = document.querySelector('#sidebar-nav .active')?.classList;
     previousClassList?.remove('active');
     previousClassList?.add('collapsed');
-    let parentElement = el.srcElement.parentElement;
+    let parentElement = el.srcElement.closest('.nav-link');
 
     parentElement?.classList.remove('collapsed');
     parentElement?.classList.add('active');
