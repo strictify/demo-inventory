@@ -29,7 +29,7 @@
 
     <stubs>
         <file name="stubs/Symfony/Component/DependencyInjection/ServiceLocator.stubphp"/>
-        <file name="stubs/Symfony/Contracts/Cache/CacheInterface.stubphp"/>
+        <!--        <file name="stubs/Symfony/Contracts/Cache/CacheInterface.stubphp"/>-->
         <file name="stubs/Symfony/Contracts/Cache/TagAwareCacheInterface.stubphp"/>
         <file name="stubs/Symfony/Contracts/Service/ServiceProviderInterface.stubphp"/>
         <file name="stubs/Symfony/Form/Extension/Core/Type/TextType.stubphp"/>

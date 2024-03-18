@@ -16,6 +16,7 @@ WORKDIR /app
 # persistent / runtime deps
 # hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends \
+	wget \
 	acl \
 	file \
 	gettext \
@@ -44,12 +45,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends chromium chromi
 #RUN apk add --no-cache chromium chromium-chromedriver
 
 # Firefox and geckodriver
-#ARG GECKODRIVER_VERSION=0.29.0
+ARG GECKODRIVER_VERSION=0.29.0
 #RUN apk add --no-cache firefox
-#RUN apt-get update && apt-get install -y --no-install-recommends firefox
-#RUN wget -q https://github.com/mozilla/geckodriver/releases/download/v$GECKODRIVER_VERSION/geckodriver-v$GECKODRIVER_VERSION-linux64.tar.gz; \
-#	tar -zxf geckodriver-v$GECKODRIVER_VERSION-linux64.tar.gz -C /usr/bin; \
-#	rm geckodriver-v$GECKODRIVER_VERSION-linux64.tar.gz
+#RUN apt-get update && apt-get install -y  firefox-geckodriver
+RUN wget -q https://github.com/mozilla/geckodriver/releases/download/v$GECKODRIVER_VERSION/geckodriver-v$GECKODRIVER_VERSION-linux64.tar.gz; \
+	tar -zxf geckodriver-v$GECKODRIVER_VERSION-linux64.tar.gz -C /usr/bin;
 ###< symfony/panther ###
 ###> doctrine/doctrine-bundle ###
 RUN install-php-extensions pdo_pgsql

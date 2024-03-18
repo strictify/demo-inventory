@@ -19,7 +19,7 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $user = new User('admin@example.com', '');
+        $user = new User('admin@example.com', '', roles: ['ROLE_ADMIN']);
         $hashedPassword = $this->passwordHasher->hashPassword($user, '123123123');
         $user->setPassword($hashedPassword);
         $this->userRepository->persist($user);

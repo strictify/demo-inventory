@@ -12,8 +12,8 @@
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
-        
-        <field name="email"/>
+
+        <field name="email" unique="true"/>
         <field name="password"/>
         <field name="roles" type="json"/>
 

@@ -19,7 +19,7 @@ help: ## Outputs this help screen
 
 ## —— Docker 🐳 ————————————————————————————————————————————————————————————————
 build: ## Builds the Docker images
-	@$(DOCKER_COMP) build --pull --no-cache
+	@$(DOCKER_COMP) build --pull
 
 bq: ## Builds quickly
 	@$(DOCKER_COMP) build --pull

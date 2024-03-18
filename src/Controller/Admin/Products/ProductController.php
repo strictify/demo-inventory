@@ -7,6 +7,7 @@ namespace App\Controller\Admin\Products;
 use App\Attribute\TurboFrame;
 use App\Entity\Product\Product;
 use App\Form\Product\ProductType;
+use App\Response\TurboRedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\Product\ProductRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,6 +39,7 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid() && $data = $form->getData()) {
             $this->productRepository->persistAndFlush($data);
 
+            return new TurboRedirectResponse($this->generateUrl('admin_products_list'), $frame);
             return $this->redirectToRoute('admin_products_list');
         }
 
@@ -55,7 +57,10 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->productRepository->flush();
 
-            return $this->redirectToRoute('admin_products_list');
+//            return new TurboRedirectResponse($this->generateUrl('admin_products_list'), $frame);
+
+            return $this->redirectToRoute('admin_products_list', status: 303);
+//            return new TurboRedirectResponse($this->generateUrl('admin_products_list'), $frame);
         }
 
         return $this->render('admin/products/form.html.twig', [
