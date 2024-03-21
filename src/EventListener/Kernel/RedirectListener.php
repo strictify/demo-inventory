@@ -23,11 +23,11 @@ class RedirectListener
             return;
         }
         $location = $response->headers->get('Location');
+        if (null === $location) {
+            return;
+        }
         if (str_contains($location, '/login')) {
             $event->setResponse(new TurboRedirectResponse($location));
-
-            $response->setStatusCode(303);
-            dump(123);
         }
     }
 }

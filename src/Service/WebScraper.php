@@ -16,7 +16,6 @@ use App\Service\WebScraper\WebScraperInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
-use function dump;
 use function sprintf;
 use function base64_encode;
 
@@ -40,9 +39,9 @@ class WebScraper
             $url = $message->url;
             $data = $this->scrape($url);
 
-            dump($data['name'], $data['price']);
+//            dump($data['name'], $data['price']);
         } catch (Throwable $e) {
-            dump($e->getMessage());
+//            dump($e->getMessage());
             throw new UnrecoverableMessageHandlingException(previous: $e);
         }
     }
@@ -75,7 +74,6 @@ class WebScraper
     private function doScrape(string $url): array
     {
         $client = Client::createChromeClient();
-        dd($client);
         $scraper = $this->findScraperForUrl($url);
         $crawler = $client->request('GET', $url);
         try {

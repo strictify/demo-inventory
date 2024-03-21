@@ -3,10 +3,9 @@
     xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
     xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="App\Entity\Product\Product"
-            table="product"
-            repository-class="App\Repository\Product\ProductRepository"
-    >
+    <entity name="App\Entity\Warehouse\Warehouse"
+            table="warehouse"
+            repository-class="App\Repository\Warehouse\WarehouseRepository">
 
         <id name="id" column="id" type="uuid">
             <generator strategy="CUSTOM"/>
@@ -16,8 +15,6 @@
         <many-to-one field="company"/>
 
         <field name="name"/>
-        <field name="price" nullable="true" type="money"/>
-
     </entity>
 
 </doctrine-mapping>

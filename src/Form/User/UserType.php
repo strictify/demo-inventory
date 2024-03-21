@@ -47,7 +47,7 @@ class UserType extends AbstractType
             'required' => false,
             'get_value' => fn() => null,
             'update_value' => function (?string $newPassword, User $user) {
-                if (!$newPassword) {
+                if (null === $newPassword) {
                     return;
                 }
                 $hashedPassword = $this->passwordHasher->hashPassword($user, $newPassword);
@@ -61,7 +61,7 @@ class UserType extends AbstractType
 
     private function factory(string $email, ?string $password): User
     {
-        if (!$password) {
+        if (null === $password) {
             throw new TransformationFailedException(invalidMessage: 'You must set password for new user.');
         }
         $user = new User(email: $email, password: '');

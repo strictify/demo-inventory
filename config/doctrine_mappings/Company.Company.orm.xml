@@ -3,21 +3,16 @@
     xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
     xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="App\Entity\Product\Product"
-            table="product"
-            repository-class="App\Repository\Product\ProductRepository"
-    >
+    <entity name="App\Entity\Company\Company"
+            table="company"
+            repository-class="App\Repository\Company\CompanyRepository">
 
         <id name="id" column="id" type="uuid">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
-        <many-to-one field="company"/>
-
         <field name="name"/>
-        <field name="price" nullable="true" type="money"/>
-
     </entity>
 
 </doctrine-mapping>

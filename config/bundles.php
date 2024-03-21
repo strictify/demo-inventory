@@ -17,4 +17,5 @@ return [
     Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
     Strictify\FormMapper\StrictifyFormMapperBundle::class => ['all' => true],
     Tbbc\MoneyBundle\TbbcMoneyBundle::class => ['all' => true],
+    Symfony\UX\Autocomplete\AutocompleteBundle::class => ['all' => true],
 ];

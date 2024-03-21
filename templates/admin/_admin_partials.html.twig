@@ -137,6 +137,13 @@
                     <span>Products</span>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ path('admin_warehouses_list') }}" data-turbo-frame="main" data-turbo-action="advance" {{ stimulus_action('admin/left-sidebar', 'select') }}>
+                    <i class="bi bi-person"></i>
+                    <span>Warehouses</span>
+                </a>
+            </li>
         </ul>
     </turbo-frame><!-- End Sidebar-->
 {%- endblock %}

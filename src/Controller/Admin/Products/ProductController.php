@@ -40,7 +40,6 @@ class ProductController extends AbstractController
             $this->productRepository->persistAndFlush($data);
 
             return new TurboRedirectResponse($this->generateUrl('admin_products_list'), $frame);
-            return $this->redirectToRoute('admin_products_list');
         }
 
         return $this->render('admin/products/form.html.twig', [
@@ -57,10 +56,7 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->productRepository->flush();
 
-//            return new TurboRedirectResponse($this->generateUrl('admin_products_list'), $frame);
-
-            return $this->redirectToRoute('admin_products_list', status: 303);
-//            return new TurboRedirectResponse($this->generateUrl('admin_products_list'), $frame);
+            return new TurboRedirectResponse($this->generateUrl('admin_products_list'), $frame);
         }
 
         return $this->render('admin/products/form.html.twig', [
