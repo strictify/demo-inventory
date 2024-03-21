@@ -1,0 +1,9 @@
+{% block tbbc_money_widget %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            {{ form_widget(form.tbbc_currency.tbbc_name) }}
+        </div>
+        {{ form_widget(form.tbbc_amount, {label: false, type: 'number'}) }}
+    </div>
+    {{ form_rest(form) }}
+{% endblock %}

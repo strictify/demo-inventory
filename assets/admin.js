@@ -1,4 +1,6 @@
 import './bootstrap.js';
+import '@hotwired/turbo';
+
 /*
  * Welcome to your app's main JavaScript file!
  *
@@ -16,18 +18,30 @@ import './styles/admin.css';
 
 import './vendor/bootstrap/js/bootstrap.bundle.js';
 
-document.addEventListener('turbo:submit-end', (event) => {
+document.addEventListener('turbo:before-fetch-response', (event) => {
   let response = event?.detail?.fetchResponse?.response;
   let status = response?.status ?? null;
-  let url = response?.headers?.get('Location') ?? null;
-  let frame = response?.headers?.get('Frame') ?? null;
-
-  if (status === 204 && url) {
-    Turbo.visit(url, {action: 'advance', frame: frame})
+  let headers = response.headers;
+  let location = headers.get('redirect-url');
+  let frame = headers.get('frame');
+  console.log(frame, status);
+  if (status !== 204) {
+    return;
+  }
+  if (!location) {
+    return;
+  }
+  if (!frame) {
+    window.location.replace(location);
     event.preventDefault();
 
     return false;
   }
+
+  Turbo.visit(location, {action: 'advance', frame: frame});
+  event.preventDefault();
+
+  return false;
 });
 
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+// console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');

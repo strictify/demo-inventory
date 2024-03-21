@@ -19,8 +19,6 @@
 
     <projectFiles>
         <directory name="src"/>
-        <!--        <file name="functions.php"/>-->
-        <!--        <directory name="tests"/>-->
         <ignoreFiles>
             <directory name="vendor"/>
             <file name="src/Kernel.php"/>
@@ -29,7 +27,6 @@
 
     <stubs>
         <file name="stubs/Symfony/Component/DependencyInjection/ServiceLocator.stubphp"/>
-        <file name="stubs/Symfony/Contracts/Cache/CacheInterface.stubphp"/>
         <file name="stubs/Symfony/Contracts/Cache/TagAwareCacheInterface.stubphp"/>
         <file name="stubs/Symfony/Contracts/Service/ServiceProviderInterface.stubphp"/>
         <file name="stubs/Symfony/Form/Extension/Core/Type/TextType.stubphp"/>
@@ -37,37 +34,6 @@
     </stubs>
 
     <issueHandlers>
-        <!--        <UndefinedAttributeClass>-->
-        <!--            <errorLevel type="suppress">-->
-        <!--                <referencedClass name="JetBrains\PhpStorm\ExpectedValues"/>-->
-        <!--            </errorLevel>-->
-        <!--        </UndefinedAttributeClass>-->
-
-        <!-- START: rules for framework-specific suppression of unused code -->
-        <TooManyArguments>
-            <!--            <errorLevel type="suppress">-->
-            <!--                &lt;!&ndash; This is a bug in the library itself &ndash;&gt;-->
-            <!--                <referencedFunction name="LongitudeOne\Spatial\PHP\Types\Geometry\Point::__construct"/>-->
-            <!--            </errorLevel>-->
-        </TooManyArguments>
-
-        <RiskyTruthyFalsyComparison errorLevel="suppress"/>
-        <!-- > Issue with vendor/doctrine/doctrine-bundle/Repository/ServiceEntityRepository.php -->
-        <!--        <InternalMethod>-->
-        <!--            <errorLevel type="suppress">-->
-        <!--                <directory name="src/Repository"/>-->
-        <!--                <referencedMethod name="*::__construct"/>-->
-        <!--            </errorLevel>-->
-        <!--        </InternalMethod>-->
-
-        <!--        <UnusedPsalmSuppress>-->
-        <!--            <errorLevel type="suppress">-->
-        <!--                <file name="src/Repository/AbstractRepository.php"/>-->
-        <!--            </errorLevel>-->
-        <!--        </UnusedPsalmSuppress>-->
-        <!-- < Issue with vendor/doctrine/doctrine-bundle/Repository/ServiceEntityRepository.php -->
-
-        <!-- END: rules for framework-specific suppression of unused code -->
     </issueHandlers>
 
     <plugins>

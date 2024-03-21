@@ -20,14 +20,13 @@ class DebugProfiler
 
     public function __invoke(ResponseEvent $event): void
     {
-        return;
         if (!$this->kernel->isDebug()) {
             return;
         }
         $request = $event->getRequest();
 
         if (!$request->isXmlHttpRequest() && !$request->headers->has('Turbo-Frame')) {
-            return;
+//            return;
         }
 
         $response = $event->getResponse();

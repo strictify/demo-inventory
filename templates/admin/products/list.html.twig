@@ -1,0 +1,54 @@
+{% extends '_admin_base.html.twig' %}
+
+{% block main -%}
+    <turbo-frame id="main" class="main" data-turbo-frame="main" data-turbo-action="advance" data-turbo-prefetch="false">
+        <div class="pagetitle">
+            <h1>Products <a class="bi bi-plus-circle" href="{{ path('admin_products_create') }}"></a></h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{ path('admin_entry') }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ path('admin_products_list') }}">Products</a>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+
+        {% block inner %}
+            <div class="row" data-turbo-action="advance">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Price</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for product in products %}
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>
+                                            <a href="{{ path('admin_products_update', {'id': product.id}) }}">
+                                                {{ product.name }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            {{ product.price|money_localized_format }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+    </turbo-frame>
+{%- endblock main %}

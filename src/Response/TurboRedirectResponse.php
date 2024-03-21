@@ -10,8 +10,13 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class TurboRedirectResponse extends Response
 {
+
     public function __construct(string $url, ?string $frame = null)
     {
-        parent::__construct(status: 204, headers: ['location' => $url, 'frame' => $frame]);
+        parent::__construct($url, status: 204, headers: [
+            'frame' => $frame,
+            'redirect-url' => $url,
+        ]);
+//        parent::__construct(status: 392, headers: ['location' => $url, 'frame' => $frame]);
     }
 }

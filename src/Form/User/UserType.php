@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Form\User;
 
 use App\Entity\User\User;
-use App\Repository\User\UserRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Email;
@@ -14,6 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * @extends AbstractType<User>
@@ -21,7 +21,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 class UserType extends AbstractType
 {
     public function __construct(
-        private UserRepository $userRepository,
+        private UserPasswordHasherInterface $passwordHasher,
     )
     {
     }
@@ -47,10 +47,11 @@ class UserType extends AbstractType
             'required' => false,
             'get_value' => fn() => null,
             'update_value' => function (?string $newPassword, User $user) {
-                if (!$newPassword) {
+                if (null === $newPassword) {
                     return;
                 }
-                $this->userRepository->upgradePassword($user, $newPassword);
+                $hashedPassword = $this->passwordHasher->hashPassword($user, $newPassword);
+                $user->setPassword($hashedPassword);
             },
             'constraints' => [
                 new Length(min: 5),
@@ -60,10 +61,13 @@ class UserType extends AbstractType
 
     private function factory(string $email, ?string $password): User
     {
-        if (!$password) {
+        if (null === $password) {
             throw new TransformationFailedException(invalidMessage: 'You must set password for new user.');
         }
+        $user = new User(email: $email, password: '');
+        $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
+        $user->setPassword($hashedPassword);
 
-        return $this->userRepository->create($email, $password);
+        return $user;
     }
 }

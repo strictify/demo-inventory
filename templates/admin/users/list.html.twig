@@ -2,13 +2,16 @@
 
 {% block main -%}
     <turbo-frame id="main" class="main" data-turbo-frame="main" data-turbo-action="advance" data-turbo-prefetch="false">
-        <a href="{{ path('admin_users_create') }}">Create</a>
         <div class="pagetitle">
-            <h1>Dashboard</h1>
+            <h1>Users <a class="bi bi-plus-circle" href="{{ path('admin_users_create') }}"></a></h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ path('admin_entry') }}">Home</a></li>
-                    <li class="breadcrumb-item active">Users</li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ path('admin_entry') }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ path('admin_users_list') }}">Users</a>
+                    </li>
                 </ol>
             </nav>
         </div>
@@ -38,7 +41,6 @@
                                 {% endfor %}
                                 </tbody>
                             </table>
-                            <!-- End Default Table Example -->
                         </div>
                     </div>
                 </div>

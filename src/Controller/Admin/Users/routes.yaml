@@ -5,7 +5,7 @@ base:
 
 children:
     resource: './*/routes.yaml'
-    prefix: /
+    prefix: /users
 
 # Use below syntax for automapping entities to controller
 #    defaults:
