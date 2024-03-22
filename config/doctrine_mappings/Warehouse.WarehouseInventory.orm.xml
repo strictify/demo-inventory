@@ -13,6 +13,10 @@
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
+        <unique-constraints>
+            <unique-constraint columns="warehouse_id,product_id"/>
+        </unique-constraints>
+
         <many-to-one field="warehouse"/>
         <many-to-one field="product"/>
         <field name="quantity"/>

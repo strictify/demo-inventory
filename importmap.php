@@ -43,7 +43,7 @@ return [
         'version' => '2.11.8',
     ],
     'quill' => [
-        'version' => '1.3.7',
+        'version' => '2.0.0-rc.3',
     ],
     'quill/dist/quill.snow.css' => [
         'version' => '1.3.7',
@@ -56,5 +56,26 @@ return [
     'bootstrap-icons/font/bootstrap-icons.min.css' => [
         'version' => '1.11.3',
         'type' => 'css',
+    ],
+    'lodash-es' => [
+        'version' => '4.17.21',
+    ],
+    'parchment' => [
+        'version' => '3.0.0-beta.0',
+    ],
+    'quill-delta' => [
+        'version' => '5.1.0',
+    ],
+    'eventemitter3' => [
+        'version' => '5.0.1',
+    ],
+    'fast-diff' => [
+        'version' => '1.3.0',
+    ],
+    'lodash.clonedeep' => [
+        'version' => '4.5.0',
+    ],
+    'lodash.isequal' => [
+        'version' => '4.5.0',
     ],
 ];

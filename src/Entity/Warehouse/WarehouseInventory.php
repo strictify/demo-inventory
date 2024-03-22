@@ -6,6 +6,7 @@ namespace App\Entity\Warehouse;
 
 use App\Entity\IdTrait;
 use App\Entity\Product\Product;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class WarehouseInventory
 {
@@ -14,6 +15,7 @@ class WarehouseInventory
     public function __construct(
         private Warehouse $warehouse,
         private Product $product,
+        #[Assert\Positive]
         private int $quantity,
     )
     {

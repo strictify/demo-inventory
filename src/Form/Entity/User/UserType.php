@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Form\User;
+namespace App\Form\Entity\User;
 
 use App\Entity\User\User;
+use App\Service\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Email;
@@ -23,6 +24,7 @@ class UserType extends AbstractType
 {
     public function __construct(
         private UserPasswordHasherInterface $passwordHasher,
+        private Security $security,
     )
     {
     }
@@ -75,7 +77,7 @@ class UserType extends AbstractType
         if (null === $password) {
             throw new TransformationFailedException(invalidMessage: 'You must set password for new user.');
         }
-        $user = new User(email: $email, password: '', firstName: $firstName, lastName: $lastName);
+        $user = new User(email: $email, password: '', firstName: $firstName, lastName: $lastName, company: $this->security->getCompany());
         $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
         $user->setPassword($hashedPassword);
 

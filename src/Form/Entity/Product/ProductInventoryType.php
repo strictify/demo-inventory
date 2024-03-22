@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Form\Product;
+namespace App\Form\Entity\Product;
 
 use App\Entity\Warehouse\Warehouse;
 use App\DTO\Form\ProductInventoryDTO;
@@ -36,6 +36,9 @@ class ProductInventoryType extends AbstractType
         $builder->add('quantity', IntegerType::class, [
             'get_value' => fn(ProductInventoryDTO|WarehouseInventory $data) => $data->getQuantity(),
             'update_value' => fn(int $quantity, ProductInventoryDTO|WarehouseInventory $data) => $data->setQuantity($quantity),
+            'attr' => [
+                'min' => 1,
+            ],
         ]);
     }
 }

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Controller\Application\Users;
 
 use App\Entity\User\User;
-use App\Form\User\UserType;
 use App\Attribute\TurboFrame;
+use App\Form\Entity\User\UserType;
 use App\Repository\User\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
