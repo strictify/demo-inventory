@@ -13,7 +13,9 @@
         <span class="spinner-border spinner-border-sm" role="status" {{ stimulus_target('forms/quill', 'spinner') }}>
             <span class="visually-hidden">Loading...</span>
         </span>
-        <div id="{{ 'quill-' ~ form.vars.id }}" style="height: 200px"></div>
+        <div id="{{ 'quill-' ~ form.vars.id }}" style="height: 200px">
+            {{ form.vars.value|raw }}
+        </div>
         {{ form_widget(form, {attr: {'style': 'display: none'}}) }}
     </div>
 {% endblock %}

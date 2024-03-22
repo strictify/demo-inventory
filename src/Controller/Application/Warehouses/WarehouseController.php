@@ -6,8 +6,8 @@ namespace App\Controller\Application\Warehouses;
 
 use App\Attribute\TurboFrame;
 use App\Entity\Warehouse\Warehouse;
-use App\Form\Warehouse\WarehouseType;
 use App\Response\TurboRedirectResponse;
+use App\Form\Entity\Warehouse\WarehouseType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

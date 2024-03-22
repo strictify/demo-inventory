@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Form\Product;
+namespace App\Form\Entity\Warehouse;
 
 use App\Entity\Company\Company;
 use App\Entity\Warehouse\Warehouse;

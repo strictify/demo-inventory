@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Form\Product;
+namespace App\Form\Entity\Product;
 
 use Money\Money;
 use App\Service\Security;
@@ -13,6 +13,7 @@ use Symfony\Component\Form\AbstractType;
 use Tbbc\MoneyBundle\Form\Type\MoneyType;
 use App\Entity\Warehouse\WarehouseInventory;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,6 +21,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Repository\Warehouse\WarehouseInventoryRepository;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use function count;
+use function array_map;
+use function array_unique_objects;
 
 /**
  * @extends AbstractType<Product>
@@ -80,6 +84,10 @@ class ProductType extends AbstractType
                 quantity: $dto->getQuantity(),
             )),
             'remove_value' => fn(WarehouseInventory $inventory) => $this->warehouseInventoryRepository->remove($inventory),
+            'constraints' => [
+                new Valid(),
+                new Callback($this->validateUniqueWarehouses(...))
+            ]
         ]);
     }
 
@@ -93,6 +101,19 @@ class ProductType extends AbstractType
             description: $description,
             price: $price,
         );
+    }
+
+    /**
+     * @param array<ProductInventoryDTO|WarehouseInventory> $data
+     */
+    private function validateUniqueWarehouses(array $data, ExecutionContextInterface $executionContext): void
+    {
+        $warehouses = array_map(fn(ProductInventoryDTO|WarehouseInventory $datum) => $datum->getWarehouse(), $data);
+        $uniqueWarehouses = array_unique_objects($warehouses);
+        if (count($warehouses) === count($uniqueWarehouses)) {
+            return;
+        }
+        $executionContext->addViolation('Non-unique warehouses selected.');
     }
 
     private function validatePriceGreaterThanZero(Money $price, ExecutionContextInterface $executionContext): void

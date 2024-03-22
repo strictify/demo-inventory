@@ -6,8 +6,8 @@ namespace App\Controller\Application\Products;
 
 use App\Attribute\TurboFrame;
 use App\Entity\Product\Product;
-use App\Form\Product\ProductType;
 use App\Response\TurboRedirectResponse;
+use App\Form\Entity\Product\ProductType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\Product\ProductRepository;
 use Symfony\Component\HttpFoundation\Response;

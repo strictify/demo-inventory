@@ -1,7 +1,6 @@
 import {Controller} from '@hotwired/stimulus';
 
 import 'quill/dist/quill.snow.css'
-// import '../../vendor/quill/quill.bubble.css'
 import Quill from "quill";
 
 /* stimulusFetch: 'lazy' */
@@ -16,16 +15,16 @@ export default class extends Controller {
   connect() {
     let targetId = this.targetValue;
     let textArea = document.getElementById(targetId);
+    let placeholder = textArea.getAttribute('placeholder');
 
     const quill = new Quill('#quill-' + targetId, {
       theme: 'snow',
-      // placeholder: 'Hello, World!',
+      placeholder: placeholder,
     });
     this.spinnerTarget.remove();
 
-    quill.setText(textArea.value);
     quill.on('text-change', () => {
-      textArea.value = quill.getText();
+      textArea.value = quill.getSemanticHTML();
     });
   }
 }
