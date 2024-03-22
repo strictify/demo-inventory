@@ -1,6 +1,6 @@
 import {Controller} from '@hotwired/stimulus';
 
-import '../../vendor/quill/quill.snow.css'
+import 'quill/dist/quill.snow.css'
 // import '../../vendor/quill/quill.bubble.css'
 import Quill from "quill";
 

@@ -36,7 +36,25 @@ return [
         'version' => '2.3.1',
         'type' => 'css',
     ],
+    'bootstrap' => [
+        'version' => '5.3.3',
+    ],
+    '@popperjs/core' => [
+        'version' => '2.11.8',
+    ],
     'quill' => [
         'version' => '1.3.7',
+    ],
+    'quill/dist/quill.snow.css' => [
+        'version' => '1.3.7',
+        'type' => 'css',
+    ],
+    'quill/dist/quill.core.css' => [
+        'version' => '1.3.7',
+        'type' => 'css',
+    ],
+    'bootstrap-icons/font/bootstrap-icons.min.css' => [
+        'version' => '1.11.3',
+        'type' => 'css',
     ],
 ];
