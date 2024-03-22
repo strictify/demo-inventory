@@ -30,7 +30,7 @@ class WarehouseType extends AbstractType
         $builder->add('company', EntityType::class, [
             'class' => Company::class,
             'get_value' => fn(Warehouse $warehouse) => $warehouse->getCompany(),
-            'update_value' => fn(Company $company, Warehouse $warehouse) => throw new TransformationFailedException(invalidMessage: 'You cannot change company.'),
+            'update_value' => fn() => throw new TransformationFailedException(invalidMessage: 'You cannot change company.'),
         ]);
 
         $builder->add('name', TextType::class, [

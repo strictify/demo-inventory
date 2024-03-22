@@ -26,7 +26,7 @@ class DebugProfiler
         $request = $event->getRequest();
 
         if (!$request->isXmlHttpRequest() && !$request->headers->has('Turbo-Frame')) {
-//            return;
+            return;
         }
 
         $response = $event->getResponse();

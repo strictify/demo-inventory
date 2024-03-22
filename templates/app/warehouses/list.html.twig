@@ -1,0 +1,50 @@
+{% extends '_app_base.html.twig' %}
+
+{% block main -%}
+    <turbo-frame id="main" class="main" data-turbo-frame="main" data-turbo-action="advance" data-turbo-prefetch="false">
+        <div class="pagetitle">
+            <h1>Warehouses <a class="bi bi-plus-circle" href="{{ path('app_warehouses_create') }}"></a></h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{ path('app_entry') }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ path('app_warehouses_list') }}">Warehouses</a>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+
+        {% block inner %}
+            <div class="row" data-turbo-action="advance">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for warehouse in warehouses %}
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>
+                                            <a href="{{ path('app_warehouses_update', {'id': warehouse.id}) }}">
+                                                {{ warehouse }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+    </turbo-frame>
+{%- endblock main %}

@@ -1,0 +1,49 @@
+{% extends 'app/products/list.html.twig' %}
+
+{% form_theme form _self %}
+
+{% block product_inventory_widget %}
+    <div class="row">
+        <div class="col-6">{{ form_row(form.warehouse) }}</div>
+        <div class="col-6">{{ form_row(form.quantity) }}</div>
+    </div>
+{% endblock %}
+
+{% block inner -%}
+    {{ form_errors(form) }}
+    {{ form_start(form, {attr: {'autocomplete': 'off'}}) }}
+    <div class="row">
+        <div class="col-6">
+            {% embed 'app/embedded/card.html.twig' %}
+                {% block body %}
+                    <div class="row">
+                        <div class="col-6 pt-3">
+                            {{ form_row(form.name) }}
+                            {{ form_row(form.description) }}
+                        </div>
+                        <div class="col-6 pt-2">
+                            {{ form_row(form.price) }}
+                        </div>
+                    </div>
+                {% endblock %}
+
+                {% block footer %}
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                {% endblock %}
+            {% endembed %}
+        </div>
+
+        <div class="col-6">
+            {% embed 'app/embedded/card.html.twig' %}
+                {% block header %}Stock{% endblock %}
+                {% block body %}
+                    <div class="col-6 pt-3">
+                        {{ form_row(form.inventory) }}
+                    </div>
+                {% endblock %}
+            {% endembed %}
+        </div>
+        {{ form_rest(form) }}
+    </div>
+    {{ form_end(form) }}
+{%- endblock inner %}
