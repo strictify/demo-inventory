@@ -13,6 +13,11 @@
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
+        <many-to-one field="company">
+            <join-column on-delete="SET NULL"/>
+        </many-to-one>
+        <field name="firstName"/>
+        <field name="lastName"/>
         <field name="email" unique="true"/>
         <field name="password"/>
         <field name="roles" type="json"/>

@@ -7,3 +7,13 @@
     </div>
     {{ form_rest(form) }}
 {% endblock %}
+
+{% block quill_text_area_widget %}
+    <div {{ stimulus_controller('forms/quill', {target: form.vars.id}) }}>
+        <span class="spinner-border spinner-border-sm" role="status" {{ stimulus_target('forms/quill', 'spinner') }}>
+            <span class="visually-hidden">Loading...</span>
+        </span>
+        <div id="{{ 'quill-' ~ form.vars.id }}" style="height: 200px"></div>
+        {{ form_widget(form, {attr: {'style': 'display: none'}}) }}
+    </div>
+{% endblock %}

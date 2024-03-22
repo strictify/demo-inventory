@@ -37,7 +37,7 @@ class WebScraper
     {
         try {
             $url = $message->url;
-            $data = $this->scrape($url);
+            $_data = $this->scrape($url);
 
 //            dump($data['name'], $data['price']);
         } catch (Throwable $e) {

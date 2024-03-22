@@ -4,14 +4,16 @@
     xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="App\Entity\Warehouse\WarehouseInventory"
-            table="warehouse_inventory">
+            table="warehouse_inventory"
+            repository-class="App\Repository\Warehouse\WarehouseInventoryRepository"
+    >
 
         <id name="id" column="id" type="uuid">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
-        <many-to-one field="company"/>
+        <many-to-one field="warehouse"/>
         <many-to-one field="product"/>
         <field name="quantity"/>
     </entity>

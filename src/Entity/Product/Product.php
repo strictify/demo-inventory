@@ -17,6 +17,7 @@ class Product implements TenantAwareInterface
     public function __construct(
         private readonly Company $company,
         private string $name,
+        private ?string $description = null,
         private ?Money $price = null,
     )
     {
@@ -40,5 +41,15 @@ class Product implements TenantAwareInterface
     public function setPrice(?Money $price): void
     {
         $this->price = $price;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
     }
 }

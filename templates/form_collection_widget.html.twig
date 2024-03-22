@@ -1,0 +1,19 @@
+{% block collection_widget %}
+    <div {{ stimulus_controller('form-collection') }}
+        data-form-collection-index-value="{{ form|length > 0 ? form|last.vars.name + 1 : 0 }}"
+        data-form-collection-prototype-value="{{ form_widget(form.vars.prototype)|e('html_attr') }}"
+    >
+        <ul {{ stimulus_target('form-collection', 'collectionContainer') }} class="list-unstyled">
+            {% for child in form %}
+                <li>
+                    {{ form_row(child) }}
+                </li>
+            {% endfor %}
+        </ul>
+        <button type="button" class="btn btn-info" {{ stimulus_action('form-collection', 'addCollectionElement') }}>{{ form.vars.add_button_value }}</button>
+    </div>
+{% endblock %}
+
+{% block collection_entry_row %}
+    {{ form_widget(form) }}
+{% endblock %}

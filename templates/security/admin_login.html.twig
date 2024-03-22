@@ -1,4 +1,4 @@
-{% extends '_admin_base.html.twig' %}
+{% extends '_app_base.html.twig' %}
 
 {% block title %}Log in!{% endblock %}
 
@@ -37,7 +37,7 @@
 
                                         {% if app.user %}
                                             <div class="mb-3">
-                                                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('admin_logout') }}">Logout</a>
+                                                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
                                             </div>
                                         {% endif %}
 

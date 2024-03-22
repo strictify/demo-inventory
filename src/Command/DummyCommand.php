@@ -19,6 +19,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use function dump;
 
+/**
+ * @psalm-suppress all
+ */
 #[AsCommand(
     name: 'dummy',
     description: 'Add a short description for your command',

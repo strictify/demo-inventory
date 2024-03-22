@@ -23,6 +23,14 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * @param T $entity
      */
+    public function remove(object $entity): void
+    {
+        $this->getEntityManager()->remove($entity);
+    }
+
+    /**
+     * @param T $entity
+     */
     public function persistAndFlush(object $entity): void
     {
         $this->getEntityManager()->persist($entity);

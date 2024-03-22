@@ -7,6 +7,8 @@
     resolveFromConfigFile="true"
     findUnusedBaselineEntry="false"
     findUnusedCode="false"
+    disableVarParsing="true"
+    findUnusedVariablesAndParams="true"
     findUnusedPsalmSuppress="true"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
