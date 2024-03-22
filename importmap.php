@@ -12,10 +12,6 @@
  * The "importmap:require" command can be used to add new entries to this file.
  */
 return [
-    'admin' => [
-        'path' => './assets/admin.js',
-        'entrypoint' => true,
-    ],
     'app' => [
         'path' => './assets/app.js',
         'entrypoint' => true,
@@ -39,5 +35,8 @@ return [
     'tom-select/dist/css/tom-select.default.css' => [
         'version' => '2.3.1',
         'type' => 'css',
+    ],
+    'quill' => [
+        'version' => '1.3.7',
     ],
 ];

@@ -7,22 +7,27 @@ namespace App\DataFixtures;
 use App\Entity\Company\Company;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use App\Repository\Company\CompanyRepository;
 
 class CompanyFixtures extends Fixture
 {
-    public function __construct(
-        private CompanyRepository $companyRepository,
-    )
+    public const string COMPANY_1 = 'company:strictify';
+    public const string COMPANY_2 = 'company:test_1';
+
+    public function __construct()
     {
     }
 
     public function load(ObjectManager $manager): void
     {
         $company1 = new Company('Strictify');
-        $this->companyRepository->persist($company1);
+        $manager->persist($company1);
+        $manager->persist($company1);
+        $this->addReference(self::COMPANY_1, $company1);
+
         $company2 = new Company('Another company');
-        $this->companyRepository->persist($company2);
+        $manager->persist($company2);
+        $this->addReference(self::COMPANY_2, $company2);
+
         $manager->flush();
     }
 }

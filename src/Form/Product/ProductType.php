@@ -5,47 +5,56 @@ declare(strict_types=1);
 namespace App\Form\Product;
 
 use Money\Money;
-use Webmozart\Assert\Assert;
+use App\Service\Security;
 use App\Entity\Product\Product;
-use App\Entity\Company\Company;
+use App\Form\Type\QuillTextAreaType;
+use App\DTO\Form\ProductInventoryDTO;
 use Symfony\Component\Form\AbstractType;
 use Tbbc\MoneyBundle\Form\Type\MoneyType;
+use App\Entity\Warehouse\WarehouseInventory;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use App\Repository\Warehouse\WarehouseInventoryRepository;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
  * @extends AbstractType<Product>
  */
 class ProductType extends AbstractType
 {
+    public function __construct(
+        private Security $security,
+        private WarehouseInventoryRepository $warehouseInventoryRepository,
+    )
+    {
+    }
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'factory' => $this->factory(...),
+            'label' => false,
         ]);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        Assert::nullOrIsInstanceOf($data = $options['data'] ?? null, Product::class);
-
-        $builder->add('company', EntityType::class, [
-            'disabled' => (bool)$data,
-            'class' => Company::class,
-            'get_value' => fn(Product $product) => $product->getCompany(),
-            'update_value' => fn(Company $company, Product $product) => throw new TransformationFailedException(invalidMessage: 'You cannot change company.'),
-            'help' => (bool)$data ? 'Company cannot be changed' : null,
-        ]);
-
         $builder->add('name', TextType::class, [
             'get_value' => fn(Product $product) => $product->getName(),
             'update_value' => fn(string $name, Product $product) => $product->setName($name),
+        ]);
+
+        $builder->add('description', QuillTextAreaType::class, [
+            'required' => false,
+            'get_value' => fn(Product $product) => $product->getDescription(),
+            'update_value' => fn(?string $description, Product $product) => $product->setDescription($description),
+            'attr' => [
+                'rows' => 5,
+            ],
         ]);
 
         $builder->add('price', MoneyType::class, [
@@ -57,13 +66,31 @@ class ProductType extends AbstractType
             'get_value' => fn(Product $product) => $product->getPrice(),
             'update_value' => fn(Money $price, Product $product) => $product->setPrice($price),
         ]);
+
+        $builder->add('inventory', CollectionType::class, [
+            'entry_type' => ProductInventoryType::class,
+            'allow_add' => true,
+            'allow_delete' => true,
+            'label' => false,
+            'add_button_value' => 'Add product',
+            'get_value' => fn(Product $product) => $this->warehouseInventoryRepository->findBy(['product' => $product]),
+            'add_value' => fn(ProductInventoryDTO $dto, Product $product) => $this->warehouseInventoryRepository->persist(new WarehouseInventory(
+                warehouse: $dto->getWarehouse(),
+                product: $product,
+                quantity: $dto->getQuantity(),
+            )),
+            'remove_value' => fn(WarehouseInventory $inventory) => $this->warehouseInventoryRepository->remove($inventory),
+        ]);
     }
 
-    private function factory(Company $company, string $name, Money $price): Product
+    private function factory(string $name, ?string $description, Money $price): Product
     {
+        $company = $this->security->getCompany();
+
         return new Product(
             company: $company,
             name: $name,
+            description: $description,
             price: $price,
         );
     }

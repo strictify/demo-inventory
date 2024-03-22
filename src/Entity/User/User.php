@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace App\Entity\User;
 
+use Override;
 use RuntimeException;
 use App\Entity\IdTrait;
+use BadMethodCallException;
+use App\Entity\Company\Company;
+use App\Entity\TenantAwareInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use function array_values;
 
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, TenantAwareInterface
 {
     use IdTrait;
 
@@ -20,9 +24,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct(
         private string $email,
         private string $password,
+        private string $firstName,
+        private string $lastName,
         private array $roles = ['ROLE_USER'],
+        private ?Company $company = null,
     )
     {
+    }
+
+    #[Override]
+    public function getCompany(): Company
+    {
+        return $this->company ?? throw new BadMethodCallException();
     }
 
     public function getId(): string
@@ -89,5 +102,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): void
+    {
+        $this->lastName = $lastName;
     }
 }

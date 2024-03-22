@@ -16,6 +16,7 @@
         <many-to-one field="company"/>
 
         <field name="name"/>
+        <field name="description" nullable="true"/>
         <field name="price" nullable="true" type="money"/>
 
     </entity>

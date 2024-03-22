@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -35,6 +36,16 @@ class UserType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $builder->add('firstName', TextType::class, [
+            'get_value' => fn(User $user) => $user->getFirstName(),
+            'update_value' => fn(string $firstName, User $user) => $user->setFirstName($firstName),
+        ]);
+
+        $builder->add('lastName', TextType::class, [
+            'get_value' => fn(User $user) => $user->getLastName(),
+            'update_value' => fn(string $lastName, User $user) => $user->setLastName($lastName),
+        ]);
+
         $builder->add('email', EmailType::class, [
             'get_value' => fn(User $user) => $user->getEmail(),
             'update_value' => fn(string $email, User $user) => $user->setEmail($email),
@@ -59,12 +70,12 @@ class UserType extends AbstractType
         ]);
     }
 
-    private function factory(string $email, ?string $password): User
+    private function factory(string $firstName, string $lastName, string $email, ?string $password): User
     {
         if (null === $password) {
             throw new TransformationFailedException(invalidMessage: 'You must set password for new user.');
         }
-        $user = new User(email: $email, password: '');
+        $user = new User(email: $email, password: '', firstName: $firstName, lastName: $lastName);
         $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
         $user->setPassword($hashedPassword);
 

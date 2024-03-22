@@ -10,4 +10,4 @@ children:
 # Use below syntax for automapping entities to controller
 #    defaults:
 #        map:
-#            App\Entity\TestLocation\TestLocation: 'location_id'
+#            Application\Entity\TestLocation\TestLocation: 'location_id'
