@@ -3,7 +3,6 @@
 {% block main -%}
     <turbo-frame id="main" class="main" data-turbo-frame="main" data-turbo-action="advance" data-turbo-prefetch="false">
         <div class="pagetitle">
-            <h1>Products <a class="bi bi-plus-circle" href="{{ path('app_products_create') }}"></a></h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
@@ -11,6 +10,9 @@
                     </li>
                     <li class="breadcrumb-item">
                         <a href="{{ path('app_products_list') }}">Products</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a class="bi bi-plus-circle" href="{{ path('app_products_create') }}"></a>
                     </li>
                 </ol>
             </nav>
@@ -21,13 +23,14 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-body">
-                            <table class="table">
+                            <table class="table caption-top">
+                                <caption>Products</caption>
                                 <thead>
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Price</th>
-                                    <th scope="col">Actions</th>
+                                    <th scope="col" class="text-end">Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -42,8 +45,9 @@
                                         <td>
                                             {{ product.price|money_localized_format }}
                                         </td>
-                                        <td>
-                                            <a href="{{ path('app_products_details', {'id': product.id}) }}" data-turbo-frame="details" data-turbo-action="advance">Details</a>
+                                        <td class="text-end">
+                                            <a href="{{ path('app_products_transport', {'id': product.id}) }}" data-turbo-frame="details" data-turbo-action="advance">Transport</a>|
+                                            <a href="{{ path('app_products_sales', {'id': product.id}) }}" data-turbo-frame="details" data-turbo-action="advance">Sales</a>
                                         </td>
                                     </tr>
                                 {% endfor %}

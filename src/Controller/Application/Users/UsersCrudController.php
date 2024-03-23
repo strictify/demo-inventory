@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class UsersController extends AbstractController
+class UsersCrudController extends AbstractController
 {
     public function __construct(
         private UserRepository $userRepository,
@@ -22,16 +22,15 @@ class UsersController extends AbstractController
     }
 
     #[Route('/', name: 'app_users_list', methods: ['GET'])]
-    public function index(#[TurboFrame] ?string $frame): Response
+    public function list(): Response
     {
         return $this->render('app/users/list.html.twig', [
-            '_block' => $frame,
             'users' => $this->userRepository->findAll(),
         ]);
     }
 
     #[Route('/create', name: 'app_users_create', methods: ['GET', 'POST'])]
-    public function create(#[TurboFrame] ?string $frame, Request $request): Response
+    public function create(Request $request): Response
     {
         $form = $this->createForm(UserType::class);
         $form->handleRequest($request);
@@ -42,13 +41,12 @@ class UsersController extends AbstractController
         }
 
         return $this->render('app/users/form.html.twig', [
-            '_block' => $frame,
             'form' => $form,
         ]);
     }
 
     #[Route('/update/{id}', name: 'app_users_update', methods: ['GET', 'POST'])]
-    public function update(#[TurboFrame] ?string $frame, Request $request, User $user): Response
+    public function update(Request $request, User $user): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -59,7 +57,6 @@ class UsersController extends AbstractController
         }
 
         return $this->render('app/users/form.html.twig', [
-            '_block' => $frame,
             'form' => $form,
         ]);
     }

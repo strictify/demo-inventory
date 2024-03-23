@@ -23,44 +23,44 @@ class WarehouseController extends AbstractController
     }
 
     #[Route('/', name: 'app_warehouses_list', methods: ['GET'])]
-    public function index(#[TurboFrame] ?string $frame): Response
+    public function index(): Response
     {
         return $this->render('app/warehouses/list.html.twig', [
-            '_block' => $frame,
             'warehouses' => $this->warehouseRepository->findAll(),
         ]);
     }
 
     #[Route('/create', name: 'app_warehouses_create', methods: ['GET', 'POST'])]
-    public function create(#[TurboFrame] ?string $frame, Request $request): Response
+    public function create(Request $request): Response
     {
         $form = $this->createForm(WarehouseType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid() && $data = $form->getData()) {
             $this->warehouseRepository->persistAndFlush($data);
 
-            return new TurboRedirectResponse($this->generateUrl('app_warehouses_list'), $frame);
+            return $this->redirectToRoute('app_warehouses_list');
+//            return new TurboRedirectResponse($this->generateUrl('app_warehouses_list'), $frame);
         }
 
         return $this->render('app/warehouses/form.html.twig', [
-            '_block' => $frame,
             'form' => $form,
         ]);
     }
 
     #[Route('/update/{id}', name: 'app_warehouses_update', methods: ['GET', 'POST'])]
-    public function update(#[TurboFrame] ?string $frame, Request $request, Warehouse $warehouse): Response
+    public function update(Request $request, Warehouse $warehouse): Response
     {
         $form = $this->createForm(WarehouseType::class, $warehouse);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->warehouseRepository->flush();
 
-            return new TurboRedirectResponse($this->generateUrl('app_warehouses_list'), $frame);
+            return $this->redirectToRoute('app_warehouses_list');
+
+//            return new TurboRedirectResponse($this->generateUrl('app_warehouses_list'), $frame);
         }
 
         return $this->render('app/warehouses/form.html.twig', [
-            '_block' => $frame,
             'form' => $form,
         ]);
     }
