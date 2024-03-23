@@ -6,7 +6,8 @@
         <title>{% block title %}Inventory management demo{% endblock %}</title>
         <link href="{{ asset('img/favicon.png') }}" rel="icon">
         <link href="{{ asset('img/apple-touch-icon.png') }}" rel="apple-touch-icon">
-        <meta name="turbo-refresh-method" content="morph">
+        <meta name="turbo-prefetch" content="false">
+        <meta name="turbo-cache-control" content="no-cache">
         {% block head %}{% endblock %}
 
         <link href="https://fonts.gstatic.com" rel="preconnect">

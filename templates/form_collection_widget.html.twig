@@ -1,19 +1,62 @@
-{% block collection_widget %}
-    <div {{ stimulus_controller('form-collection') }}
+{% block collection_widget -%}
+    <div {{ stimulus_controller('form-collection', {
+        'minimum': form.vars.minimum
+    }) }}
         data-form-collection-index-value="{{ form|length > 0 ? form|last.vars.name + 1 : 0 }}"
-        data-form-collection-prototype-value="{{ form_widget(form.vars.prototype)|e('html_attr') }}"
+        data-form-collection-prototype-value="{{ form_row(form.vars.prototype)|e('html_attr') }}"
     >
-        <ul {{ stimulus_target('form-collection', 'collectionContainer') }} class="list-unstyled">
-            {% for child in form %}
-                <li>
-                    {{ form_row(child) }}
-                </li>
+        {{ form_errors(form) }}
+
+        <table class="table table-borderless form-no-mb">
+            <caption class="pl-3">
+                <button type="button" class="btn btn-info" {{ stimulus_action('form-collection', 'addCollectionElement') }}>{{ form.vars.add_button_value }}</button>
+            </caption>
+
+            <thead class="text-bg-danger">
+            {% for child in form.vars.prototype %}
+                <th scope="col" class="text-center {{ child.vars.collection_entry_class }}">{{ field_label(child) }}</th>
             {% endfor %}
-        </ul>
-        <button type="button" class="btn btn-info" {{ stimulus_action('form-collection', 'addCollectionElement') }}>{{ form.vars.add_button_value }}</button>
+
+            {% if form.vars.allow_delete %}
+                <th scope="col" class="text-end" style="width: 0"></th>
+            {% endif %}
+            </thead>
+
+            <tbody {{ stimulus_target('form-collection', 'collectionContainer') }}>
+            {% for child in form %}
+                <tr>
+                    {{ form_row(child) }}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
+{%- endblock %}
+
+{% block collection_entry_row -%}
+    {{ form_errors(form) }}
+    {{ form_widget(form) }}
+{%- endblock %}
+
+{% block collection_entry_widget %}
+    {% for child in form %}
+        <td>
+            {{ form_widget(child) }}
+            {{ form_errors(child) }}
+        </td>
+    {% endfor %}
+
+    {% if form.parent.vars.allow_delete %}
+        <td class="text-end">
+            {{ block('collection_button_delete') }}
+        </td>
+    {% endif %}
 {% endblock %}
 
-{% block collection_entry_row %}
-    {{ form_widget(form) }}
-{% endblock %}
+{% block collection_button_delete -%}
+    <i class="btn btn-outline-danger btn" {{ stimulus_action('form-collection', 'remove', 'click') }}>X</i>
+{%- endblock %}
+
+{% block collection_label %}{% endblock %}
+
+{% block collection_entry_label %}{% endblock %}
