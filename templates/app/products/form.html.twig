@@ -2,8 +2,8 @@
 
 {% form_theme form _self %}
 
-{% block product_inventory_widget %}
-    <div class="row">
+{% block xproduct_inventory_widget %}
+    <div class="row abc">
         <div class="col-6">{{ form_row(form.warehouse) }}</div>
         <div class="col-6">{{ form_row(form.quantity) }}</div>
     </div>
@@ -15,6 +15,8 @@
     <div class="row">
         <div class="col-6">
             {% embed 'app/embedded/card.html.twig' %}
+                {% block header %}Details{% endblock %}
+
                 {% block body %}
                     <div class="row">
                         <div class="col-6 pt-3">
@@ -37,7 +39,7 @@
             {% embed 'app/embedded/card.html.twig' %}
                 {% block header %}Stock{% endblock %}
                 {% block body %}
-                    <div class="col-6 pt-3">
+                    <div class="col-12 pt-3">
                         {{ form_row(form.inventory) }}
                     </div>
                 {% endblock %}

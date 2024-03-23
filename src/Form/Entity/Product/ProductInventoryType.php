@@ -28,6 +28,7 @@ class ProductInventoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('warehouse', EntityType::class, [
+            'placeholder' => '--',
             'class' => Warehouse::class,
             'get_value' => fn(ProductInventoryDTO|WarehouseInventory $data) => $data->getWarehouse(),
             'update_value' => fn(Warehouse $warehouse, ProductInventoryDTO|WarehouseInventory $data) => $data->setWarehouse($warehouse),
@@ -36,6 +37,7 @@ class ProductInventoryType extends AbstractType
         $builder->add('quantity', IntegerType::class, [
             'get_value' => fn(ProductInventoryDTO|WarehouseInventory $data) => $data->getQuantity(),
             'update_value' => fn(int $quantity, ProductInventoryDTO|WarehouseInventory $data) => $data->setQuantity($quantity),
+            'collection_entry_class' => 'col-3',
             'attr' => [
                 'min' => 1,
             ],

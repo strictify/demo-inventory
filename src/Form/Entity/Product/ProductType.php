@@ -23,6 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use function count;
 use function array_map;
+use function array_filter;
 use function array_unique_objects;
 
 /**
@@ -41,7 +42,6 @@ class ProductType extends AbstractType
     {
         $resolver->setDefaults([
             'factory' => $this->factory(...),
-            'label' => false,
         ]);
     }
 
@@ -75,7 +75,9 @@ class ProductType extends AbstractType
             'entry_type' => ProductInventoryType::class,
             'allow_add' => true,
             'allow_delete' => true,
+            'error_bubbling' => false,
             'label' => false,
+            'min' => 1,
             'add_button_value' => 'Add product',
             'get_value' => fn(Product $product) => $this->warehouseInventoryRepository->findBy(['product' => $product]),
             'add_value' => fn(ProductInventoryDTO $dto, Product $product) => $this->warehouseInventoryRepository->persist(new WarehouseInventory(
@@ -104,11 +106,13 @@ class ProductType extends AbstractType
     }
 
     /**
-     * @param array<ProductInventoryDTO|WarehouseInventory> $data
+     * @param array<null|ProductInventoryDTO|WarehouseInventory> $data
      */
     private function validateUniqueWarehouses(array $data, ExecutionContextInterface $executionContext): void
     {
-        $warehouses = array_map(fn(ProductInventoryDTO|WarehouseInventory $datum) => $datum->getWarehouse(), $data);
+        $warehouses = array_filter($data, fn(null|ProductInventoryDTO|WarehouseInventory$datum) => (bool)$datum);
+
+        $warehouses = array_map(fn(ProductInventoryDTO|WarehouseInventory $datum) => $datum->getWarehouse(), $warehouses);
         $uniqueWarehouses = array_unique_objects($warehouses);
         if (count($warehouses) === count($uniqueWarehouses)) {
             return;
@@ -116,8 +120,11 @@ class ProductType extends AbstractType
         $executionContext->addViolation('Non-unique warehouses selected.');
     }
 
-    private function validatePriceGreaterThanZero(Money $price, ExecutionContextInterface $executionContext): void
+    private function validatePriceGreaterThanZero(?Money $price, ExecutionContextInterface $executionContext): void
     {
+        if (!$price) {
+            return;
+        }
         $amount = (int)$price->getAmount();
         if ($amount > 0) {
             return;

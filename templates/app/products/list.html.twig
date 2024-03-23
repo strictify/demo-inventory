@@ -38,7 +38,7 @@
                                     <tr>
                                         <th scope="row">1</th>
                                         <td>
-                                            <a href="{{ path('app_products_update', {'id': product.id}) }}">
+                                            <a href="{{ path('app_products_update', {'id': product.id}) }}" data-turbo-action="advance">
                                                 {{ product.name }}
                                             </a>
                                         </td>

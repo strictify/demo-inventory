@@ -57,7 +57,7 @@ class ProductCrudController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->productRepository->flush();
 
-            return $this->redirectToRoute('app_products_list');
+            return $this->redirectToRoute('app_products_list', status: 303);
 //            return new TurboRedirectResponse($this->generateUrl('app_products_list'), 'main');
         }
 

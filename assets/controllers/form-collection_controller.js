@@ -5,13 +5,27 @@ export default class extends Controller {
 
   static values = {
     index: Number,
+    minimum: Number,
     prototype: String,
   }
 
-  addCollectionElement(event) {
-    const item = document.createElement('li');
+  connect() {
+    let min = this.minimumValue;
+    let indexValue = this.indexValue;
+    if (min > indexValue) {
+      this.addCollectionElement();
+    }
+  }
+
+  addCollectionElement() {
+    const item = document.createElement('tr');
     item.innerHTML = this.prototypeValue.replace(/__name__/g, this.indexValue);
     this.collectionContainerTarget.appendChild(item);
     this.indexValue++;
+  }
+
+  remove(event) {
+    let closest = event.target.closest(`tr`);
+    closest.parentNode.removeChild(closest);
   }
 }

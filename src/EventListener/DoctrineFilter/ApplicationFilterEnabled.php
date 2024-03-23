@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\EventListener\DoctrineFilter;
 
 use App\Entity\User\User;
+use App\Service\Security;
 use Webmozart\Assert\Assert;
 use App\Doctrine\Filter\TenantFilter;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -23,7 +23,7 @@ class ApplicationFilterEnabled
     {
     }
 
-    #[AsEventListener(event: KernelEvents::REQUEST)]
+    #[AsEventListener(event: KernelEvents::REQUEST, priority: -600)]
     public function appFilter(RequestEvent $event): void
     {
         $uri = $event->getRequest()->getRequestUri();
@@ -31,7 +31,7 @@ class ApplicationFilterEnabled
             return;
         }
 
-        Assert::isInstanceOf($user = $this->security->getUser(), User::class);
+        $user = $this->security->getUser();
         $companyId = $user->getCompany()->getId();
         $this->enableFilter($companyId);
     }
