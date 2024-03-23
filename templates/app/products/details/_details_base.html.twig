@@ -1,0 +1,16 @@
+{% extends 'app/products/list.html.twig' %}
+
+{% block details %}
+    <turbo-frame class="col-4 hide-empty" id="details">
+        <div class="card">
+            <div class="card-header hide-empty">
+                {% block details_header %}BLOCK: details_header{% endblock %}
+                 <a href="{{ path('app_products_list') }}" class="bi bi-x-circle" data-turbo-frame="main" data-turbo-action="advance"></a>
+            </div>
+
+            <div class="card-body">
+                {% block details_inner %}BLOCK: details_inner{% endblock %}
+            </div>
+        </div>
+    </turbo-frame>
+{% endblock %}

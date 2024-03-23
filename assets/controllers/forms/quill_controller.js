@@ -3,7 +3,7 @@ import {Controller} from '@hotwired/stimulus';
 import 'quill/dist/quill.snow.css'
 import Quill from "quill";
 
-/* stimulusFetch: 'lazy' */
+/* x-stimulusFetch: 'lazy' */
 export default class extends Controller {
   static values = {
     target: String,

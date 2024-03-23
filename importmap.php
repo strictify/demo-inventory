@@ -78,4 +78,11 @@ return [
     'lodash.isequal' => [
         'version' => '4.5.0',
     ],
+    'animate.css' => [
+        'version' => '4.1.1',
+    ],
+    'animate.css/animate.min.css' => [
+        'version' => '4.1.1',
+        'type' => 'css',
+    ],
 ];
