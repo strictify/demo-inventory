@@ -15,8 +15,6 @@ export default class extends Controller {
     if (min > indexValue) {
       this.addCollectionElement();
     }
-
-    console.log(this.prototypeValue);
   }
 
   addCollectionElement() {
