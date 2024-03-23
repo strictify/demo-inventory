@@ -18,7 +18,7 @@
 
         {% block inner %}
             <div class="row" data-turbo-action="advance">
-                <div class="col-lg-12">
+                <div class="col">
                     <div class="card">
                         <div class="card-body">
                             <table class="table">
@@ -27,6 +27,7 @@
                                     <th scope="col">#</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Price</th>
+                                    <th scope="col">Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -41,6 +42,9 @@
                                         <td>
                                             {{ product.price|money_localized_format }}
                                         </td>
+                                        <td>
+                                            <a href="{{ path('app_products_details', {'id': product.id}) }}" data-turbo-frame="details" data-turbo-action="advance">Details</a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -48,6 +52,9 @@
                         </div>
                     </div>
                 </div>
+
+                {% block details %}<turbo-frame class="col-4 hide-empty" id="details"></turbo-frame>{% endblock %}
+
             </div>
         {% endblock %}
     </turbo-frame>

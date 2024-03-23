@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Application\Products;
 
+use Generator;
 use App\Attribute\TurboFrame;
 use App\Entity\Product\Product;
 use App\Response\TurboRedirectResponse;
@@ -27,7 +28,7 @@ class ProductController extends AbstractController
     {
         return $this->render('app/products/list.html.twig', [
             '_block' => $frame,
-            'products' => $this->productRepository->findAll(),
+            'products' => $this->getProducts(),
         ]);
     }
 
@@ -63,5 +64,23 @@ class ProductController extends AbstractController
             '_block' => $frame,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/details/{id}', name: 'app_products_details', methods: ['GET', 'POST'])]
+    public function details(Product $product, #[TurboFrame] ?string $frame): Response
+    {
+        return $this->render('app/products/details.html.twig', [
+            '_block' => $frame,
+            'product' => $product,
+            'products' => $this->getProducts(),
+        ]);
+    }
+
+    /**
+     * @return Generator<array-key, Product>
+     */
+    private function getProducts(): Generator
+    {
+        yield from $this->productRepository->findAll();
     }
 }
