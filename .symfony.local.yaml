@@ -1,0 +1,23 @@
+proxy:
+    domains:
+        - test1.test2
+        - domain2
+
+workers:
+    # built-in command that builds and watches front-end assets
+    # npm_encore_watch:
+    #     cmd: ['npx', 'encore', 'dev', '--watch']
+#    npm_encore_watch: ~
+
+    # built-in command that starts messenger consumer
+    messenger_consume_async:
+        cmd: ['symfony', 'console', 'messenger:consume', 'async']
+        watch: ['config', 'src', 'templates', 'vendor']
+#    messenger_consume_async: ~
+
+    # you can also add your own custom commands
+#    build_spa:
+#        cmd: ['npm', '--cwd', './spa/', 'dev']
+
+    # auto start Docker compose when starting server (available since Symfony CLI 5.7.0)
+    docker_compose: ~

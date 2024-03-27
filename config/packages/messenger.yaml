@@ -9,6 +9,7 @@ framework:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
                     queue_name: async
+                    use_notify: true
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
 

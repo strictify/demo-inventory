@@ -18,9 +18,14 @@
             </nav>
         </div>
 
-        {% block inner %}
-            <div class="row" data-turbo-action="advance">
-                <div class="col">
+        <div class="row" data-turbo-action="advance">
+            <div class="col-1">
+                {{ render(path('app_products_filters')) }}
+            </div>
+
+            {% block inner %}
+                <turbo-frame id="inner" class="col" data-turbo-action="advance">
+                    {{ random() }}
                     <div class="card">
                         <div class="card-body">
                             <table class="table caption-top">
@@ -38,7 +43,7 @@
                                     <tr>
                                         <th scope="row">1</th>
                                         <td>
-                                            <a href="{{ path('app_products_update', {'id': product.id}) }}" data-turbo-action="advance">
+                                            <a href="{{ path('app_products_update', {'id': product.id, '_filters': true}) }}" data-turbo-action="advance">
                                                 {{ product.name }}
                                             </a>
                                         </td>
@@ -55,11 +60,19 @@
                             </table>
                         </div>
                     </div>
-                </div>
+                </turbo-frame>
 
-                {% block details %}<turbo-frame class="col-4 hide-empty" id="details"></turbo-frame>{% endblock %}
+                {% block details -%}<turbo-frame class="col-4 hide-empty" id="details"></turbo-frame>{%- endblock details %}
 
-            </div>
-        {% endblock %}
+            {% endblock inner %}
+        </div>
     </turbo-frame>
 {%- endblock main %}
+
+{% block filters %}
+    {{ form_start(form) }}
+    {{ random(1, 99999999) }}
+    {{ form_rest(form) }}
+    <button type="submit" class="btn btn-primary">Filter</button>
+    {{ form_end(form) }}
+{% endblock filters %}
