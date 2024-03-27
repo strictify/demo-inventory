@@ -35,4 +35,13 @@ document.addEventListener('turbo:before-fetch-response', (event) => {
   return false;
 });
 
+// monkeypatch: https://github.com/hotwired/turbo/pull/579#issuecomment-1403990185
+document.addEventListener('turbo:before-fetch-request', (event) => {
+  const targetTurboFrame = event.target.getAttribute('data-turbo-frame');
+  const fetchTurboFrame = event.detail.fetchOptions.headers['Turbo-Frame'];
+  if (targetTurboFrame && targetTurboFrame != fetchTurboFrame && document.querySelector(`turbo-frame#${targetTurboFrame}`)) {
+    event.detail.fetchOptions.headers['Turbo-Frame'] = targetTurboFrame;
+  }
+});
+
 // console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
