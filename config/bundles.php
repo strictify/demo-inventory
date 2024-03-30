@@ -18,4 +18,6 @@ return [
     Strictify\FormMapper\StrictifyFormMapperBundle::class => ['all' => true],
     Tbbc\MoneyBundle\TbbcMoneyBundle::class => ['all' => true],
     Symfony\UX\Autocomplete\AutocompleteBundle::class => ['all' => true],
+    CuyZ\ValinorBundle\ValinorBundle::class => ['all' => true],
+    BabDev\PagerfantaBundle\BabDevPagerfantaBundle::class => ['all' => true],
 ];

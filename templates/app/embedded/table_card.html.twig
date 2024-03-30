@@ -1,0 +1,33 @@
+<div class="card">
+    <div class="card-body">
+        <table class="table caption-top">
+            <caption>{{ caption|default('') }}</caption>
+
+{#            <colgroup>#}
+{#                <col class="col-200" span="1" />#}
+{#                <col class="xxx" span="1" />#}
+{#                <col class="col-edit" span="1" />#}
+{#            </colgroup>#}
+
+            <thead>
+            <tr>
+                {% for column in columns|default([]) %}
+                    <th scope="col">{{ column }}</th>
+                {% endfor %}
+                <th scope="col" class="text-end">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% block tbody -%}{%- endblock tbody %}
+            </tbody>
+
+            <tfoot>
+            {% if pager is defined %}
+                <tr>
+                    <td colspan="20">{{ pagerfanta(pager) }}</td>
+                </tr>
+            {% endif %}
+            </tfoot>
+        </table>
+    </div>
+</div>

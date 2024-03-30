@@ -34,12 +34,18 @@
         <file name="stubs/Symfony/Contracts/Service/ServiceProviderInterface.stubphp"/>
         <file name="stubs/Symfony/Form/Extension/Core/Type/TextType.stubphp"/>
         <file name="stubs/Symfony/FrameworkBundle/Controller/AbstractController.stubphp"/>
+        <file name="stubs/Doctrine/Bundle/DoctrineBundle/Repository/ServiceEntityRepositoryProxy.stubphp"/>
+<!--        <file name="stubs/Doctrine/ORM/EntityRepository.stubphp"/>-->
+<!--        <file name="stubs/Doctrine/ORM/AbstractQuery.stubphp"/>-->
+<!--        <file name="stubs/Doctrine/ORM/Query.stubphp"/>-->
+<!--        <file name="stubs/Doctrine/ORM/QueryBuilder.stubphp"/>-->
     </stubs>
 
     <issueHandlers>
     </issueHandlers>
 
     <plugins>
+        <pluginClass class="CuyZ\Valinor\QA\Psalm\ValinorPsalmPlugin"/>
         <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">
             <containerXml>var/cache/dev/App_KernelDevDebugContainer.xml</containerXml>
             <containerXml>var/cache/dev/App_KernelTestDebugContainer.xml</containerXml>

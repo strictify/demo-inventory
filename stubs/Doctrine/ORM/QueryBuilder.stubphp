@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Doctrine\ORM;
+
+/**
+ * @template T
+ */
+class QueryBuilder implements \Stringable
+{
+    /**
+     * @return Query<T>
+     */
+    public function getQuery(): Query
+    {}
+
+    /**
+     * @psalm-this-out self<mixed>
+     *
+     * @psalm-return QueryBuilder<mixed>
+     */
+    public function select(mixed ...$select): static
+    {}
+
+
+}

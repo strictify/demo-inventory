@@ -7,5 +7,6 @@
     <option name="codeFoldingPhpTemplate" value="false" />
     <option name="codeFoldingTwigRoute" value="false" />
     <option name="codeFoldingTwigTemplate" value="false" />
+    <option name="profilerCsvPath" value="" />
   </component>
 </project>

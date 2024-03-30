@@ -1,3 +1,8 @@
-body {
-    background-color: skyblue;
+@import url('../../vendor/babdev/pagerfanta-bundle/public/css/pagerfanta.css');
+
+table colgroup col.xxx {
+ /*display: none;*/
+    visibility: collapse;
+    width: 0;
+    /*background-color: red;*/
 }
