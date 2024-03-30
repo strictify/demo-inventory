@@ -5,6 +5,8 @@ import '@hotwired/turbo';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.min.css'
 import './styles/admin.css';
+import './styles/app.css';
+
 import './styles/extras.css';
 import 'animate.css/animate.min.css';
 

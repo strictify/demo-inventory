@@ -12,57 +12,51 @@
                         <a href="{{ path('app_products_list') }}">Products</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a class="bi bi-plus-circle" href="{{ path('app_products_create') }}"></a>
+                        <a class="bi bi-plus-circle" href="{{ path('app_products_create', {_filters: true}) }}" data-turbo-frame="inner"></a>
                     </li>
                 </ol>
             </nav>
         </div>
 
         <div class="row" data-turbo-action="advance">
-            <div class="col-1">
+            <div class="col-2">
                 {{ render(path('app_products_filters')) }}
             </div>
 
             {% block inner %}
                 <turbo-frame id="inner" class="col" data-turbo-action="advance">
-                    {{ random() }}
-                    <div class="card">
-                        <div class="card-body">
-                            <table class="table caption-top">
-                                <caption>Products</caption>
-                                <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col" class="text-end">Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for product in products %}
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>
-                                            <a href="{{ path('app_products_update', {'id': product.id, '_filters': true}) }}" data-turbo-action="advance">
-                                                {{ product.name }}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            {{ product.price|money_localized_format }}
-                                        </td>
-                                        <td class="text-end">
-                                            <a href="{{ path('app_products_transport', {'id': product.id}) }}" data-turbo-frame="details" data-turbo-action="advance">Transport</a>|
-                                            <a href="{{ path('app_products_sales', {'id': product.id}) }}" data-turbo-frame="details" data-turbo-action="advance">Sales</a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </turbo-frame>
+                    <div class="row">
+                        <div class="col">
+                            {% embed 'app/embedded/table_card.html.twig' with {caption: 'Products', columns: ['Name', 'Price']} %}
+                                {% block tbody %}
+                                    {% for product in pager %}
+                                        <tr>
+                                            <td>
+                                                <a href="{{ path('app_products_update', {'id': product.id, '_filters': true}) }}" data-turbo-action="advance">
+                                                    {{ product.name }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {{ product.price|money_localized_format }}
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="{{ path('app_products_transport', {'id': product.id, '_filters': true}) }}" data-turbo-frame="details" data-turbo-action="advance">Transport</a>|
+                                                <a href="{{ path('app_products_sales', {'id': product.id, '_filters': true}) }}" data-turbo-frame="details" data-turbo-action="advance">Sales</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endblock %}
 
-                {% block details -%}<turbo-frame class="col-4 hide-empty" id="details"></turbo-frame>{%- endblock details %}
+                            {% endembed %}
+                        </div>
+
+                        {% block details -%}
+                            <turbo-frame class="col-4 hide-empty" id="details"></turbo-frame>
+                        {%- endblock details %}
+
+                    </div>
+
+                </turbo-frame>
 
             {% endblock inner %}
         </div>
@@ -70,9 +64,14 @@
 {%- endblock main %}
 
 {% block filters %}
-    {{ form_start(form) }}
-    {{ random(1, 99999999) }}
-    {{ form_rest(form) }}
-    <button type="submit" class="btn btn-primary">Filter</button>
-    {{ form_end(form) }}
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Filters</h5>
+            {{ form_start(form) }}
+            {{ form_rest(form) }}
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a class="btn btn-secondary" href="{{ path('app_products_list') }}">Reset</a>
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock filters %}

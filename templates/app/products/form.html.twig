@@ -13,16 +13,22 @@
                         <div class="row">
                             <div class="col-6 pt-3">
                                 {{ form_row(form.name) }}
-                                {{ form_row(form.description) }}
                             </div>
                             <div class="col-6 pt-2">
                                 {{ form_row(form.price) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                {{ form_row(form.description) }}
                             </div>
                         </div>
                     {% endblock %}
 
                     {% block footer %}
                         <button type="submit" class="btn btn-primary">Submit</button>
+                        <a class="btn btn-secondary" href="{{ path('app_products_list', {_filters: true}) }}">Back</a>
                     {% endblock %}
                 {% endembed %}
             </div>

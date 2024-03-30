@@ -5,7 +5,7 @@
         <div class="card">
             <div class="card-header hide-empty">
                 {% block details_header %}BLOCK: details_header{% endblock %}
-                 <a href="{{ path('app_products_list') }}" class="bi bi-x-circle" data-turbo-frame="inner" data-turbo-action="advance"></a>
+                 <a href="{{ path('app_products_list', {'_filters': true}) }}" class="bi bi-x-circle" data-turbo-frame="inner" data-turbo-action="advance"></a>
             </div>
 
             <div class="card-body">

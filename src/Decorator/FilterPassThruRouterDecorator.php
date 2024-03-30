@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Decorator;
 
+use Override;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
@@ -71,7 +72,7 @@ class FilterPassThruRouterDecorator implements RouterInterface, WarmableInterfac
         return $parameters;
     }
 
-    #[\Override]
+    #[Override]
     public function warmUp(string $cacheDir, ?string $buildDir = null): array
     {
         return $this->router->warmUp($cacheDir, $buildDir);

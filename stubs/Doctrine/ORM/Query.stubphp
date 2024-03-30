@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Doctrine\ORM;
+
+/**
+ * @template T
+ * @extends AbstractQuery<T>
+ */
+class Query extends AbstractQuery
+{
+    /**
+     * @psalm-this-out self<mixed>
+     *
+     * @return self<mixed>
+     */
+    public function setHydrationMode(string|int $hydrationMode): static
+    {}
+}
