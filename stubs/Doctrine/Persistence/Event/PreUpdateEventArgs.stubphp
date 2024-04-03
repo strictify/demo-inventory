@@ -1,0 +1,40 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Doctrine\ORM\Event;
+
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\PersistentCollection;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
+use InvalidArgumentException;
+
+/**
+ * @template T of object
+ * @extends LifecycleEventArgs<EntityManagerInterface>
+ */
+class PreUpdateEventArgs extends LifecycleEventArgs
+{
+    /**
+     * @template TR of
+     *
+     * @psalm-return properties-of<T>
+     */
+    public function getEntityChangeSet()
+    {}
+
+    /**
+     * @template TProperties of properties-of<T>
+     * @template TA of key-of<TProperties>
+     * @template TB of list<TA>
+     * @template TKey of key-of<TB>
+     *
+     *
+     * @psalm-param TKey $field
+     *
+     *
+     * return value-of<properties-of<T>>
+     */
+    public function getOldValue( $field): bool
+    {}
+}

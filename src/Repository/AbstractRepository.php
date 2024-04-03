@@ -15,6 +15,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 abstract class AbstractRepository extends ServiceEntityRepository
 {
+    /**
+     * @return Pagerfanta<T>
+     */
     public function paginateWhere(int $page, array $_filters = []): Pagerfanta
     {
         $qb = $this->createQueryBuilder('o');

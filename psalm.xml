@@ -35,10 +35,12 @@
         <file name="stubs/Symfony/Form/Extension/Core/Type/TextType.stubphp"/>
         <file name="stubs/Symfony/FrameworkBundle/Controller/AbstractController.stubphp"/>
         <file name="stubs/Doctrine/Bundle/DoctrineBundle/Repository/ServiceEntityRepositoryProxy.stubphp"/>
-<!--        <file name="stubs/Doctrine/ORM/EntityRepository.stubphp"/>-->
-<!--        <file name="stubs/Doctrine/ORM/AbstractQuery.stubphp"/>-->
-<!--        <file name="stubs/Doctrine/ORM/Query.stubphp"/>-->
-<!--        <file name="stubs/Doctrine/ORM/QueryBuilder.stubphp"/>-->
+        <!--        <file name="stubs/Doctrine/Persistence/Event/LifecycleEventArgs.stubphp"/>-->
+        <!--        <file name="stubs/Doctrine/Persistence/Event/PreUpdateEventArgs.stubphp"/>-->
+        <!--        <file name="stubs/Doctrine/ORM/EntityRepository.stubphp"/>-->
+        <!--        <file name="stubs/Doctrine/ORM/AbstractQuery.stubphp"/>-->
+        <!--        <file name="stubs/Doctrine/ORM/Query.stubphp"/>-->
+        <!--        <file name="stubs/Doctrine/ORM/QueryBuilder.stubphp"/>-->
     </stubs>
 
     <issueHandlers>

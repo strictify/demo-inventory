@@ -8,9 +8,7 @@ use App\Attribute\Page;
 use Pagerfanta\Pagerfanta;
 use App\Attribute\MainRequest;
 use App\Entity\Product\Product;
-use Doctrine\ORM\AbstractQuery;
 use CuyZ\Valinor\Mapper\TreeMapper;
-use CuyZ\Valinor\Mapper\Source\Source;
 use App\Form\Entity\Product\ProductType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\Product\ProductRepository;
@@ -96,6 +94,9 @@ class ProductCrudController extends AbstractController
         ]);
     }
 
+    /**
+     * @return Pagerfanta<Product>
+     */
     protected function getProducts(int $page): Pagerfanta
     {
         return $this->productRepository->paginateWhere($page);
