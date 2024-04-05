@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Repository\User;
+namespace App\Repository\Vehicle;
 
-use App\Entity\User\User;
+use App\Entity\Vehicle\Vehicle;
 use App\Repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
- * @extends ServiceEntityRepository<User>
+ * @extends ServiceEntityRepository<Vehicle>
  */
-class UserRepository extends AbstractRepository
+class VehicleRepository extends AbstractRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, User::class);
+        parent::__construct($registry, Vehicle::class);
     }
 }

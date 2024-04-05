@@ -21,6 +21,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function paginateWhere(int $page, array $_filters = []): Pagerfanta
     {
         $qb = $this->createQueryBuilder('o');
+        $this->setDefaultOrder($qb);
         if (!$qb->getDQLPart('orderBy')) {
             $this->setDefaultOrder($qb);
         }
@@ -63,7 +64,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * @psalm-suppress PossiblyUnusedMethod - bug in psalm
+     */
     protected function setDefaultOrder(QueryBuilder $qb): void
     {
+        $qb->orderBy('o.id');
     }
 }

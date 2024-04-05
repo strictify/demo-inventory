@@ -48,9 +48,10 @@
             <errorLevel type="suppress">
                 <directory name="src/Controller"/>
                 <directory name="src/Entity"/>
+                <referencedMethod name="App\Repository\*\*::__construct"/>
             </errorLevel>
         </PossiblyUnusedMethod>
-        
+
         <PossiblyUnusedParam>
             <errorLevel type="suppress">
                 <directory name="src/Repository"/>
