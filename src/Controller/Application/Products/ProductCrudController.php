@@ -8,9 +8,6 @@ use App\Attribute\Page;
 use Pagerfanta\Pagerfanta;
 use App\Attribute\MainRequest;
 use App\Entity\Product\Product;
-use Doctrine\ORM\AbstractQuery;
-use CuyZ\Valinor\Mapper\TreeMapper;
-use CuyZ\Valinor\Mapper\Source\Source;
 use App\Form\Entity\Product\ProductType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\Product\ProductRepository;
@@ -18,19 +15,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use CuyZ\ValinorBundle\Configurator\Attributes\SupportDateFormats;
-use CuyZ\ValinorBundle\Configurator\Attributes\AllowSuperfluousKeys;
 
 class ProductCrudController extends AbstractController
 {
     public function __construct(
-        #[SupportDateFormats('Y-m-d', 'Y-m-d H:i'), AllowSuperfluousKeys]
-        private TreeMapper $treeMapper,
         protected ProductRepository $productRepository,
         private FormFactoryInterface $formFactory,
     )
     {
     }
+
 
     #[Route('/filters', name: 'app_products_filters', methods: ['GET'])]
     public function filters(#[MainRequest] Request $request): Response
@@ -55,10 +49,8 @@ class ProductCrudController extends AbstractController
     }
 
     #[Route('/', name: 'app_products_list', methods: ['GET'])]
-    public function list(Request $request, #[Page] int $page): Response
+    public function list(#[Page] int $page): Response
     {
-//        $_data = $this->treeMapper->map('array{name?: ?string}', Source::array($request->query->all('filters')));
-
         return $this->render('app/products/list.html.twig', [
             'pager' => $this->getProducts($page),
         ]);
@@ -96,6 +88,9 @@ class ProductCrudController extends AbstractController
         ]);
     }
 
+    /**
+     * @return Pagerfanta<Product>
+     */
     protected function getProducts(int $page): Pagerfanta
     {
         return $this->productRepository->paginateWhere($page);

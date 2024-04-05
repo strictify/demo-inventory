@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Doctrine\Persistence\Event;
+
+use Doctrine\Common\EventArgs;
+use Doctrine\Persistence\ObjectManager;
+
+/**
+ * @template-covariant TObjectManager of ObjectManager
+ * @template T of object
+ */
+class LifecycleEventArgs extends EventArgs
+{
+    /**
+     * @return T
+     */
+    public function getObject()
+    {}
+}

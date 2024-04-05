@@ -122,7 +122,7 @@
         "symfony/monolog-bundle": "^3.0",
         "symfony/stopwatch": "7.0.*",
         "symfony/web-profiler-bundle": "7.0.*",
-        "psalm/plugin-symfony": "dev-symfony-forms-6.3-compatibility",
-        "vimeo/psalm": "dev-master#c488d40e6243536a42608bbe37245f07ebebe1ad as 5.13.0"
+        "psalm/plugin-symfony": "dev-symfony-forms-6.3-compatibility as 5.1.1",
+        "vimeo/psalm": "^5"
     }
 }
