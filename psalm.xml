@@ -6,7 +6,7 @@
     memoizeMethodCallResults="true"
     resolveFromConfigFile="true"
     findUnusedBaselineEntry="false"
-    findUnusedCode="false"
+    findUnusedCode="true"
     disableVarParsing="true"
     findUnusedVariablesAndParams="true"
     findUnusedPsalmSuppress="true"
@@ -44,6 +44,18 @@
     </stubs>
 
     <issueHandlers>
+        <PossiblyUnusedMethod>
+            <errorLevel type="suppress">
+                <directory name="src/Controller"/>
+                <directory name="src/Entity"/>
+            </errorLevel>
+        </PossiblyUnusedMethod>
+        
+        <PossiblyUnusedParam>
+            <errorLevel type="suppress">
+                <directory name="src/Repository"/>
+            </errorLevel>
+        </PossiblyUnusedParam>
     </issueHandlers>
 
     <plugins>

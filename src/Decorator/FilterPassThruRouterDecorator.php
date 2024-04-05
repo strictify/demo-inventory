@@ -17,9 +17,6 @@ use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
 #[AsDecorator(decorates: 'router')]
 class FilterPassThruRouterDecorator implements RouterInterface, WarmableInterface
 {
-    /**
-     * @param array<string> $passQueryData
-     */
     public function __construct(
         private Router $router,
         private RequestStack $requestStack,
@@ -59,6 +56,12 @@ class FilterPassThruRouterDecorator implements RouterInterface, WarmableInterfac
         return $this->router->match($pathinfo);
     }
 
+    #[Override]
+    public function warmUp(string $cacheDir, ?string $buildDir = null): array
+    {
+        return $this->router->warmUp($cacheDir, $buildDir);
+    }
+
     private function doProcess(array $parameters, Request $request): array
     {
         foreach (['filters'] as $passQueryDatum) {
@@ -70,11 +73,5 @@ class FilterPassThruRouterDecorator implements RouterInterface, WarmableInterfac
         }
 
         return $parameters;
-    }
-
-    #[Override]
-    public function warmUp(string $cacheDir, ?string $buildDir = null): array
-    {
-        return $this->router->warmUp($cacheDir, $buildDir);
     }
 }

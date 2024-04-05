@@ -49,7 +49,7 @@ class ProductCrudController extends AbstractController
     }
 
     #[Route('/', name: 'app_products_list', methods: ['GET'])]
-    public function list(Request $request, #[Page] int $page): Response
+    public function list(#[Page] int $page): Response
     {
         return $this->render('app/products/list.html.twig', [
             'pager' => $this->getProducts($page),
