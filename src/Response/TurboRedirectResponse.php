@@ -6,7 +6,7 @@ namespace App\Response;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * @psalm-suppress PropertyNotSetInConstructor - bug in Symfony itself
  */
 class TurboRedirectResponse extends Response
 {

@@ -19,7 +19,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryProxy;
 abstract class AbstractRepository extends ServiceEntityRepositoryProxy
 {
     /**
-     * @psalm-suppress MixedReturnTypeCoercion
+     * @psalm-suppress MixedReturnTypeCoercion - Doctrine needs to be psalmified first
      *
      * @return Pagerfanta<T>
      */

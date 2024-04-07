@@ -6,7 +6,6 @@ namespace App\Service\Zoho;
 
 use Override;
 use Generator;
-use Doctrine\ORM\Events;
 use App\Entity\Company\Company;
 use App\Message\ZohoSyncMessage;
 use App\Service\Zoho\Sync\TaxSync;
@@ -20,17 +19,16 @@ use App\Service\Zoho\Sync\Model\SyncInterface;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\DependencyInjection\ServiceLocator;
+use App\Autowire\Doctrine\PreUpdateEventListenerInterface;
+use App\Autowire\Doctrine\PostFlushEventListenerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Symfony\Component\DependencyInjection\Attribute\TaggedLocator;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use function is_a;
 use function sprintf;
 use function array_keys;
 
-#[AsDoctrineListener(event: Events::preUpdate)]
-#[AsDoctrineListener(event: Events::postFlush)]
-class ZohoManager implements ResetInterface
+class ZohoManager implements ResetInterface, PreUpdateEventListenerInterface, PostFlushEventListenerInterface
 {
     /**
      * @var list<AsyncMessageInterface>
@@ -63,13 +61,10 @@ class ZohoManager implements ResetInterface
         $this->sync($company);
     }
 
-    /**
-     * @api
-     */
-    public function preUpdate(PreUpdateEventArgs $eventArgs): void
+    public function preUpdate(PreUpdateEventArgs $event): void
     {
-        $entity = $eventArgs->getObject();
-        $changeSet = $eventArgs->getEntityChangeSet();
+        $entity = $event->getObject();
+        $changeSet = $event->getEntityChangeSet();
 
         $messages = [];
         $identifiers = array_keys($this->syncs->getProvidedServices());
@@ -85,9 +80,6 @@ class ZohoManager implements ResetInterface
         $this->pendingUpdateMessages = $messages;
     }
 
-    /**
-     * @api
-     */
     public function postFlush(): void
     {
         foreach ($this->pendingUpdateMessages as $key => $message) {

@@ -28,6 +28,8 @@ class TwigDecorator extends Environment
 
     /**
      * @see Kernel::process()
+     *
+     * @api
      */
     public function setRequestStack(RequestStack $requestStack): void
     {
