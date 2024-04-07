@@ -27,7 +27,7 @@
                 <turbo-frame id="inner" class="col" data-turbo-action="advance">
                     <div class="row">
                         <div class="col">
-                            {% embed 'app/embedded/table_card.html.twig' with {caption: 'Products', columns: ['Name', 'Price']} %}
+                            {% embed 'app/embedded/table_card.html.twig' with {caption: 'Products', columns: ['Name', 'Price', 'Tax']} %}
                                 {% block tbody %}
                                     {% for product in pager %}
                                         <tr>
@@ -37,8 +37,9 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                {{ product.price|money_localized_format }}
+                                                {{ product.price ? product.price|money_localized_format : '-' }}
                                             </td>
+                                            <td>{{ product.tax }}</td>
                                             <td class="text-end">
                                                 <a href="{{ path('app_products_transport', {'id': product.id, '_filters': true}) }}" data-turbo-frame="details" data-turbo-action="advance">Transport</a>|
                                                 <a href="{{ path('app_products_sales', {'id': product.id, '_filters': true}) }}" data-turbo-frame="details" data-turbo-action="advance">Sales</a>

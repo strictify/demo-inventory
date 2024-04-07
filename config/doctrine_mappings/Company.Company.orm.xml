@@ -13,6 +13,15 @@
         </id>
 
         <field name="name"/>
+
+        <field name="zohoCredentials" type="json">
+            <options>
+                <option name="default">[]</option>
+            </options>
+        </field>
+
+
     </entity>
+
 
 </doctrine-mapping>

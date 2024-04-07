@@ -5,10 +5,9 @@ namespace App\Repository\User;
 use App\Entity\User\User;
 use App\Repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
- * @extends ServiceEntityRepository<User>
+ * @extends AbstractRepository<User>
  */
 class UserRepository extends AbstractRepository
 {

@@ -6,6 +6,7 @@ namespace App\Entity\Product;
 
 use Money\Money;
 use App\Entity\IdTrait;
+use App\Entity\Tax\Tax;
 use App\Entity\Company\Company;
 use App\Entity\TenantAwareTrait;
 use App\Entity\TenantAwareInterface;
@@ -19,6 +20,8 @@ class Product implements TenantAwareInterface
         private string $name,
         private ?string $description = null,
         private ?Money $price = null,
+        private ?Tax $tax = null,
+        private ?string $zohoId = null,
     )
     {
     }
@@ -41,6 +44,16 @@ class Product implements TenantAwareInterface
     public function setPrice(?Money $price): void
     {
         $this->price = $price;
+    }
+
+    public function getTax(): ?Tax
+    {
+        return $this->tax;
+    }
+
+    public function setTax(?Tax $tax): void
+    {
+        $this->tax = $tax;
     }
 
     public function getDescription(): ?string

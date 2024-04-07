@@ -5,10 +5,9 @@ namespace App\Repository\Vehicle;
 use App\Entity\Vehicle\Vehicle;
 use App\Repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
- * @extends ServiceEntityRepository<Vehicle>
+ * @extends AbstractRepository<Vehicle>
  */
 class VehicleRepository extends AbstractRepository
 {

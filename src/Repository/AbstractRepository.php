@@ -6,16 +6,21 @@ namespace App\Repository;
 use Pagerfanta\Pagerfanta;
 use Doctrine\ORM\QueryBuilder;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryProxy;
 
 /**
  * @template T of object
  *
- * @extends ServiceEntityRepository<T>
+ * @extends ServiceEntityRepositoryProxy<T>
+ *
+ * @psalm-suppress InternalMethod
+ * @psalm-suppress InternalClass
  */
-abstract class AbstractRepository extends ServiceEntityRepository
+abstract class AbstractRepository extends ServiceEntityRepositoryProxy
 {
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
+     *
      * @return Pagerfanta<T>
      */
     public function paginateWhere(int $page, array $_filters = []): Pagerfanta
@@ -64,9 +69,6 @@ abstract class AbstractRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    /**
-     * @psalm-suppress PossiblyUnusedMethod - bug in psalm
-     */
     protected function setDefaultOrder(QueryBuilder $qb): void
     {
         $qb->orderBy('o.id');

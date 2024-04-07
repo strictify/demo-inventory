@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Form\Entity\Product;
 
 use Money\Money;
+use App\Entity\Tax\Tax;
 use App\Service\Security;
 use App\Entity\Product\Product;
 use App\Form\Type\QuillTextAreaType;
@@ -13,6 +14,7 @@ use Symfony\Component\Form\AbstractType;
 use Tbbc\MoneyBundle\Form\Type\MoneyType;
 use App\Entity\Warehouse\WarehouseInventory;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Callback;
@@ -47,6 +49,14 @@ class ProductType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $builder->add('tax', EntityType::class, [
+            'class' => Tax::class,
+            'required' => false,
+            'placeholder' => '--',
+            'get_value' => fn(Product $product) => $product->getTax(),
+            'update_value' => fn(?Tax $tax, Product $product) => $product->setTax($tax),
+        ]);
+
         $builder->add('name', TextType::class, [
             'get_value' => fn(Product $product) => $product->getName(),
             'update_value' => fn(string $name, Product $product) => $product->setName($name),
@@ -88,8 +98,8 @@ class ProductType extends AbstractType
             'remove_value' => fn(WarehouseInventory $inventory) => $this->warehouseInventoryRepository->remove($inventory),
             'constraints' => [
                 new Valid(),
-                new Callback($this->validateUniqueWarehouses(...))
-            ]
+                new Callback($this->validateUniqueWarehouses(...)),
+            ],
         ]);
     }
 
@@ -110,7 +120,7 @@ class ProductType extends AbstractType
      */
     private function validateUniqueWarehouses(array $data, ExecutionContextInterface $executionContext): void
     {
-        $warehouses = array_filter($data, fn(null|ProductInventoryDTO|WarehouseInventory$datum) => (bool)$datum);
+        $warehouses = array_filter($data, fn(null|ProductInventoryDTO|WarehouseInventory $datum) => (bool)$datum);
 
         $warehouses = array_map(fn(ProductInventoryDTO|WarehouseInventory $datum) => $datum->getWarehouse(), $warehouses);
         $uniqueWarehouses = array_unique_objects($warehouses);

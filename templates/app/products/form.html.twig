@@ -11,10 +11,13 @@
 
                     {% block body %}
                         <div class="row">
-                            <div class="col-6 pt-3">
+                            <div class="col-4 pt-3">
                                 {{ form_row(form.name) }}
                             </div>
-                            <div class="col-6 pt-2">
+                            <div class="col-4 pt-3">
+                                {{ form_row(form.tax) }}
+                            </div>
+                            <div class="col-4 pt-2">
                                 {{ form_row(form.price) }}
                             </div>
                         </div>

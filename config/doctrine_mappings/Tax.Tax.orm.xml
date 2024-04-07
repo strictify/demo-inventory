@@ -3,9 +3,9 @@
     xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
     xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="App\Entity\Warehouse\Warehouse"
-            table="warehouse"
-            repository-class="App\Repository\Warehouse\WarehouseRepository">
+    <entity name="App\Entity\Tax\Tax"
+            table="tax"
+            repository-class="App\Repository\Tax\TaxRepository">
 
         <id name="id" column="id" type="uuid">
             <generator strategy="CUSTOM"/>
@@ -13,10 +13,9 @@
         </id>
 
         <many-to-one field="company"/>
-
         <field name="name"/>
+        <field name="value"/>
         <field name="zohoId" unique="true" nullable="true"/>
-        
     </entity>
 
 </doctrine-mapping>

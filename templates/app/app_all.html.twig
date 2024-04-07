@@ -41,10 +41,13 @@
                 </form>
             </div><!-- End Search Bar -->
 
+            <a href="{{ path('zoho_connect') }}" class="btn btn-warning" data-turbo-frame="main" data-turbo-action="advance">
+                Zoho
+            </a>
             <turbo-frame id="header-turbo" class="header-nav ms-auto" src="{{ path('app_header') }}">
-            <span class="spinner-border spinner-border-sm" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </span>
+                <span class="spinner-border spinner-border-sm" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </span>
             </turbo-frame><!-- End Icons Navigation -->
 
         </header><!-- End Header -->

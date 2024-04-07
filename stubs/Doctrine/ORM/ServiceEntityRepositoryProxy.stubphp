@@ -1,0 +1,33 @@
+declare(strict_types=1);
+
+namespace Doctrine\Bundle\DoctrineBundle\Repository;
+
+use Doctrine\Common\Collections\AbstractLazyCollection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Selectable;
+use Doctrine\DBAL\LockMode;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
+use LogicException;
+use Symfony\Component\VarExporter\LazyObjectInterface;
+
+use function sprintf;
+
+/**
+ * @internal Extend {@see ServiceEntityRepository} instead.
+ *
+ * @template T of object
+ * @template-extends EntityRepository<T>
+ */
+class ServiceEntityRepositoryProxy extends EntityRepository implements ServiceEntityRepositoryInterface
+{
+    /**
+     * @return T|null
+     */
+    public function findOneBy(array $criteria, ?array $orderBy = null): object|null
+    {}
+}
