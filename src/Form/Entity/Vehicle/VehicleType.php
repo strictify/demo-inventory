@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form\Entity\Vehicle;
 
+use Override;
 use App\Entity\Company\Company;
 use App\Entity\Vehicle\Vehicle;
 use Symfony\Component\Form\AbstractType;
@@ -18,6 +19,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
  */
 class VehicleType extends AbstractType
 {
+    #[Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -25,6 +27,7 @@ class VehicleType extends AbstractType
         ]);
     }
 
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('company', EntityType::class, [

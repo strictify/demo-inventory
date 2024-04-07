@@ -10,6 +10,7 @@ use App\Entity\Tax\Tax;
 use App\Entity\Company\Company;
 use App\Entity\TenantAwareTrait;
 use App\Entity\TenantAwareInterface;
+use function is_string;
 
 class Product implements TenantAwareInterface
 {
@@ -64,5 +65,15 @@ class Product implements TenantAwareInterface
     public function setDescription(?string $description): void
     {
         $this->description = $description;
+    }
+
+    /**
+     * @return non-empty-string|null
+     */
+    public function getZohoId(): ?string
+    {
+        $zohoId = $this->zohoId;
+
+        return is_string($zohoId) && $zohoId !== '' ? $zohoId : null;
     }
 }

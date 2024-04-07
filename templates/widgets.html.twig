@@ -3,7 +3,7 @@
         <div class="input-group-prepend">
             {{ form_widget(form.tbbc_currency.tbbc_name) }}
         </div>
-        {{ form_widget(form.tbbc_amount, {label: false, type: 'number'}) }}
+        {{ form_widget(form.tbbc_amount, {label: false, type: 'text'}) }}
     </div>
     {{ form_rest(form) }}
 {% endblock %}

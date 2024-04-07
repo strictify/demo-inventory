@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <psalm
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    phpVersion="8.3"
-    errorLevel="1"
-    memoizeMethodCallResults="true"
-    resolveFromConfigFile="true"
-    findUnusedBaselineEntry="false"
-    findUnusedCode="false"
-    disableVarParsing="true"
-    findUnusedVariablesAndParams="true"
-    findUnusedPsalmSuppress="true"
-    xmlns="https://getpsalm.org/schema/config"
-    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        phpVersion="8.3"
+        errorLevel="1"
+        memoizeMethodCallResults="true"
+        resolveFromConfigFile="true"
+        findUnusedBaselineEntry="false"
+        findUnusedCode="false"
+        disableVarParsing="true"
+        findUnusedVariablesAndParams="true"
+        findUnusedPsalmSuppress="true"
+        xmlns="https://getpsalm.org/schema/config"
+        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 >
     <forbiddenFunctions>
         <function name="dd"/>
@@ -39,6 +39,12 @@
     </stubs>
 
     <issueHandlers>
+        <UndefinedAttributeClass>
+            <errorLevel type="suppress">
+                <referencedClass name="JetBrains\PhpStorm\ExpectedValues"/>
+            </errorLevel>
+        </UndefinedAttributeClass>
+
         <PossiblyUnusedMethod>
             <errorLevel type="suppress">
                 <!-- Controllers are the "magic" of every framework -->

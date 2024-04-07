@@ -23,6 +23,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     {
     }
 
+    #[Override]
     public function load(ObjectManager $manager): void
     {
         $admin = new User(email: 'app@example.com', password: '', firstName: 'Super', lastName: 'Application', roles: ['ROLE_ADMIN', 'ROLE_USER']);

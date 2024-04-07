@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form\Entity\User;
 
+use Override;
 use App\Entity\User\User;
 use App\Service\Security;
 use Symfony\Component\Form\AbstractType;
@@ -29,6 +30,7 @@ class UserType extends AbstractType
     {
     }
 
+    #[Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -36,6 +38,7 @@ class UserType extends AbstractType
         ]);
     }
 
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('firstName', TextType::class, [

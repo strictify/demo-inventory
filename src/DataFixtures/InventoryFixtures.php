@@ -15,6 +15,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class InventoryFixtures extends Fixture implements DependentFixtureInterface
 {
+    #[Override]
     public function load(ObjectManager $manager): void
     {
         foreach ($this->getData() as [$warehouseReference, $productReference, $quantity]) {
