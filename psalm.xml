@@ -24,7 +24,6 @@
         <file name="functions.php"/>
         <ignoreFiles>
             <directory name="vendor"/>
-            <file name="src/Kernel.php"/>
         </ignoreFiles>
     </projectFiles>
 
@@ -44,6 +43,13 @@
                 <referencedClass name="JetBrains\PhpStorm\ExpectedValues"/>
             </errorLevel>
         </UndefinedAttributeClass>
+
+        <PossiblyUnusedProperty>
+            <errorLevel type="suppress">
+                <!--  We don't care about unused values from API response -->
+                <directory name="src/DTO/Zoho"/>
+            </errorLevel>
+        </PossiblyUnusedProperty>
 
         <PossiblyUnusedMethod>
             <errorLevel type="suppress">
