@@ -18,6 +18,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 {
     public const string PRODUCT_1 = 'product:1';
 
+    #[Override]
     public function load(ObjectManager $manager): void
     {
         foreach ($this->getData() as [$companyReference, $selfReference, $name, $price]) {

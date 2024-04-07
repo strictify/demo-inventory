@@ -9,6 +9,7 @@ use App\Entity\IdTrait;
 use App\Entity\Company\Company;
 use App\Entity\TenantAwareTrait;
 use App\Entity\TenantAwareInterface;
+use function is_string;
 
 class Warehouse implements TenantAwareInterface, Stringable
 {
@@ -35,5 +36,15 @@ class Warehouse implements TenantAwareInterface, Stringable
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return non-empty-string|null
+     */
+    public function getZohoId(): ?string
+    {
+        $zohoId = $this->zohoId;
+
+        return is_string($zohoId) && $zohoId !== '' ? $zohoId : null;
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
+use Override;
 use App\Entity\Company\Company;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -17,6 +18,7 @@ class CompanyFixtures extends Fixture
     {
     }
 
+    #[Override]
     public function load(ObjectManager $manager): void
     {
         $company1 = new Company('Strictify');

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use LogicException;
-use App\Service\Zoho\ZohoSync;
+use App\Service\Zoho\ZohoManager;
 use App\Repository\Company\CompanyRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -22,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DummyCommand extends Command
 {
     public function __construct(
-        private ZohoSync $zohoSync,
+        private ZohoManager $zohoSync,
         private CompanyRepository $companyRepository,
     )
     {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\ValueResolver;
 
+use Override;
 use App\Attribute\Page;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
@@ -20,6 +21,7 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
  */
 class PageValueResolver implements ValueResolverInterface
 {
+    #[Override]
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         if (!$this->getAttribute($argument)) {

@@ -24,21 +24,25 @@ class FilterPassThruRouterDecorator implements RouterInterface, WarmableInterfac
     {
     }
 
+    #[Override]
     public function setContext(RequestContext $context): void
     {
         $this->router->setContext($context);
     }
 
+    #[Override]
     public function getContext(): RequestContext
     {
         return $this->router->getContext();
     }
 
+    #[Override]
     public function getRouteCollection(): RouteCollection
     {
         return $this->router->getRouteCollection();
     }
 
+    #[Override]
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
         $keyword = '_filters';
@@ -51,6 +55,7 @@ class FilterPassThruRouterDecorator implements RouterInterface, WarmableInterfac
         return $this->router->generate($name, $parameters, $referenceType);
     }
 
+    #[Override]
     public function match(string $pathinfo): array
     {
         return $this->router->match($pathinfo);

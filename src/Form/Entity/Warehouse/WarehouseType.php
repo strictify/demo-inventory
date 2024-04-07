@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form\Entity\Warehouse;
 
+use Override;
 use App\Entity\Company\Company;
 use App\Entity\Warehouse\Warehouse;
 use Symfony\Component\Form\AbstractType;
@@ -18,6 +19,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
  */
 class WarehouseType extends AbstractType
 {
+    #[Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -25,6 +27,7 @@ class WarehouseType extends AbstractType
         ]);
     }
 
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('company', EntityType::class, [

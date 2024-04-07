@@ -27,9 +27,10 @@
                 <turbo-frame id="inner" class="col" data-turbo-action="advance">
                     <div class="row">
                         <div class="col">
-                            {% embed 'app/embedded/table_card.html.twig' with {caption: 'Products', columns: ['Name', 'Price', 'Tax']} %}
+                            {% embed 'app/embedded/table_card.html.twig' with {caption: 'Products', columns: ['Name', 'Price', 'Tax', 'Zoho']} %}
                                 {% block tbody %}
                                     {% for product in pager %}
+                                        {# @var \App\Entity\Product\Product product #}
                                         <tr>
                                             <td>
                                                 <a href="{{ path('app_products_update', {'id': product.id, '_filters': true}) }}" data-turbo-action="advance">
@@ -40,6 +41,11 @@
                                                 {{ product.price ? product.price|money_localized_format : '-' }}
                                             </td>
                                             <td>{{ product.tax }}</td>
+                                            <td>
+                                                {% if product.zohoId %}
+                                                    <i class="bi bi-check-circle"></i>
+                                                {% endif %}
+                                            </td>
                                             <td class="text-end">
                                                 <a href="{{ path('app_products_transport', {'id': product.id, '_filters': true}) }}" data-turbo-frame="details" data-turbo-action="advance">Transport</a>|
                                                 <a href="{{ path('app_products_sales', {'id': product.id, '_filters': true}) }}" data-turbo-frame="details" data-turbo-action="advance">Sales</a>

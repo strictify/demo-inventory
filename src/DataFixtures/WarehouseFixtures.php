@@ -20,6 +20,7 @@ class WarehouseFixtures extends Fixture implements DependentFixtureInterface
     {
     }
 
+    #[Override]
     public function load(ObjectManager $manager): void
     {
         foreach ($this->getData() as [$companyReference, $selfReference, $name]) {

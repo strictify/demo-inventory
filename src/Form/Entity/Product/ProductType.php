@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form\Entity\Product;
 
+use Override;
 use Money\Money;
 use App\Entity\Tax\Tax;
 use App\Service\Security;
@@ -40,6 +41,7 @@ class ProductType extends AbstractType
     {
     }
 
+    #[Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -47,6 +49,7 @@ class ProductType extends AbstractType
         ]);
     }
 
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('tax', EntityType::class, [
