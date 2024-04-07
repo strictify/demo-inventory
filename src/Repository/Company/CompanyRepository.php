@@ -5,10 +5,9 @@ namespace App\Repository\Company;
 use App\Entity\Company\Company;
 use App\Repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
- * @extends ServiceEntityRepository<Company>
+ * @extends AbstractRepository<Company>
  */
 class CompanyRepository extends AbstractRepository
 {

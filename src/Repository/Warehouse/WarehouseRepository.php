@@ -5,10 +5,9 @@ namespace App\Repository\Warehouse;
 use App\Entity\Warehouse\Warehouse;
 use App\Repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
- * @extends ServiceEntityRepository<Warehouse>
+ * @extends AbstractRepository<Warehouse>
  */
 class WarehouseRepository extends AbstractRepository
 {

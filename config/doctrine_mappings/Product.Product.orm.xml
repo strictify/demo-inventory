@@ -18,6 +18,11 @@
         <field name="name"/>
         <field name="description" nullable="true"/>
         <field name="price" nullable="true" type="money"/>
+        <field name="zohoId" unique="true" nullable="true"/>
+
+        <many-to-one field="tax">
+            <join-column on-delete="SET NULL"/>
+        </many-to-one>
 
     </entity>
 

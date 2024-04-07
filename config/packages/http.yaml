@@ -1,0 +1,9 @@
+framework:
+    http_client:
+        scoped_clients:
+        # only requests matching scope will use these options
+#            github.client:
+#                base_uri: 'https://accounts.zoho.eu'
+#                headers:
+#                    Accept: 'application/vnd.github.v3+json'
+#                    Authorization: 'token %env(GITHUB_API_TOKEN)%'

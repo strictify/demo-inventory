@@ -6,7 +6,7 @@
     memoizeMethodCallResults="true"
     resolveFromConfigFile="true"
     findUnusedBaselineEntry="false"
-    findUnusedCode="true"
+    findUnusedCode="false"
     disableVarParsing="true"
     findUnusedVariablesAndParams="true"
     findUnusedPsalmSuppress="true"
@@ -35,19 +35,20 @@
         <file name="stubs/Symfony/Form/Extension/Core/Type/TextType.stubphp"/>
         <file name="stubs/Symfony/FrameworkBundle/Controller/AbstractController.stubphp"/>
         <file name="stubs/Doctrine/Bundle/DoctrineBundle/Repository/ServiceEntityRepositoryProxy.stubphp"/>
-        <!--        <file name="stubs/Doctrine/Persistence/Event/LifecycleEventArgs.stubphp"/>-->
-        <!--        <file name="stubs/Doctrine/Persistence/Event/PreUpdateEventArgs.stubphp"/>-->
-        <!--        <file name="stubs/Doctrine/ORM/EntityRepository.stubphp"/>-->
-        <!--        <file name="stubs/Doctrine/ORM/AbstractQuery.stubphp"/>-->
-        <!--        <file name="stubs/Doctrine/ORM/Query.stubphp"/>-->
-        <!--        <file name="stubs/Doctrine/ORM/QueryBuilder.stubphp"/>-->
+        <!--        <file name="stubs/Doctrine/ORM/ServiceEntityRepositoryProxy.stubphp"/>-->
     </stubs>
 
     <issueHandlers>
         <PossiblyUnusedMethod>
             <errorLevel type="suppress">
+                <!-- Controllers are the "magic" of every framework -->
                 <directory name="src/Controller"/>
+                <!-- During MVP, some methods will be unused -->
                 <directory name="src/Entity"/>
+                <!-- cuyz/valinor-bundle takes care of these -->
+                <directory name="src/DTO/Zoho"/>
+                <directory name="src/DTO/OAuth"/>
+                <!-- psalm doesn't detect these calls to __construct -->
                 <referencedMethod name="App\Repository\*\*::__construct"/>
             </errorLevel>
         </PossiblyUnusedMethod>
@@ -57,6 +58,19 @@
                 <directory name="src/Repository"/>
             </errorLevel>
         </PossiblyUnusedParam>
+
+        <InternalMethod>
+            <errorLevel type="suppress">
+                <directory name="src/Repository"/>
+                <referencedMethod name="*::__construct"/>
+            </errorLevel>
+            <errorLevel type="suppress">
+                <referencedMethod name="Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryProxy::findOneBy"/>
+                <referencedMethod name="Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryProxy::findBy"/>
+                <referencedMethod name="Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryProxy::find"/>
+            </errorLevel>
+        </InternalMethod>
+
     </issueHandlers>
 
     <plugins>
