@@ -112,6 +112,7 @@ class ZohoManager implements ResetInterface, PreUpdateEventListenerInterface, Po
                 new DelayStamp($key * 1_000), // delay each update by 1 second
             ]);
         }
+        $this->pendingUpdateMessages = [];
     }
 
     /**
