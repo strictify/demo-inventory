@@ -147,3 +147,9 @@
         </ul>
     </turbo-frame><!-- End Sidebar-->
 {%- endblock %}
+
+{%- block mercure_listener -%}
+    <turbo-frame id="mercure">
+        <div {{ turbo_stream_listen(topic) }}></div>
+    </turbo-frame>
+{%- endblock %}

@@ -27,6 +27,7 @@ class Product implements TenantAwareInterface, ZohoAwareInterface, Stringable
         private ?Money $price = null,
         private ?Tax $tax = null,
         private ?string $zohoId = null,
+        private ZohoStatusEnum $zohoStatus = ZohoStatusEnum::NOT_CONNECTED,
     )
     {
     }
@@ -85,5 +86,15 @@ class Product implements TenantAwareInterface, ZohoAwareInterface, Stringable
         $zohoId = $this->zohoId;
 
         return is_string($zohoId) && $zohoId !== '' ? $zohoId : null;
+    }
+
+    public function getZohoStatus(): ZohoStatusEnum
+    {
+        return $this->zohoStatus;
+    }
+
+    public function setZohoStatus(ZohoStatusEnum $zohoStatus): void
+    {
+        $this->zohoStatus = $zohoStatus;
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Zoho\Model;
 
+use App\Entity\Company\Company;
 use App\Entity\ZohoAwareInterface;
 use App\DTO\Zoho\ZohoMappingInterface;
 use App\Message\AsyncMessageInterface;
@@ -63,4 +64,11 @@ interface SyncInterface
      * @param TK $mapping
      */
     public function map(ZohoAwareInterface $entity, object $mapping): void;
+
+    /**
+     * @param TK $mapping
+     *
+     * @return TEntity
+     */
+    public function createNewEntity(Company $company, object $mapping): ZohoAwareInterface;
 }

@@ -8,6 +8,8 @@ use App\Attribute\Page;
 use Pagerfanta\Pagerfanta;
 use App\Attribute\MainRequest;
 use App\Entity\Product\Product;
+use App\Turbo\Stream\ReplaceStream;
+use App\Service\Mercure\StreamBuilder;
 use App\Form\Entity\Product\ProductType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\Product\ProductRepository;
@@ -54,6 +56,18 @@ class ProductCrudController extends AbstractController
         return $this->render('app/products/list.html.twig', [
             'pager' => $this->getProducts($page),
         ]);
+    }
+
+    #[Route('/row/{id}', name: 'app_products_list_one', methods: ['GET'])]
+    public function renderRow(Product $product, StreamBuilder $streamBuilder): Response
+    {
+        $html = $this->renderBlockView('app/products/list.html.twig', 'tr', [
+            'product' => $product,
+        ]);
+
+        return $streamBuilder->createResponse(
+            new ReplaceStream('product-' . $product->getId(), $html),
+        );
     }
 
     #[Route('/create', name: 'app_products_create', methods: ['GET', 'POST'])]

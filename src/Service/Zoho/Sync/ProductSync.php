@@ -9,6 +9,7 @@ use Money\Money;
 use Money\Currency;
 use App\Entity\Tax\Tax;
 use App\Entity\Product\Product;
+use App\Entity\Company\Company;
 use App\DTO\Zoho\Item as ZohoItem;
 use App\Entity\ZohoAwareInterface;
 use App\DTO\Zoho\Items as ZohoItems;
@@ -19,7 +20,7 @@ use App\Repository\Product\ProductRepository;
 use function is_float;
 use function is_string;
 use function strip_tags;
-use function array_key_exists;
+use function any_key_exists;
 
 /**
  * @implements SyncInterface<Product, ZohoItem, ZohoItems>
@@ -75,7 +76,7 @@ class ProductSync implements SyncInterface
     #[Override]
     public function onUpdate(ZohoAwareInterface $entity, array $changeSet): iterable
     {
-        if (!array_key_exists('name', $changeSet) && !array_key_exists('value', $changeSet)) {
+        if (!any_key_exists(['name', 'description', 'price', 'tax'], $changeSet)) {
             return;
         }
 
@@ -90,6 +91,15 @@ class ProductSync implements SyncInterface
             'name' => $entity->getName(),
             'description' => strip_tags($entity->getDescription() ?? ''),
         ];
+    }
+
+    #[Override]
+    public function createNewEntity(Company $company, object $mapping): Product
+    {
+        $product = new Product($company, $mapping->getName(), zohoId: $mapping->getId());
+        $this->productRepository->persist($product);
+        
+        return $product;
     }
 
     private function findTax(ZohoItem $zohoItem): ?Tax

@@ -26,6 +26,8 @@
     {% block body %}
         <!-- ======= Header ======= -->
         <header id="header" class="header fixed-top d-flex align-items-center">
+            <turbo-frame id="mercure" src="{{ path('app_mercure_listener') }}"></turbo-frame>
+
             <div class="d-flex align-items-center justify-content-between">
                 <a href="index.html" class="logo d-flex align-items-center">
                     <img src="{{ asset('img/logo.png') }}" alt="">

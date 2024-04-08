@@ -30,27 +30,7 @@
                             {% embed 'app/embedded/table_card.html.twig' with {caption: 'Products', columns: ['Name', 'Price', 'Tax', 'Zoho']} %}
                                 {% block tbody %}
                                     {% for product in pager %}
-                                        {# @var \App\Entity\Product\Product product #}
-                                        <tr>
-                                            <td>
-                                                <a href="{{ path('app_products_update', {'id': product.id, '_filters': true}) }}" data-turbo-action="advance">
-                                                    {{ product.name }}
-                                                </a>
-                                            </td>
-                                            <td>
-                                                {{ product.price ? product.price|money_localized_format : '-' }}
-                                            </td>
-                                            <td>{{ product.tax }}</td>
-                                            <td>
-                                                {% if product.zohoId %}
-                                                    <i class="bi bi-check-circle"></i>
-                                                {% endif %}
-                                            </td>
-                                            <td class="text-end">
-                                                <a href="{{ path('app_products_transport', {'id': product.id, '_filters': true}) }}" data-turbo-frame="details" data-turbo-action="advance">Transport</a>|
-                                                <a href="{{ path('app_products_sales', {'id': product.id, '_filters': true}) }}" data-turbo-frame="details" data-turbo-action="advance">Sales</a>
-                                            </td>
-                                        </tr>
+                                        {{ block('tr', _self) }}
                                     {% endfor %}
                                 {% endblock %}
                             {% endembed %}
@@ -66,6 +46,37 @@
         </div>
     </turbo-frame>
 {%- endblock main %}
+
+{% block tr %}
+    {# @var \App\Entity\Product\Product product #}
+    <tr id="product-{{ product.id }}" data-reload-src="{{ path('app_products_list_one', {'id': product.id}) }}" is="turbo-frame">
+        <td>
+            <a href="{{ path('app_products_update', {'id': product.id, '_filters': true}) }}" data-turbo-action="advance">
+                {{ product.name }} {{ random() }}
+            </a>
+        </td>
+        <td>
+            {{ product.price ? product.price|money_localized_format : '-' }}
+        </td>
+        <td>{{ product.tax }}</td>
+        <td>
+            {% if product.zohoId %}
+                <i class="bi bi-check-circle"></i>
+            {% endif %}
+            <div class="spinner-border spinner-border-sm text-secondary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <i class="bi bi-download"></i>
+            <i class="bi bi-upload"></i>
+        </td>
+        <td class="text-end">
+            <a href="{{ path('app_products_transport', {'id': product.id, '_filters': true}) }}" data-turbo-frame="details" data-turbo-action="advance">Transport</a>|
+            <a href="{{ path('app_products_sales', {'id': product.id, '_filters': true}) }}" data-turbo-frame="details" data-turbo-action="advance">Sales</a>|
+
+            <a href="{{ path('app_products_list_one', {'id': product.id}) }}">Refresh</a>
+        </td>
+    </tr>
+{% endblock tr %}
 
 {% block filters %}
     <div class="card">

@@ -7,6 +7,7 @@ namespace App\Service\Zoho\Sync;
 use Override;
 use App\Entity\Tax\Tax;
 use App\DTO\Zoho\Tax as ZohoTax;
+use App\Entity\Company\Company;
 use App\Entity\ZohoAwareInterface;
 use App\DTO\Zoho\Taxes as ZohoTaxes;
 use App\Repository\Tax\TaxRepository;
@@ -73,5 +74,14 @@ class TaxSync implements SyncInterface
             'tax_name' => $entity->getName(),
             'tax_percentage' => $entity->getValue(),
         ];
+    }
+
+    #[Override]
+    public function createNewEntity(Company $company, object $mapping): Tax
+    {
+        $tax = new Tax($company, $mapping->getTaxName(), value: $mapping->getTaxPercentage(), zohoId: $mapping->getId());
+        $this->taxRepository->persist($tax);
+        
+        return $tax;
     }
 }

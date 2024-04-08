@@ -87,9 +87,8 @@ class ZohoImprovedManager implements ResetInterface, PreUpdateEventListenerInter
             $data = $this->zohoClient->get($company, $sync->getBaseUrl(), $mapperClass);
             foreach ($data->getMany() as $item) {
                 $zohoId = $item->getId();
-                if ($entity = $sync->findEntityByZohoId($zohoId)) {
-                    $sync->map($entity, $item);
-                }
+                $entity = $sync->findEntityByZohoId($zohoId) ?? $sync->createNewEntity($company, $item);
+                $sync->map($entity, $item);
             }
             // in case tagged service didn't flush its entities, do it here
             $this->companyRepository->flush();
