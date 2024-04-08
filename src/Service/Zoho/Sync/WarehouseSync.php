@@ -8,6 +8,7 @@ use Override;
 use App\DTO\Zoho\Warehouses;
 use App\Entity\Company\Company;
 use App\Service\Zoho\ZohoClient;
+use App\Entity\ZohoAwareInterface;
 use App\Entity\Warehouse\Warehouse;
 use App\DTO\Zoho\Warehouse as ZohoWarehouse;
 use App\Service\Zoho\Sync\Model\SyncInterface;
@@ -38,11 +39,14 @@ class WarehouseSync implements SyncInterface
         if (!is_string($zohoId = $warehouse->getZohoId())) {
             return;
         }
+        // @see https://www.zoho.com/inventory/api/v1/multi-warehouse/#overview
         $url = sprintf('/settings/warehouses/%s', $zohoId);
 
         match ($message->getAction()) {
-            'update' => $this->zohoClient->put($warehouse->getCompany(), $url, ['warehouse_name' => $warehouse->getName()]),
             'remove' => $this->zohoClient->delete($warehouse->getCompany(), $url),
+            'update' => $this->zohoClient->put($warehouse->getCompany(), $url, data: [
+                'warehouse_name' => $warehouse->getName(),
+            ]),
         };
     }
 
@@ -53,7 +57,7 @@ class WarehouseSync implements SyncInterface
     }
 
     #[Override]
-    public function onUpdate(object $entity, array $changeSet): iterable
+    public function onUpdate(ZohoAwareInterface $entity, array $changeSet): iterable
     {
         if (!array_key_exists('name', $changeSet)) {
             return;

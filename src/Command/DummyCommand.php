@@ -32,7 +32,7 @@ class DummyCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $company = $this->companyRepository->findOneBy(['name' => 'Strictify']) ?? throw new LogicException();
-        $this->zohoSync->sync($company);
+        $this->zohoSync->downloadAll($company);
 
         return Command::SUCCESS;
     }

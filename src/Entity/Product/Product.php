@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace App\Entity\Product;
 
+use Override;
+use Stringable;
 use Money\Money;
+use Money\Currency;
 use App\Entity\IdTrait;
 use App\Entity\Tax\Tax;
 use App\Entity\Company\Company;
 use App\Entity\TenantAwareTrait;
+use App\Entity\ZohoAwareInterface;
 use App\Entity\TenantAwareInterface;
 use function is_string;
 
-class Product implements TenantAwareInterface
+class Product implements TenantAwareInterface, ZohoAwareInterface, Stringable
 {
     use IdTrait, TenantAwareTrait;
 
@@ -27,6 +31,11 @@ class Product implements TenantAwareInterface
     {
     }
 
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
     public function getName(): string
     {
         return $this->name;
@@ -37,9 +46,9 @@ class Product implements TenantAwareInterface
         $this->name = $name;
     }
 
-    public function getPrice(): ?Money
+    public function getPrice(): Money
     {
-        return $this->price;
+        return $this->price ?: new Money(0, new Currency('USD'));
     }
 
     public function setPrice(?Money $price): void
@@ -67,9 +76,7 @@ class Product implements TenantAwareInterface
         $this->description = $description;
     }
 
-    /**
-     * @return non-empty-string|null
-     */
+    #[Override]
     public function getZohoId(): ?string
     {
         $zohoId = $this->zohoId;
