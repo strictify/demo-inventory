@@ -11,6 +11,9 @@ trait IdTrait
 {
     protected ?UuidInterface $id = null;
 
+    /**
+     * @return non-empty-string
+     */
     public function getId(): string
     {
         $id = $this->id ??= $this->doCreateUuid();

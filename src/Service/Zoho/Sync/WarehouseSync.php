@@ -5,53 +5,52 @@ declare(strict_types=1);
 namespace App\Service\Zoho\Sync;
 
 use Override;
-use App\DTO\Zoho\Warehouses;
-use App\Entity\Company\Company;
-use App\Service\Zoho\ZohoClient;
 use App\Entity\ZohoAwareInterface;
 use App\Entity\Warehouse\Warehouse;
+use App\Message\Zoho\ZohoPutEntityMessage;
 use App\DTO\Zoho\Warehouse as ZohoWarehouse;
-use App\Service\Zoho\Sync\Model\SyncInterface;
-use App\Message\Zoho\ZohoSyncWarehouseMessage;
+use App\DTO\Zoho\Warehouses as ZohoWarehouses;
 use App\Repository\Warehouse\WarehouseRepository;
-use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use function is_string;
+use App\Service\Zoho\Model\SyncInterface;
 use function array_key_exists;
 
 /**
- * @implements SyncInterface<Warehouse>
+ * @implements SyncInterface<Warehouse, ZohoWarehouse, ZohoWarehouses>
  */
 class WarehouseSync implements SyncInterface
 {
     public function __construct(
-        private ZohoClient $zohoClient,
         private WarehouseRepository $warehouseRepository,
     )
     {
     }
 
-    #[AsMessageHandler]
-    public function __invoke(ZohoSyncWarehouseMessage $message): void
+    #[Override]
+    public function map(ZohoAwareInterface $entity, object $mapping): void
     {
-        if (!$warehouse = $this->warehouseRepository->find($message->getId())) {
-            return;
-        }
-        if (!is_string($zohoId = $warehouse->getZohoId())) {
-            return;
-        }
-        // @see https://www.zoho.com/inventory/api/v1/multi-warehouse/#overview
-        $url = sprintf('/settings/warehouses/%s', $zohoId);
-
-        match ($message->getAction()) {
-            'remove' => $this->zohoClient->delete($warehouse->getCompany(), $url),
-            'update' => $this->zohoClient->put($warehouse->getCompany(), $url, data: [
-                'warehouse_name' => $warehouse->getName(),
-            ]),
-        };
+        $entity->setName($mapping->getName());
     }
 
     #[Override]
-    public function getEntityName(): string
+    public function getBaseUrl(): string
+    {
+        return '/settings/warehouses';
+    }
+
+    #[Override]
+    public function findEntityByZohoId(string $zohoId): Warehouse|null
+    {
+        return $this->warehouseRepository->findOneBy(['zohoId' => $zohoId]);
+    }
+
+    #[Override]
+    public function getMappingClass(): string
+    {
+        return ZohoWarehouses::class;
+    }
+
+    #[Override]
+    public function getEntityClass(): string
     {
         return Warehouse::class;
     }
@@ -59,32 +58,18 @@ class WarehouseSync implements SyncInterface
     #[Override]
     public function onUpdate(ZohoAwareInterface $entity, array $changeSet): iterable
     {
-        if (!array_key_exists('name', $changeSet)) {
+        if (!array_key_exists('name', $changeSet) && !array_key_exists('value', $changeSet)) {
             return;
         }
 
-        yield new ZohoSyncWarehouseMessage($entity, 'update');
+        yield new ZohoPutEntityMessage($entity, 'put');
     }
 
     #[Override]
-    public function downloadAll(Company $company): void
+    public function createPutPayload(ZohoAwareInterface $entity): array
     {
-        $warehouses = $this->zohoClient->get($company, '/settings/warehouses', Warehouses::class);
-        foreach ($warehouses->warehouses as $zohoWarehouse) {
-            $warehouse = $this->getWarehouse($zohoWarehouse, $company);
-            $warehouse->setName($zohoWarehouse->getName());
-        }
-        $this->warehouseRepository->flush();
-    }
-
-    private function getWarehouse(ZohoWarehouse $zohoWarehouse, Company $company): Warehouse
-    {
-        if ($product = $this->warehouseRepository->findOneBy(['zohoId' => $zohoWarehouse->getWarehouseId()])) {
-            return $product;
-        }
-        $warehouse = new Warehouse($company, $zohoWarehouse->getName(), zohoId: $zohoWarehouse->getWarehouseId());
-        $this->warehouseRepository->persist($warehouse);
-
-        return $warehouse;
+        return [
+            'warehouse_name' => $entity->getName(),
+        ];
     }
 }

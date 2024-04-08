@@ -92,6 +92,39 @@ class ZohoClient implements ResetInterface
         $this->request($company, 'DELETE', $url);
     }
 
+    public function getConnectUrl(): string
+    {
+        return sprintf('%s/oauth/v2/auth?scope=%s&client_id=%s&state=testing&response_type=code&redirect_uri=%s&access_type=offline',
+            $this->baseUrl,
+            'ZohoInventory.FullAccess.all',
+            $this->clientId,
+            $this->generateRedirectUrl(),
+        );
+    }
+
+    public function getToken(string $code, Company $company): void
+    {
+        $url = sprintf('%s/oauth/v2/token?code=%s&client_id=%s&client_secret=%s&redirect_uri=%s&grant_type=authorization_code',
+            $this->baseUrl,
+            $code,
+            $this->clientId,
+            $this->clientSecret,
+            $this->generateRedirectUrl(),
+        );
+
+        $response = $this->httpClient->request('POST', $url);
+        $data = $response->getContent();
+        $dto = $this->treeMapper->map(Token::class, Source::json($data)->camelCaseKeys());
+
+        $company->setZohoAccessToken($dto->getAccessToken());
+        $company->setZohoRefreshToken($dto->getRefreshToken());
+        if (is_int($expiresIn = $dto->getExpiresIn())) {
+            $expiresAt = new DateTimeImmutable('+' . $expiresIn . ' seconds');
+            $company->setZohoExpiresAt($expiresAt);
+        }
+        $this->tokenRefreshed = true;
+    }
+
     /**
      * @param non-empty-array<string, scalar>|null $payload
      *
@@ -127,39 +160,6 @@ class ZohoClient implements ResetInterface
         }
 
         return $response->getContent(false);
-    }
-
-    public function getConnectUrl(): string
-    {
-        return sprintf('%s/oauth/v2/auth?scope=%s&client_id=%s&state=testing&response_type=code&redirect_uri=%s&access_type=offline',
-            $this->baseUrl,
-            'ZohoInventory.FullAccess.all',
-            $this->clientId,
-            $this->generateRedirectUrl(),
-        );
-    }
-
-    public function getToken(string $code, Company $company): void
-    {
-        $url = sprintf('%s/oauth/v2/token?code=%s&client_id=%s&client_secret=%s&redirect_uri=%s&grant_type=authorization_code',
-            $this->baseUrl,
-            $code,
-            $this->clientId,
-            $this->clientSecret,
-            $this->generateRedirectUrl(),
-        );
-
-        $response = $this->httpClient->request('POST', $url);
-        $data = $response->getContent();
-        $dto = $this->treeMapper->map(Token::class, Source::json($data)->camelCaseKeys());
-
-        $company->setZohoAccessToken($dto->getAccessToken());
-        $company->setZohoRefreshToken($dto->getRefreshToken());
-        if (is_int($expiresIn = $dto->getExpiresIn())) {
-            $expiresAt = new DateTimeImmutable('+' . $expiresIn . ' seconds');
-            $company->setZohoExpiresAt($expiresAt);
-        }
-        $this->tokenRefreshed = true;
     }
 
     private function refreshToken(Company $company): string

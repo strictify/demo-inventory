@@ -162,3 +162,17 @@ function implode_non_empty(string $separator, array $parts): ?string
 
     return implode($separator, $filtered) ?: null;
 }
+
+/**
+ * @param non-empty-list<array-key> $lookup
+ */
+function any_key_exists(array $lookup, array $haystack): bool
+{
+    foreach ($lookup as $item) {
+        if (array_key_exists($item, $haystack)) {
+            return true;
+        }
+    }
+
+    return false;
+}

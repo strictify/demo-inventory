@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace App\DTO\Zoho;
 
-class Items
+use LogicException;
+
+/**
+ * @implements ZohoMappingInterface<Item>
+ */
+class Items implements ZohoMappingInterface
 {
     /**
      * @param list<Item> $items
@@ -12,8 +17,19 @@ class Items
     public function __construct(
         public int $code,
         public string $message,
-        public array $items,
+        public ?Item $item = null,
+        public array $items = [],
     )
     {
+    }
+
+    public function getOne(): object
+    {
+        return $this->item ?? throw new LogicException();
+    }
+
+    public function getMany(): array
+    {
+        return $this->items;
     }
 }

@@ -7,9 +7,7 @@ namespace App\Form\DataComparator;
 use Override;
 use Money\Money;
 use Strictify\FormMapper\Service\Comparator\DataComparatorInterface;
-use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('strictify_form_mapper.comparator')]
 class MoneyComparator implements DataComparatorInterface
 {
     #[Override]

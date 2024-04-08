@@ -1,11 +1,13 @@
-<?php
+<?php /** @noinspection PhpPropertyOnlyWrittenInspection */
+/** @noinspection PhpPropertyOnlyWrittenInspection */
 
 declare(strict_types=1);
 
 namespace App\Command;
 
 use LogicException;
-use App\Service\Zoho\ZohoManager;
+use CuyZ\Valinor\Mapper\TreeMapper;
+use App\Service\ZohoImprovedManager;
 use App\Repository\Company\CompanyRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -22,7 +24,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DummyCommand extends Command
 {
     public function __construct(
-        private ZohoManager $zohoSync,
+//        #[SupportDateFormats('Y-m-d', 'Y-m-d H:i'), AllowSuperfluousKeys]
+        private TreeMapper $treeMapper,
+        private ZohoImprovedManager $zohoImprovedManager,
         private CompanyRepository $companyRepository,
     )
     {
@@ -32,7 +36,8 @@ class DummyCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $company = $this->companyRepository->findOneBy(['name' => 'Strictify']) ?? throw new LogicException();
-        $this->zohoSync->downloadAll($company);
+
+        $this->zohoImprovedManager->downloadAll($company);
 
         return Command::SUCCESS;
     }

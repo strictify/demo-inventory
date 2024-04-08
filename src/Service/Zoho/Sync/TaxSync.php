@@ -5,56 +5,53 @@ declare(strict_types=1);
 namespace App\Service\Zoho\Sync;
 
 use Override;
-use App\DTO\Zoho\Taxes;
 use App\Entity\Tax\Tax;
-use App\Entity\Company\Company;
 use App\DTO\Zoho\Tax as ZohoTax;
-use App\Service\Zoho\ZohoClient;
 use App\Entity\ZohoAwareInterface;
+use App\DTO\Zoho\Taxes as ZohoTaxes;
 use App\Repository\Tax\TaxRepository;
-use App\Message\Zoho\ZohoSyncTaxMessage;
-use App\Service\Zoho\Sync\Model\SyncInterface;
-use App\Message\Zoho\ZohoSyncWarehouseMessage;
-use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use function sprintf;
-use function is_string;
+use App\Service\Zoho\Model\SyncInterface;
+use App\Message\Zoho\ZohoPutEntityMessage;
 use function array_key_exists;
 
 /**
- * @implements SyncInterface<Tax>
+ * @implements SyncInterface<Tax, ZohoTax, ZohoTaxes>
  */
 class TaxSync implements SyncInterface
 {
     public function __construct(
-        private ZohoClient $zohoClient,
-        private TaxRepository $repository,
+        private TaxRepository $taxRepository,
     )
     {
     }
 
-    #[AsMessageHandler]
-    public function __invoke(ZohoSyncWarehouseMessage $message): void
+    #[Override]
+    public function map(ZohoAwareInterface $entity, object $mapping): void
     {
-        if (!$tax = $this->repository->find($message->getId())) {
-            return;
-        }
-        if (!is_string($zohoId = $tax->getZohoId())) {
-            return;
-        }
-        // @see https://www.zoho.com/inventory/api/v1/taxes/#overview
-        $url = sprintf('/settings/taxes/%s', $zohoId);
-
-        match ($message->getAction()) {
-            'remove' => $this->zohoClient->delete($tax->getCompany(), $url),
-            'update' => $this->zohoClient->put($tax->getCompany(), $url, data: [
-                'tax_name' => $tax->getName(),
-                'tax_percentage' => $tax->getValue(),
-            ]),
-        };
+        $entity->setName($mapping->getTaxName());
+        $entity->setValue((int)$mapping->getTaxPercentage());
     }
 
     #[Override]
-    public function getEntityName(): string
+    public function getBaseUrl(): string
+    {
+        return '/settings/taxes';
+    }
+
+    #[Override]
+    public function findEntityByZohoId(string $zohoId): Tax|null
+    {
+        return $this->taxRepository->findOneBy(['zohoId' => $zohoId]);
+    }
+
+    #[Override]
+    public function getMappingClass(): string
+    {
+        return ZohoTaxes::class;
+    }
+
+    #[Override]
+    public function getEntityClass(): string
     {
         return Tax::class;
     }
@@ -66,29 +63,15 @@ class TaxSync implements SyncInterface
             return;
         }
 
-        yield new ZohoSyncTaxMessage($entity, 'update');
+        yield new ZohoPutEntityMessage($entity, 'put');
     }
 
     #[Override]
-    public function downloadAll(Company $company): void
+    public function createPutPayload(ZohoAwareInterface $entity): array
     {
-        $zohoTaxes = $this->zohoClient->get($company, '/settings/taxes', Taxes::class);
-        foreach ($zohoTaxes->taxes as $zohoTax) {
-            $tax = $this->getTax($zohoTax, $company);
-            $tax->setName($zohoTax->getTaxName());
-            $tax->setValue((int)$zohoTax->getTaxPercentage());
-        }
-        $this->repository->flush();
-    }
-
-    private function getTax(ZohoTax $zohoTax, Company $company): Tax
-    {
-        if ($tax = $this->repository->findOneBy(['zohoId' => $zohoTax->getTaxId()])) {
-            return $tax;
-        }
-        $tax = new Tax($company, $zohoTax->getTaxName(), $zohoTax->getTaxPercentage(), zohoId: $zohoTax->getTaxId());
-        $this->repository->persist($tax);
-
-        return $tax;
+        return [
+            'tax_name' => $entity->getName(),
+            'tax_percentage' => $entity->getValue(),
+        ];
     }
 }
