@@ -4,17 +4,25 @@ declare(strict_types=1);
 
 namespace App\DTO\Zoho;
 
-class Tax
+use Override;
+
+class Tax implements ZohoSingleResultInterface
 {
+    /**
+     * @param non-empty-string|int $taxId
+     */
     public function __construct(
-        private string $taxId,
+        private string|int $taxId,
         private string $taxName,
         private float $taxPercentage,
     )
     {
     }
 
-    public function getTaxId(): string
+    /**
+     * @return non-empty-string|int
+     */
+    public function getTaxId(): string|int
     {
         return $this->taxId;
     }
@@ -27,5 +35,11 @@ class Tax
     public function getTaxPercentage(): float
     {
         return $this->taxPercentage;
+    }
+
+    #[Override]
+    public function getId(): string
+    {
+        return (string)$this->getTaxId();
     }
 }

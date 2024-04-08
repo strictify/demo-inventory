@@ -2,21 +2,22 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Zoho;
+namespace App\Service;
 
 use Override;
 use Generator;
 use App\Entity\Company\Company;
-use App\Message\ZohoSyncMessage;
-use App\Service\Zoho\Sync\TaxSync;
+use App\Service\Zoho\ZohoClient;
 use App\Entity\ZohoAwareInterface;
-use App\Service\Zoho\Sync\ProductSync;
+use App\Service\Zoho\Sync\TaxSync;
 use App\Message\AsyncMessageInterface;
+use App\Service\Zoho\Sync\ProductSync;
 use App\Service\Zoho\Sync\WarehouseSync;
+use App\Service\Zoho\Model\SyncInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use App\Message\Zoho\ZohoPutEntityMessage;
 use App\Repository\Company\CompanyRepository;
 use Symfony\Contracts\Service\ResetInterface;
-use App\Service\Zoho\Sync\Model\SyncInterface;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\DependencyInjection\ServiceLocator;
@@ -29,7 +30,7 @@ use function is_a;
 use function sprintf;
 use function array_keys;
 
-class ZohoManager implements ResetInterface, PreUpdateEventListenerInterface, PostFlushEventListenerInterface
+class ZohoImprovedManager implements ResetInterface, PreUpdateEventListenerInterface, PostFlushEventListenerInterface
 {
     private bool $syncEnabled = true;
 
@@ -46,16 +47,25 @@ class ZohoManager implements ResetInterface, PreUpdateEventListenerInterface, Po
         private ServiceLocator $syncs,
         private CompanyRepository $companyRepository,
         private MessageBusInterface $messageBus,
+        private ZohoClient $zohoClient,
     )
     {
     }
 
     #[AsMessageHandler]
-    public function __invoke(ZohoSyncMessage $message): void
+    public function __invoke(ZohoPutEntityMessage $message): void
     {
-        $id = $message->getId();
-        $company = $this->companyRepository->find($id) ?? throw new UnrecoverableMessageHandlingException(sprintf('Company %s does not exist.', $id));
-        $this->downloadAll($company);
+        $entityClassName = $message->getClass();
+        $sync = $this->findSyncForEntity($entityClassName) ?? throw new UnrecoverableMessageHandlingException(sprintf('Entity %s not supported', $entityClassName));
+        $zohoId = $message->getZohoId();
+        if (!$entity = $sync->findEntityByZohoId($zohoId)) {
+            return;
+        }
+        $url = $sync->getBaseUrl() . '/' . $zohoId;
+        match ($message->getAction()) {
+            'delete' => $this->zohoClient->delete($entity->getCompany(), $url),
+            'put' => $this->zohoClient->put($entity->getCompany(), $url, data: $sync->createPutPayload($entity)),
+        };
     }
 
     #[Override]
@@ -74,10 +84,17 @@ class ZohoManager implements ResetInterface, PreUpdateEventListenerInterface, Po
         $this->syncEnabled = false;
         foreach ($this->getSyncsInOrder() as $serviceName) {
             $sync = $this->syncs->get($serviceName);
-            $sync->downloadAll($company);
+            $mapperClass = $sync->getMappingClass();
+            $data = $this->zohoClient->get($company, $sync->getBaseUrl(), $mapperClass);
+            foreach ($data->getMany() as $item) {
+                $zohoId = $item->getId();
+                if ($entity = $sync->findEntityByZohoId($zohoId)) {
+                    $sync->map($entity, $item);
+                }
+            }
+            // in case tagged service didn't flush its entities, do it here
+            $this->companyRepository->flush();
         }
-        // in case tagged service didn't flush its entities, do it here
-        $this->companyRepository->flush();
         $this->syncEnabled = true;
     }
 
@@ -93,14 +110,11 @@ class ZohoManager implements ResetInterface, PreUpdateEventListenerInterface, Po
         if (!$entity instanceof ZohoAwareInterface) {
             return;
         }
-
-        foreach ($this->getAllSyncServices() as $sync) {
-            if (!is_a($entity, $sync->getEntityName(), true)) {
-                continue;
-            }
-            foreach ($sync->onUpdate($entity, $changeSet) as $message) {
-                $this->pendingUpdateMessages[] = $message;
-            }
+        if (!$sync = $this->findSyncForEntity($entity)) {
+            return;
+        }
+        foreach ($sync->onUpdate($entity, $changeSet) as $message) {
+            $this->pendingUpdateMessages[] = $message;
         }
     }
 
@@ -124,6 +138,23 @@ class ZohoManager implements ResetInterface, PreUpdateEventListenerInterface, Po
         foreach ($identifiers as $identifier) {
             yield $this->syncs->get($identifier);
         }
+    }
+
+    /**
+     * @template TEntity of ZohoAwareInterface
+     *
+     * @param class-string<TEntity>|TEntity $entityClassName
+     */
+    private function findSyncForEntity(string|object $entityClassName): SyncInterface|null
+    {
+        foreach ($this->getSyncsInOrder() as $serviceName) {
+            $sync = $this->syncs->get($serviceName);
+            if (is_a($entityClassName, $sync->getEntityClass(), true)) {
+                return $sync;
+            }
+        }
+
+        return null;
     }
 
     /**

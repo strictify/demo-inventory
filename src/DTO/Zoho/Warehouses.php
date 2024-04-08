@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace App\DTO\Zoho;
 
-class Warehouses
+use LogicException;
+
+/**
+ * @implements ZohoMappingInterface<Warehouse>
+ */
+class Warehouses implements ZohoMappingInterface
 {
     /**
      * @param list<Warehouse> $warehouses
@@ -12,8 +17,19 @@ class Warehouses
     public function __construct(
         public int $code,
         public string $message,
-        public array $warehouses,
+        private ?Warehouse $warehouse = null,
+        public array $warehouses = [],
     )
     {
+    }
+
+    public function getOne(): object
+    {
+        return $this->warehouse ?? throw new LogicException();
+    }
+
+    public function getMany(): array
+    {
+        return $this->warehouses;
     }
 }

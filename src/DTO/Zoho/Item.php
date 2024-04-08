@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace App\DTO\Zoho;
 
+use Override;
 use function is_string;
 
-class Item
+class Item implements ZohoSingleResultInterface
 {
+    /**
+     * @param non-empty-string|int $itemId
+     */
     public function __construct(
         private string|int $itemId,
         private string $name,
@@ -18,6 +22,9 @@ class Item
     {
     }
 
+    /**
+     * @return non-empty-string|int
+     */
     public function getItemId(): string|int
     {
         return $this->itemId;
@@ -49,5 +56,11 @@ class Item
         }
 
         return null;
+    }
+
+    #[Override]
+    public function getId(): string
+    {
+        return (string)$this->getItemId();
     }
 }
