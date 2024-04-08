@@ -12,7 +12,8 @@ class Items
     public function __construct(
         public int $code,
         public string $message,
-        public array $items,
+        public ?Item $item = null,
+        public array $items = [],
     )
     {
     }

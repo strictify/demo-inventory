@@ -107,7 +107,7 @@ class ProductSync implements SyncInterface
         if ($product = $this->productRepository->findOneBy(['zohoId' => $zohoItem->getItemId()])) {
             return $product;
         }
-        $product = new Product($company, name: $zohoItem->getName(), zohoId: $zohoItem->getItemId());
+        $product = new Product($company, name: $zohoItem->getName(), zohoId: (string)$zohoItem->getItemId());
         $this->productRepository->persist($product);
 
         return $product;

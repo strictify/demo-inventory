@@ -9,16 +9,16 @@ use function is_string;
 class Item
 {
     public function __construct(
-        private string $itemId,
+        private string|int $itemId,
         private string $name,
         private ?string $description,
         private ?float $rate,
-        private ?string $taxId,
+        private string|int|null $taxId,
     )
     {
     }
 
-    public function getItemId(): string
+    public function getItemId(): string|int
     {
         return $this->itemId;
     }
@@ -39,9 +39,9 @@ class Item
     }
 
     /**
-     * @return non-empty-string|null
+     * @return non-empty-string|int|null
      */
-    public function getTaxId(): ?string
+    public function getTaxId(): string|int|null
     {
         $taxId = $this->taxId;
         if (is_string($taxId) && $taxId !== '') {

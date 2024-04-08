@@ -77,6 +77,9 @@ class Product implements TenantAwareInterface, ZohoAwareInterface, Stringable
     }
 
     #[Override]
+    /**
+     * @return non-empty-string|null
+     */
     public function getZohoId(): ?string
     {
         $zohoId = $this->zohoId;

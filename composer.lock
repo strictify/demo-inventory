@@ -2762,12 +2762,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/strictify/form-mapper-bundle.git",
-                "reference": "939818b29cafffcba94d93334b56859e0f45eeab"
+                "reference": "485ef9a26dc50f20fc4ff3f9e470cf742015bb35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/strictify/form-mapper-bundle/zipball/939818b29cafffcba94d93334b56859e0f45eeab",
-                "reference": "939818b29cafffcba94d93334b56859e0f45eeab",
+                "url": "https://api.github.com/repos/strictify/form-mapper-bundle/zipball/485ef9a26dc50f20fc4ff3f9e470cf742015bb35",
+                "reference": "485ef9a26dc50f20fc4ff3f9e470cf742015bb35",
                 "shasum": ""
             },
             "require": {
@@ -2827,7 +2827,7 @@
                 "source": "https://github.com/strictify/form-mapper-bundle/tree/master",
                 "issues": "https://github.com/strictify/form-mapper-bundle/issues"
             },
-            "time": "2024-03-11T16:57:31+00:00"
+            "time": "2024-04-08T10:20:01+00:00"
         },
         {
             "name": "strictify/lazy",
