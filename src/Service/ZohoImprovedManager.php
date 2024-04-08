@@ -28,7 +28,6 @@ use Symfony\Component\DependencyInjection\Attribute\TaggedLocator;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use function is_a;
 use function sprintf;
-use function array_keys;
 
 class ZohoImprovedManager implements ResetInterface, PreUpdateEventListenerInterface, PostFlushEventListenerInterface
 {
@@ -127,17 +126,6 @@ class ZohoImprovedManager implements ResetInterface, PreUpdateEventListenerInter
             ]);
         }
         $this->pendingUpdateMessages = [];
-    }
-
-    /**
-     * @return Generator<array-key, SyncInterface>
-     */
-    private function getAllSyncServices(): Generator
-    {
-        $identifiers = array_keys($this->syncs->getProvidedServices());
-        foreach ($identifiers as $identifier) {
-            yield $this->syncs->get($identifier);
-        }
     }
 
     /**

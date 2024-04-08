@@ -54,7 +54,6 @@ class ProductType extends AbstractType
     {
         $builder->add('tax', EntityType::class, [
             'class' => Tax::class,
-            'disabled' => true,
             'required' => false,
             'placeholder' => '--',
             'get_value' => fn(Product $product) => $product->getTax(),
