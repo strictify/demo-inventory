@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Entity\Warehouse;
 
+use Override;
 use Stringable;
 use App\Entity\IdTrait;
 use App\Entity\Company\Company;
 use App\Entity\TenantAwareTrait;
+use App\Entity\ZohoAwareInterface;
 use App\Entity\TenantAwareInterface;
 use function is_string;
 
-class Warehouse implements TenantAwareInterface, Stringable
+class Warehouse implements TenantAwareInterface, Stringable, ZohoAwareInterface
 {
     use IdTrait, TenantAwareTrait;
 
@@ -38,9 +40,7 @@ class Warehouse implements TenantAwareInterface, Stringable
         $this->name = $name;
     }
 
-    /**
-     * @return non-empty-string|null
-     */
+    #[Override]
     public function getZohoId(): ?string
     {
         $zohoId = $this->zohoId;

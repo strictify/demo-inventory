@@ -9,6 +9,7 @@ use Generator;
 use App\Entity\Company\Company;
 use App\Message\ZohoSyncMessage;
 use App\Service\Zoho\Sync\TaxSync;
+use App\Entity\ZohoAwareInterface;
 use App\Service\Zoho\Sync\ProductSync;
 use App\Message\AsyncMessageInterface;
 use App\Service\Zoho\Sync\WarehouseSync;
@@ -30,6 +31,8 @@ use function array_keys;
 
 class ZohoManager implements ResetInterface, PreUpdateEventListenerInterface, PostFlushEventListenerInterface
 {
+    private bool $syncEnabled = true;
+
     /**
      * @var list<AsyncMessageInterface>
      */
@@ -47,39 +50,61 @@ class ZohoManager implements ResetInterface, PreUpdateEventListenerInterface, Po
     {
     }
 
-    #[Override]
-    public function reset(): void
-    {
-        $this->pendingUpdateMessages = [];
-    }
-
     #[AsMessageHandler]
     public function __invoke(ZohoSyncMessage $message): void
     {
         $id = $message->getId();
         $company = $this->companyRepository->find($id) ?? throw new UnrecoverableMessageHandlingException(sprintf('Company %s does not exist.', $id));
-        $this->sync($company);
+        $this->downloadAll($company);
     }
 
+    #[Override]
+    public function reset(): void
+    {
+        $this->pendingUpdateMessages = [];
+        $this->syncEnabled = true;
+    }
+
+    /**
+     * Download all data from Zoho.
+     * Temporarily disable sync, we don't want to call Zoho during this process.
+     */
+    public function downloadAll(Company $company): void
+    {
+        $this->syncEnabled = false;
+        foreach ($this->getSyncsInOrder() as $serviceName) {
+            $sync = $this->syncs->get($serviceName);
+            $sync->downloadAll($company);
+        }
+        // in case tagged service didn't flush its entities, do it here
+        $this->companyRepository->flush();
+        $this->syncEnabled = true;
+    }
+
+    #[Override]
     public function preUpdate(PreUpdateEventArgs $event): void
     {
+        if (!$this->syncEnabled) {
+            return;
+        }
         $entity = $event->getObject();
         $changeSet = $event->getEntityChangeSet();
+        // updates to other entities are of no interest to us
+        if (!$entity instanceof ZohoAwareInterface) {
+            return;
+        }
 
-        $messages = [];
-        $identifiers = array_keys($this->syncs->getProvidedServices());
-        foreach ($identifiers as $identifier) {
-            $sync = $this->syncs->get($identifier);
+        foreach ($this->getAllSyncServices() as $sync) {
             if (!is_a($entity, $sync->getEntityName(), true)) {
                 continue;
             }
             foreach ($sync->onUpdate($entity, $changeSet) as $message) {
-                $messages[] = $message;
+                $this->pendingUpdateMessages[] = $message;
             }
         }
-        $this->pendingUpdateMessages = $messages;
     }
 
+    #[Override]
     public function postFlush(): void
     {
         foreach ($this->pendingUpdateMessages as $key => $message) {
@@ -87,13 +112,17 @@ class ZohoManager implements ResetInterface, PreUpdateEventListenerInterface, Po
                 new DelayStamp($key * 1_000), // delay each update by 1 second
             ]);
         }
+        $this->pendingUpdateMessages = [];
     }
 
-    public function sync(Company $company): void
+    /**
+     * @return Generator<array-key, SyncInterface>
+     */
+    private function getAllSyncServices(): Generator
     {
-        foreach ($this->getSyncsInOrder() as $serviceName) {
-            $sync = $this->syncs->get($serviceName);
-            $sync->downloadAll($company);
+        $identifiers = array_keys($this->syncs->getProvidedServices());
+        foreach ($identifiers as $identifier) {
+            yield $this->syncs->get($identifier);
         }
     }
 
