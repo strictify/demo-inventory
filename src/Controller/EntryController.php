@@ -19,7 +19,6 @@ class EntryController extends AbstractController
         if (in_array('ROLE_COMPANY', $user->getRoles(), true)) {
             return $this->redirectToRoute('app_entry');
         }
-        
-        throw $this->createNotFoundException();
+        return $this->redirectToRoute('admin_entry');
     }
 }

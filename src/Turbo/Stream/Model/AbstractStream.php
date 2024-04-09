@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Turbo\Stream\Model;
 
 use Override;
+use Stringable;
 use LogicException;
 use function ltrim;
 use function is_string;
 
-abstract class AbstractStream implements StreamInterface
+abstract class AbstractStream implements StreamInterface, Stringable
 {
     /**
      * @param non-empty-string|null $attributeName
@@ -22,6 +23,7 @@ abstract class AbstractStream implements StreamInterface
     {
     }
 
+    #[Override]
     public function __toString(): string
     {
         return $this->generate();

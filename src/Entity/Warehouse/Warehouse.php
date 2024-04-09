@@ -25,6 +25,7 @@ class Warehouse implements TenantAwareInterface, Stringable, ZohoAwareInterface
     {
     }
 
+    #[Override]
     public function __toString(): string
     {
         return $this->getName();

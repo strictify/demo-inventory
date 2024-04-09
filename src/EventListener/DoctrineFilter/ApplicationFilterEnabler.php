@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\EventListener\DoctrineFilter;
 
-use App\Entity\User\User;
 use App\Service\Security;
-use Webmozart\Assert\Assert;
 use App\Doctrine\Filter\TenantFilter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -14,7 +12,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use function str_starts_with;
 
-class ApplicationFilterEnabled
+class ApplicationFilterEnabler
 {
     public function __construct(
         private EntityManagerInterface $em,

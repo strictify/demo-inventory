@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity\Tax;
 
+use Override;
 use Stringable;
 use App\Entity\IdTrait;
 use App\Entity\ZohoAwareTrait;
@@ -24,6 +25,7 @@ class Tax implements TenantAwareInterface, Stringable, ZohoAwareInterface
     {
     }
 
+    #[Override]
     public function __toString(): string
     {
         return $this->getName();

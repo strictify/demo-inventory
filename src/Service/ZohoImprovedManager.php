@@ -6,6 +6,8 @@ namespace App\Service;
 
 use Override;
 use Generator;
+use Throwable;
+use InvalidArgumentException;
 use App\Entity\Company\Company;
 use App\Service\Zoho\ZohoClient;
 use App\Entity\ZohoAwareInterface;
@@ -19,6 +21,7 @@ use App\Service\Zoho\Sync\WarehouseSync;
 use App\Service\Zoho\Model\SyncInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use App\Message\Zoho\ZohoSyncEntityMessage;
+use App\Message\Zoho\ZohoDownloadAllMessage;
 use App\Repository\Company\CompanyRepository;
 use Symfony\Contracts\Service\ResetInterface;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
@@ -31,6 +34,7 @@ use Symfony\Component\DependencyInjection\Attribute\TaggedLocator;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use function is_a;
 use function sprintf;
+use function is_string;
 
 class ZohoImprovedManager implements ResetInterface, PreUpdateEventListenerInterface, PostFlushEventListenerInterface
 {
@@ -55,8 +59,11 @@ class ZohoImprovedManager implements ResetInterface, PreUpdateEventListenerInter
     {
     }
 
-    #[AsMessageHandler]
-    public function __invoke(ZohoSyncEntityMessage $message): void
+    /**
+     * @api
+     */
+    #[AsMessageHandler(handles: ZohoSyncEntityMessage::class)]
+    public function handleSyncEntityMessage(ZohoSyncEntityMessage $message): void
     {
         try {
             $this->syncEnabled = false;
@@ -77,8 +84,25 @@ class ZohoImprovedManager implements ResetInterface, PreUpdateEventListenerInter
             $entity->setZohoStatus(ZohoStatusEnum::SYNCED);
             $this->companyRepository->flush();
             $this->streamBuilder->pushToApp($company, new ReloadStream(sprintf('app-%s', $entity->getId())));
+        } catch (Throwable $e) {
+            throw new UnrecoverableMessageHandlingException(previous: $e);
         } finally {
             $this->syncEnabled = true;
+        }
+    }
+
+    /**
+     * @api
+     */
+    #[AsMessageHandler(handles: ZohoDownloadAllMessage::class)]
+    public function handleDownloadAllMessage(ZohoDownloadAllMessage $message): void
+    {
+        $id = $message->getId();
+        $company = $this->companyRepository->find($id) ?? throw new UnrecoverableMessageHandlingException(sprintf('Company %s not found', $id));
+        try {
+            $this->downloadAll($company);
+        } catch (Throwable $e) {
+            throw new UnrecoverableMessageHandlingException(previous: $e);
         }
     }
 
@@ -86,29 +110,6 @@ class ZohoImprovedManager implements ResetInterface, PreUpdateEventListenerInter
     public function reset(): void
     {
         $this->pendingUpdateMessages = [];
-        $this->syncEnabled = true;
-    }
-
-    /**
-     * Download all data from Zoho.
-     * Temporarily disable sync, we don't want to call Zoho during this process.
-     */
-    public function downloadAll(Company $company): void
-    {
-        $this->syncEnabled = false;
-        foreach ($this->getSyncsInOrder() as $serviceName) {
-            $sync = $this->syncs->get($serviceName);
-            $mapperClass = $sync->getMappingClass();
-            $data = $this->zohoClient->get($company, $sync->getBaseUrl(), $mapperClass);
-            foreach ($data->getMany() as $item) {
-                $zohoId = $item->getId();
-                $entity = $sync->findEntityByZohoId($zohoId) ?? $sync->createNewEntity($company, $item);
-                $entity->setZohoId($item->getId());
-                $sync->map($entity, $item);
-            }
-            // in case tagged service didn't flush its entities, do it here
-            $this->companyRepository->flush();
-        }
         $this->syncEnabled = true;
     }
 
@@ -141,6 +142,41 @@ class ZohoImprovedManager implements ResetInterface, PreUpdateEventListenerInter
             ]);
         }
         $this->pendingUpdateMessages = [];
+    }
+
+    /**
+     * Download all data from Zoho.
+     * Temporarily disable sync, we don't want to call Zoho during this process.
+     */
+    private function downloadAll(Company $company): void
+    {
+        if (!is_string($company->getZohoAccessToken())) {
+            throw new InvalidArgumentException('Not synced with Zoho.');
+        }
+        try {
+            $this->syncEnabled = false;
+            $company->setZohoDownloading(true);
+            $this->companyRepository->flush();
+            $this->streamBuilder->pushToApp($company, new ReloadStream(sprintf('app-%s', $company->getId())));
+            foreach ($this->getSyncsInOrder() as $serviceName) {
+                $sync = $this->syncs->get($serviceName);
+                $mapperClass = $sync->getMappingClass();
+                $data = $this->zohoClient->get($company, $sync->getBaseUrl(), $mapperClass);
+                foreach ($data->getMany() as $item) {
+                    $zohoId = $item->getId();
+                    $entity = $sync->findEntityByZohoId($zohoId) ?? $sync->createNewEntity($company, $item);
+                    $entity->setZohoId($item->getId());
+                    $sync->map($entity, $item);
+                }
+                // in case tagged service didn't flush its entities, do it here
+                $this->companyRepository->flush();
+            }
+        } finally {
+            $this->syncEnabled = true;
+            $company->setZohoDownloading(false);
+            $this->companyRepository->flush();
+            $this->streamBuilder->pushToApp($company, new ReloadStream(sprintf('app-%s', $company->getId())));
+        }
     }
 
     /**

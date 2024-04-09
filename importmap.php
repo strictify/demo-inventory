@@ -85,4 +85,7 @@ return [
         'version' => '4.1.1',
         'type' => 'css',
     ],
+    'sweetalert2' => [
+        'version' => '11.10.7',
+    ],
 ];

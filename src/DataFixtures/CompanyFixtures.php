@@ -11,7 +11,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class CompanyFixtures extends Fixture
 {
-    public const string COMPANY_1 = 'company:strictify';
+    public const string COMPANY_1 = 'company:demo';
     public const string COMPANY_2 = 'company:test_1';
 
     public function __construct()
@@ -21,7 +21,7 @@ class CompanyFixtures extends Fixture
     #[Override]
     public function load(ObjectManager $manager): void
     {
-        $company1 = new Company('Strictify');
+        $company1 = new Company('Demo Company 1');
         $manager->persist($company1);
         $manager->persist($company1);
         $this->addReference(self::COMPANY_1, $company1);
