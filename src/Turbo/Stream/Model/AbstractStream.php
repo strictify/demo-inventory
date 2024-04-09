@@ -33,9 +33,10 @@ abstract class AbstractStream implements StreamInterface, Stringable
     public function generate(): string
     {
         $action = $this->getAction();
-        $targetId = ltrim($this->getTargetId(), '#');
+        $targetId = ltrim($this->getStreamTarget(), '#');
 
         $attributeName = $this->attributeName;
+
 
         $target = is_string($attributeName) ? sprintf('targets="[%s=\'%s\']"', $attributeName, $targetId) : sprintf('target="%s"', $targetId);
 
@@ -53,6 +54,11 @@ HTML;
     public function getTargetId(): string
     {
         return $this->targetId;
+    }
+
+    protected function getStreamTarget(): string
+    {
+        return $this->getTargetId();
     }
 
     /**

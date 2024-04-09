@@ -2,8 +2,8 @@
 
 {% block main -%}
     {# @var company \App\Entity\Company\Company #}
-    <turbo-frame id="main" class="main" data-turbo-frame="main" data-turbo-prefetch="false" data-turbo-action="advance">
-        <div id="app-{{ company.id }}" data-reload-src="{{ path('zoho_connect') }}">
+    <turbo-frame id="main" class="main" data-turbo-frame="main" data-turbo-prefetch="false" data-turbo-action="visit">
+        <div id="app-{{ company.id }}" data-reload-src="{{ path('zoho_refresh') }}">
 
             {# Avoid complex if-else statements by making smaller blocks, until Twig gets `match` equivalent #}
             {{ is_connected ? block('_connected') : block('_not_connected') }}
@@ -25,6 +25,6 @@
         </span>
         Downloading data from Zoho
     {% else %}
-        <a href="{{ path('zoho_download_all') }}" class="btn btn-danger" data-turbo-action="visit" data-turbo-method="put" data-turbo-confirm="Are you sure?">Download all</a>
+        <a href="{{ path('zoho_download_all') }}" class="btn btn-danger" data-turbo-frame="main" data-turbo-action="visit" data-turbo-method="put" xdata-turbo-confirm="Are you sure?">Download all</a>
     {% endif %}
 {%- endblock _connected %}

@@ -14,7 +14,6 @@ use App\DTO\Zoho\Item as ZohoItem;
 use App\Entity\ZohoAwareInterface;
 use App\DTO\Zoho\Items as ZohoItems;
 use App\Repository\Tax\TaxRepository;
-use App\Entity\Product\ZohoStatusEnum;
 use App\Service\Zoho\Model\SyncInterface;
 use App\Message\Zoho\ZohoSyncEntityMessage;
 use App\Repository\Product\ProductRepository;
@@ -80,8 +79,6 @@ class ProductSync implements SyncInterface
         if (!any_key_exists(['name', 'description', 'price', 'tax'], $changeSet)) {
             return;
         }
-        $entity->setZohoStatus(ZohoStatusEnum::BUSY);
-
         yield new ZohoSyncEntityMessage($entity, 'put');
     }
 

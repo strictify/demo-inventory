@@ -17,17 +17,31 @@ export default class extends Controller {
         if (!frame) {
             return;
         }
-
         let reloadSrc = frame.getAttribute('data-reload-src');
         if (reloadSrc) {
-            let a = document.createElement('a');
-            a.href = reloadSrc;
-            frame.appendChild(a);
-            a.click()
+            fetch(reloadSrc)
+            .then(response => {
+                if (response.ok) {
+                    return response.text()
+                }
+                throw response.status
+            })
+            .then(html => {
+                Turbo.renderStreamMessage(html)
 
-            return;
+            })
+            .catch(error => console.warn(error))
+
+
+            // let a = document.createElement('a');
+            // a.style.display = 'none';
+            // a.href = reloadSrc;
+            // frame.appendChild(a);
+            // a.click()
+            //
+            // return;
         }
 
-        frame.reload();
+        // frame.reload();
     }
 }

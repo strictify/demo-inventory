@@ -19,6 +19,11 @@ class ReloadStream extends AbstractStream
 HTML;
     }
 
+    protected function getStreamTarget(): string
+    {
+        return 'streams';
+    }
+
     #[Override]
     protected function getAction(): string
     {

@@ -8,6 +8,7 @@
         <link href="{{ asset('img/apple-touch-icon.png') }}" rel="apple-touch-icon">
         <meta name="turbo-prefetch" content="false">
         <meta name="turbo-cache-control" content="no-cache">
+        <meta name="turbo-refresh-method" content="morph">
         {% block head %}{% endblock %}
 
         <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -84,6 +85,9 @@
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     {% endblock body %}
+    <div id="streams" class="alert alert-danger">
+        asdasd
+    </div>
     </body>
     </html>
 {%- endblock all %}

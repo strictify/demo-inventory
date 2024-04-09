@@ -169,7 +169,7 @@ class ZohoClient implements ResetInterface
     {
         $url = sprintf('%s/oauth/v2/token?refresh_token=%s&client_id=%s&client_secret=%s&grant_type=refresh_token',
             $this->baseUrl,
-            $company->getZohoRefreshToken() ?? throw new LogicException(),
+            $company->getZohoRefreshToken() ?? throw new LogicException(sprintf('Company %s does not have refresh token assigned.', $company->getId())),
             $this->clientId,
             $this->clientSecret,
         );
