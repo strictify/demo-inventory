@@ -49,10 +49,10 @@
 
 {% block tr %}
     {# @var \App\Entity\Product\Product product #}
-    <tr id="product-{{ product.id }}" data-reload-src="{{ path('app_products_list_one', {'id': product.id}) }}" is="turbo-frame">
+    <tr id="app-{{ product.id }}" data-reload-src="{{ path('app_products_list_one', {'id': product.id}) }}" is="turbo-frame">
         <td>
             <a href="{{ path('app_products_update', {'id': product.id, '_filters': true}) }}" data-turbo-action="advance">
-                {{ product.name }} {{ random() }}
+                {{ product.name }}
             </a>
         </td>
         <td>
@@ -60,14 +60,20 @@
         </td>
         <td>{{ product.tax }}</td>
         <td>
-            {% if product.zohoId %}
-                <i class="bi bi-check-circle"></i>
+            {% if product.zohoStatus.busy %}
+                <div class="spinner-border spinner-border-sm text-secondary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
             {% endif %}
-            <div class="spinner-border spinner-border-sm text-secondary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <i class="bi bi-download"></i>
-            <i class="bi bi-upload"></i>
+
+            {% if product.zohoStatus.synced %}
+                <i class="bi bi-check-circle"></i>
+                <a href="{{ path('app_products_download_from_zoho', {'id': product.id}) }}" data-turbo-method="put">
+                    <i class="bi bi-download"></i>
+                </a>
+                {#                <i class="bi bi-upload"></i> #}
+            {% endif %}
+
         </td>
         <td class="text-end">
             <a href="{{ path('app_products_transport', {'id': product.id, '_filters': true}) }}" data-turbo-frame="details" data-turbo-action="advance">Transport</a>|

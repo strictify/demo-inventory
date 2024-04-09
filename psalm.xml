@@ -10,6 +10,7 @@
         disableVarParsing="true"
         findUnusedVariablesAndParams="true"
         findUnusedPsalmSuppress="true"
+        ensureOverrideAttribute="false"
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 >

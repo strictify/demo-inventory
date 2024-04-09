@@ -11,9 +11,9 @@ use JetBrains\PhpStorm\ExpectedValues;
 use function get_class;
 
 /**
- * @psalm-type TAction = 'put'|'delete'
+ * @psalm-type TAction = 'put'|'delete'|'get'
  */
-class ZohoPutEntityMessage implements AsyncMessageInterface
+class ZohoSyncEntityMessage implements AsyncMessageInterface
 {
     /**
      * @var class-string<ZohoAwareInterface>
@@ -28,7 +28,7 @@ class ZohoPutEntityMessage implements AsyncMessageInterface
     /**
      * @param TAction $action
      */
-    public function __construct(ZohoAwareInterface $entity, #[ExpectedValues(['put', 'delete'])] private string $action = 'put')
+    public function __construct(ZohoAwareInterface $entity, #[ExpectedValues(['put', 'delete', 'get'])] private string $action = 'put')
     {
         $this->class = get_class($entity);
         $this->zohoId = $entity->getZohoId() ?? throw new LogicException();

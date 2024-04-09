@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Turbo\Stream;
 
+use Override;
 use App\Turbo\Stream\Model\AbstractStream;
 
 class CloseModalStream extends AbstractStream
@@ -13,6 +14,7 @@ class CloseModalStream extends AbstractStream
         parent::__construct('modal');
     }
 
+    #[Override]
     protected function getHtml(): ?string
     {
         return <<<HTML
@@ -20,6 +22,7 @@ class CloseModalStream extends AbstractStream
 HTML;
     }
 
+    #[Override]
     protected function getAction(): string
     {
         return 'append';

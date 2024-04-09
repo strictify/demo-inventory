@@ -4,24 +4,27 @@ declare(strict_types=1);
 
 namespace App\Turbo\Stream;
 
+use Override;
 use App\Turbo\Stream\Model\AbstractStream;
 
 class SetAttributeStream extends AbstractStream
 {
     public function __construct(
-        string                  $targetId,
-        private string          $name,
+        string $targetId,
+        private string $name,
         private null|string|int $value = null,
     )
     {
         parent::__construct($targetId);
     }
 
+    #[Override]
     protected function getAction(): string
     {
         return 'append';
     }
 
+    #[Override]
     protected function getHtml(): string
     {
         if (null === $this->value) {

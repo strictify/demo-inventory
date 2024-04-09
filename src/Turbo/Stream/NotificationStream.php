@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Turbo\Stream;
 
+use Override;
 use App\Turbo\Stream\Model\AbstractStream;
 
 class NotificationStream extends AbstractStream
@@ -13,11 +14,13 @@ class NotificationStream extends AbstractStream
         parent::__construct($id);
     }
 
+    #[Override]
     protected function getAction(): string
     {
         return 'append';
     }
 
+    #[Override]
     protected function getHtml(): ?string
     {
         $type = $this->type;

@@ -12,7 +12,7 @@ use App\Entity\ZohoAwareInterface;
 use App\DTO\Zoho\Taxes as ZohoTaxes;
 use App\Repository\Tax\TaxRepository;
 use App\Service\Zoho\Model\SyncInterface;
-use App\Message\Zoho\ZohoPutEntityMessage;
+use App\Message\Zoho\ZohoSyncEntityMessage;
 use function array_key_exists;
 
 /**
@@ -64,7 +64,7 @@ class TaxSync implements SyncInterface
             return;
         }
 
-        yield new ZohoPutEntityMessage($entity, 'put');
+        yield new ZohoSyncEntityMessage($entity, 'put');
     }
 
     #[Override]
@@ -79,9 +79,9 @@ class TaxSync implements SyncInterface
     #[Override]
     public function createNewEntity(Company $company, object $mapping): Tax
     {
-        $tax = new Tax($company, $mapping->getTaxName(), value: $mapping->getTaxPercentage(), zohoId: $mapping->getId());
+        $tax = new Tax($company, $mapping->getTaxName(), value: $mapping->getTaxPercentage());
         $this->taxRepository->persist($tax);
-        
+
         return $tax;
     }
 }

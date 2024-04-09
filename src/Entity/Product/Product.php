@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace App\Entity\Product;
 
-use Override;
 use Stringable;
 use Money\Money;
 use Money\Currency;
 use App\Entity\IdTrait;
 use App\Entity\Tax\Tax;
+use App\Entity\ZohoAwareTrait;
 use App\Entity\Company\Company;
 use App\Entity\TenantAwareTrait;
 use App\Entity\ZohoAwareInterface;
 use App\Entity\TenantAwareInterface;
-use function is_string;
 
 class Product implements TenantAwareInterface, ZohoAwareInterface, Stringable
 {
-    use IdTrait, TenantAwareTrait;
+    use IdTrait, TenantAwareTrait, ZohoAwareTrait;
 
     public function __construct(
         private readonly Company $company,
@@ -26,8 +25,6 @@ class Product implements TenantAwareInterface, ZohoAwareInterface, Stringable
         private ?string $description = null,
         private ?Money $price = null,
         private ?Tax $tax = null,
-        private ?string $zohoId = null,
-        private ZohoStatusEnum $zohoStatus = ZohoStatusEnum::NOT_CONNECTED,
     )
     {
     }
@@ -75,26 +72,5 @@ class Product implements TenantAwareInterface, ZohoAwareInterface, Stringable
     public function setDescription(?string $description): void
     {
         $this->description = $description;
-    }
-
-    #[Override]
-    /**
-     * @return non-empty-string|null
-     */
-    public function getZohoId(): ?string
-    {
-        $zohoId = $this->zohoId;
-
-        return is_string($zohoId) && $zohoId !== '' ? $zohoId : null;
-    }
-
-    public function getZohoStatus(): ZohoStatusEnum
-    {
-        return $this->zohoStatus;
-    }
-
-    public function setZohoStatus(ZohoStatusEnum $zohoStatus): void
-    {
-        $this->zohoStatus = $zohoStatus;
     }
 }

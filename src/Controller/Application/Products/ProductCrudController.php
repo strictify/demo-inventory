@@ -10,12 +10,15 @@ use App\Attribute\MainRequest;
 use App\Entity\Product\Product;
 use App\Turbo\Stream\ReplaceStream;
 use App\Service\Mercure\StreamBuilder;
+use App\Entity\Product\ZohoStatusEnum;
 use App\Form\Entity\Product\ProductType;
+use App\Message\Zoho\ZohoSyncEntityMessage;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\Product\ProductRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ProductCrudController extends AbstractController
@@ -23,6 +26,8 @@ class ProductCrudController extends AbstractController
     public function __construct(
         protected ProductRepository $productRepository,
         private FormFactoryInterface $formFactory,
+        private StreamBuilder $streamBuilder,
+        private MessageBusInterface $messageBus,
     )
     {
     }
@@ -59,15 +64,27 @@ class ProductCrudController extends AbstractController
     }
 
     #[Route('/row/{id}', name: 'app_products_list_one', methods: ['GET'])]
-    public function renderRow(Product $product, StreamBuilder $streamBuilder): Response
+    public function renderRow(Product $product): Response
     {
         $html = $this->renderBlockView('app/products/list.html.twig', 'tr', [
             'product' => $product,
         ]);
 
-        return $streamBuilder->createResponse(
-            new ReplaceStream('product-' . $product->getId(), $html),
+        return $this->streamBuilder->createResponse(
+            new ReplaceStream(sprintf('app-%s', $product->getId()), $html),
         );
+    }
+
+    #[Route('/download_from_zoho/{id}', name: 'app_products_download_from_zoho', methods: ['PUT'])]
+    public function downloadFromZoho(Product $product): Response
+    {
+        $this->messageBus->dispatch(
+            new ZohoSyncEntityMessage($product, 'get'),
+        );
+        $product->setZohoStatus(ZohoStatusEnum::BUSY);
+        $this->productRepository->flush();
+
+        return $this->renderRow($product);
     }
 
     #[Route('/create', name: 'app_products_create', methods: ['GET', 'POST'])]

@@ -14,8 +14,9 @@ use App\DTO\Zoho\Item as ZohoItem;
 use App\Entity\ZohoAwareInterface;
 use App\DTO\Zoho\Items as ZohoItems;
 use App\Repository\Tax\TaxRepository;
+use App\Entity\Product\ZohoStatusEnum;
 use App\Service\Zoho\Model\SyncInterface;
-use App\Message\Zoho\ZohoPutEntityMessage;
+use App\Message\Zoho\ZohoSyncEntityMessage;
 use App\Repository\Product\ProductRepository;
 use function is_float;
 use function is_string;
@@ -79,8 +80,9 @@ class ProductSync implements SyncInterface
         if (!any_key_exists(['name', 'description', 'price', 'tax'], $changeSet)) {
             return;
         }
+        $entity->setZohoStatus(ZohoStatusEnum::BUSY);
 
-        yield new ZohoPutEntityMessage($entity, 'put');
+        yield new ZohoSyncEntityMessage($entity, 'put');
     }
 
     #[Override]
@@ -96,9 +98,9 @@ class ProductSync implements SyncInterface
     #[Override]
     public function createNewEntity(Company $company, object $mapping): Product
     {
-        $product = new Product($company, $mapping->getName(), zohoId: $mapping->getId());
+        $product = new Product($company, $mapping->getName());
         $this->productRepository->persist($product);
-        
+
         return $product;
     }
 

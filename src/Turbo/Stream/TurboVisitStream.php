@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Turbo\Stream;
 
+use Override;
 use App\Turbo\Stream\Model\AbstractStream;
 
 class TurboVisitStream extends AbstractStream
@@ -16,6 +17,7 @@ class TurboVisitStream extends AbstractStream
         parent::__construct($targetId);
     }
 
+    #[Override]
     protected function getHtml(): ?string
     {
         $url = $this->url;
@@ -25,6 +27,7 @@ class TurboVisitStream extends AbstractStream
 HTML;
     }
 
+    #[Override]
     protected function getAction(): string
     {
         return 'update';

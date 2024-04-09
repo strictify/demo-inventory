@@ -4,24 +4,22 @@ declare(strict_types=1);
 
 namespace App\Entity\Tax;
 
-use Override;
 use Stringable;
 use App\Entity\IdTrait;
+use App\Entity\ZohoAwareTrait;
 use App\Entity\Company\Company;
 use App\Entity\TenantAwareTrait;
 use App\Entity\ZohoAwareInterface;
 use App\Entity\TenantAwareInterface;
-use function is_string;
 
 class Tax implements TenantAwareInterface, Stringable, ZohoAwareInterface
 {
-    use IdTrait, TenantAwareTrait;
+    use IdTrait, TenantAwareTrait, ZohoAwareTrait;
 
     public function __construct(
         private readonly Company $company,
         private string $name,
         private float $value,
-        private ?string $zohoId = null,
     )
     {
     }
@@ -49,18 +47,5 @@ class Tax implements TenantAwareInterface, Stringable, ZohoAwareInterface
     public function setValue(float $value): void
     {
         $this->value = $value;
-    }
-
-    #[Override]
-    public function getZohoId(): ?string
-    {
-        $zohoId = $this->zohoId;
-
-        return is_string($zohoId) && $zohoId !== '' ? $zohoId : null;
-    }
-
-    public function setZohoId(?string $zohoId): void
-    {
-        $this->zohoId = $zohoId;
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\DTO\Zoho;
 
+use Override;
 use LogicException;
 
 /**
@@ -23,11 +24,13 @@ class Warehouses implements ZohoMappingInterface
     {
     }
 
+    #[Override]
     public function getOne(): object
     {
         return $this->warehouse ?? throw new LogicException();
     }
 
+    #[Override]
     public function getMany(): array
     {
         return $this->warehouses;
