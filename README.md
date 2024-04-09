@@ -34,11 +34,11 @@ itself and enter them manually; it is pretty straightforward if you ever worked 
 * Use any name, set https://inventory.localhost as homepage, and https://inventory.localhost/app/zoho/oauth2 as
   Authorized Redirect URIs
 * Write down details into `ZOHO_CLIENT_ID` and `ZOHO_CLIENT_SECRET` in your `.env.local` file.
-* **Important**: you must set Multi-DC option is `Settings` tab; app does not accept users for regions.
+* **Important**: you must set Multi-DC option is `Settings` tab; app does not ask users for region.
 * Go to https://inventory.localhost/app/zoho/connect to connect app with your Zoho account
 * App will ask for all privileges, so use fake account as playground.
 
-Once you want to disconnect the app, go to https://accounts.zoho.eu/home#setting/authorizedsites and remove it.
+Once you want to disconnect the app, go to https://accounts.zoho.eu/home#sessions/userconnectedapps and remove it.
 
 ## Docker details
 
