@@ -14,6 +14,7 @@ trait IdTrait
     /**
      * @return non-empty-string
      */
+
     public function getId(): string
     {
         $id = $this->id ??= $this->doCreateUuid();

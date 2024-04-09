@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace App\Service\Zoho\Sync;
 
 use Override;
+use App\Entity\Company\Company;
 use App\Entity\ZohoAwareInterface;
 use App\Entity\Warehouse\Warehouse;
-use App\Message\Zoho\ZohoPutEntityMessage;
+use App\Service\Zoho\Model\SyncInterface;
+use App\Message\Zoho\ZohoSyncEntityMessage;
 use App\DTO\Zoho\Warehouse as ZohoWarehouse;
 use App\DTO\Zoho\Warehouses as ZohoWarehouses;
 use App\Repository\Warehouse\WarehouseRepository;
-use App\Service\Zoho\Model\SyncInterface;
 use function array_key_exists;
 
 /**
@@ -62,7 +63,7 @@ class WarehouseSync implements SyncInterface
             return;
         }
 
-        yield new ZohoPutEntityMessage($entity, 'put');
+        yield new ZohoSyncEntityMessage($entity, 'put');
     }
 
     #[Override]
@@ -71,5 +72,14 @@ class WarehouseSync implements SyncInterface
         return [
             'warehouse_name' => $entity->getName(),
         ];
+    }
+
+    #[Override]
+    public function createNewEntity(Company $company, object $mapping): Warehouse
+    {
+        $warehouse = new Warehouse($company, $mapping->getName());
+        $this->warehouseRepository->persist($warehouse);
+
+        return $warehouse;
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\DTO\Zoho;
 
+use Override;
+
 class Warehouse implements ZohoSingleResultInterface
 {
     /**
@@ -29,6 +31,7 @@ class Warehouse implements ZohoSingleResultInterface
         return $this->warehouseName;
     }
 
+    #[Override]
     public function getId(): string
     {
         return (string)$this->warehouseId;

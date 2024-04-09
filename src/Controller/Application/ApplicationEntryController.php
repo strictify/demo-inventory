@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\Application;
 
+use App\Service\Security;
 use App\Attribute\TurboFrame;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use function sprintf;
 
 class ApplicationEntryController extends AbstractController
 {
@@ -29,5 +31,16 @@ class ApplicationEntryController extends AbstractController
     public function header(): Response
     {
         return $this->renderBlock('app/_app_partials.html.twig', 'header');
+    }
+
+    #[Route('/mercure_listener', name: 'app_mercure_listener', methods: ['GET'])]
+    public function mercureListener(Security $security): Response
+    {
+        $company = $security->getCompany();
+        $topic = sprintf('app-%s', $company->getId());
+
+        return $this->renderBlock('app/_app_partials.html.twig', 'mercure_listener', [
+            'topic' => $topic,
+        ]);
     }
 }

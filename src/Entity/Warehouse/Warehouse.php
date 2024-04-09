@@ -7,6 +7,7 @@ namespace App\Entity\Warehouse;
 use Override;
 use Stringable;
 use App\Entity\IdTrait;
+use App\Entity\ZohoAwareTrait;
 use App\Entity\Company\Company;
 use App\Entity\TenantAwareTrait;
 use App\Entity\ZohoAwareInterface;
@@ -15,12 +16,11 @@ use function is_string;
 
 class Warehouse implements TenantAwareInterface, Stringable, ZohoAwareInterface
 {
-    use IdTrait, TenantAwareTrait;
+    use IdTrait, TenantAwareTrait, ZohoAwareTrait;
 
     public function __construct(
         private readonly Company $company,
         private string $name,
-        private ?string $zohoId = null,
     )
     {
     }

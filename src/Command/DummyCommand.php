@@ -6,8 +6,10 @@ declare(strict_types=1);
 namespace App\Command;
 
 use LogicException;
-use CuyZ\Valinor\Mapper\TreeMapper;
+use App\Turbo\Stream\ReloadStream;
 use App\Service\ZohoImprovedManager;
+use App\Service\Mercure\StreamBuilder;
+use Symfony\Component\Mercure\HubInterface;
 use App\Repository\Company\CompanyRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -24,10 +26,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DummyCommand extends Command
 {
     public function __construct(
-//        #[SupportDateFormats('Y-m-d', 'Y-m-d H:i'), AllowSuperfluousKeys]
-        private TreeMapper $treeMapper,
         private ZohoImprovedManager $zohoImprovedManager,
         private CompanyRepository $companyRepository,
+        private HubInterface $hub,
+        private StreamBuilder $streamBuilder,
     )
     {
         parent::__construct();
@@ -37,7 +39,14 @@ class DummyCommand extends Command
     {
         $company = $this->companyRepository->findOneBy(['name' => 'Strictify']) ?? throw new LogicException();
 
-        $this->zohoImprovedManager->downloadAll($company);
+        $this->streamBuilder->pushToApp(
+            $company,
+            new ReloadStream('product-1c5fb58e-a2eb-451d-b95f-ad0149ea3837'),
+        );
+
+//        $company = $this->companyRepository->findOneBy(['name' => 'Strictify']) ?? throw new LogicException();
+
+//        $this->zohoImprovedManager->downloadAll($company);
 
         return Command::SUCCESS;
     }
