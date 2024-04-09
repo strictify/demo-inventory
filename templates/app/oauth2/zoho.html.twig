@@ -1,7 +1,30 @@
 {% extends '_app_base.html.twig' %}
 
 {% block main -%}
-    <turbo-frame id="main" class="main" data-turbo-frame="main" data-turbo-action="advance" data-turbo-prefetch="false">
-        <a href="{{ connect_url|raw }}" target="_blank">Connect</a>
+    {# @var company \App\Entity\Company\Company #}
+    <turbo-frame id="main" class="main" data-turbo-frame="main" data-turbo-prefetch="false" data-turbo-action="advance">
+        <div id="app-{{ company.id }}" data-reload-src="{{ path('zoho_connect') }}">
+
+            {# Avoid complex if-else statements by making smaller blocks, until Twig gets `match` equivalent #}
+            {{ is_connected ? block('_connected') : block('_not_connected') }}
+
+        </div>
     </turbo-frame>
 {% endblock %}
+
+{% block _not_connected %}
+    <a href="{{ connect_url|raw }}" target="_blank">Connect</a>
+{% endblock _not_connected %}
+
+{% block _connected -%}
+    {# @var company \App\Entity\Company\Company #}
+
+    {% if company.zohoDownloading %}
+        <span class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </span>
+        Downloading data from Zoho
+    {% else %}
+        <a href="{{ path('zoho_download_all') }}" class="btn btn-danger" data-turbo-action="visit" data-turbo-method="put" data-turbo-confirm="Are you sure?">Download all</a>
+    {% endif %}
+{%- endblock _connected %}

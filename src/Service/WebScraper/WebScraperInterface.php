@@ -7,6 +7,9 @@ namespace App\Service\WebScraper;
 use Symfony\Component\Panther\DomCrawler\Crawler;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+/**
+ * @api
+ */
 #[AutoconfigureTag(name: self::class)]
 interface WebScraperInterface
 {

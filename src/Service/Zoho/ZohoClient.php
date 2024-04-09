@@ -16,9 +16,11 @@ use CuyZ\Valinor\Mapper\Source\Source;
 use App\Repository\Company\CompanyRepository;
 use Symfony\Contracts\Service\ResetInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use CuyZ\ValinorBundle\Configurator\Attributes\SupportDateFormats;
 use CuyZ\ValinorBundle\Configurator\Attributes\AllowSuperfluousKeys;
 use function ltrim;
@@ -47,6 +49,7 @@ class ZohoClient implements ResetInterface
     }
 
     #[Override]
+    #[AsEventListener(event: KernelEvents::TERMINATE)]
     public function reset(): void
     {
         if (!$this->tokenRefreshed) {

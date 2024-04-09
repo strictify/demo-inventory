@@ -10,10 +10,12 @@ use App\Turbo\Stream\ReloadStream;
 use App\Service\ZohoImprovedManager;
 use App\Service\Mercure\StreamBuilder;
 use Symfony\Component\Mercure\HubInterface;
+use App\Message\Zoho\ZohoDownloadAllMessage;
 use App\Repository\Company\CompanyRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -30,6 +32,7 @@ class DummyCommand extends Command
         private CompanyRepository $companyRepository,
         private HubInterface $hub,
         private StreamBuilder $streamBuilder,
+        private MessageBusInterface $messageBus,
     )
     {
         parent::__construct();
@@ -38,6 +41,7 @@ class DummyCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $company = $this->companyRepository->findOneBy(['name' => 'Strictify']) ?? throw new LogicException();
+        $this->messageBus->dispatch(new ZohoDownloadAllMessage($company));
 
         $this->streamBuilder->pushToApp(
             $company,

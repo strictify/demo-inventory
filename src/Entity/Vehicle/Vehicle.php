@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity\Vehicle;
 
+use Override;
 use Stringable;
 use App\Entity\IdTrait;
 use App\Entity\Company\Company;
@@ -21,6 +22,7 @@ class Vehicle implements TenantAwareInterface, Stringable
     {
     }
 
+    #[Override]
     public function __toString(): string
     {
         return $this->getName();

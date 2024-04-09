@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity\Product;
 
+use Override;
 use Stringable;
 use Money\Money;
 use Money\Currency;
@@ -29,6 +30,7 @@ class Product implements TenantAwareInterface, ZohoAwareInterface, Stringable
     {
     }
 
+    #[Override]
     public function __toString(): string
     {
         return $this->getName();

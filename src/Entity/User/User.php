@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity\User;
 
 use Override;
+use Stringable;
 use RuntimeException;
 use App\Entity\IdTrait;
 use BadMethodCallException;
@@ -12,9 +13,10 @@ use App\Entity\Company\Company;
 use App\Entity\TenantAwareInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use function sprintf;
 use function array_values;
 
-class User implements UserInterface, PasswordAuthenticatedUserInterface, TenantAwareInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, TenantAwareInterface, Stringable
 {
     use IdTrait;
 
@@ -30,6 +32,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TenantA
         private ?Company $company = null,
     )
     {
+    }
+
+    #[Override]
+    public function __toString(): string
+    {
+        return sprintf('%s %s', $this->firstName, $this->lastName);
     }
 
     #[Override]

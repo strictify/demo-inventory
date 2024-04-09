@@ -26,7 +26,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     #[Override]
     public function load(ObjectManager $manager): void
     {
-        $admin = new User(email: 'app@example.com', password: '', firstName: 'Super', lastName: 'Application', roles: ['ROLE_ADMIN', 'ROLE_USER']);
+        $admin = new User(email: 'admin@example.com', password: '', firstName: 'Super', lastName: 'Admin', roles: ['ROLE_ADMIN', 'ROLE_USER']);
         $hashedPassword = $this->passwordHasher->hashPassword($admin, '123123123');
         $admin->setPassword($hashedPassword);
         $this->userRepository->persist($admin);
@@ -58,7 +58,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     private function getData(): Generator
     {
         yield [
-            CompanyFixtures::COMPANY_1, 'mitke013@gmail.com', '123123123', 'Zeljko', 'Mitic',
+            CompanyFixtures::COMPANY_1, 'demo@example.com', 'demo', 'Demo', 'Demo',
         ];
     }
 }

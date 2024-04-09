@@ -26,37 +26,40 @@
     {% block body %}
         <!-- ======= Header ======= -->
         <header id="header" class="header fixed-top d-flex align-items-center">
-            <turbo-frame id="mercure" src="{{ path('app_mercure_listener') }}"></turbo-frame>
+            {% block header %}
+                <turbo-frame id="mercure" src="{{ path('app_mercure_listener') }}"></turbo-frame>
 
-            <div class="d-flex align-items-center justify-content-between">
-                <a href="index.html" class="logo d-flex align-items-center">
-                    <img src="{{ asset('img/logo.png') }}" alt="">
-                    <span class="d-none d-lg-block">NiceAdmin</span>
+                <div class="d-flex align-items-center justify-content-between">
+                    <a href="index.html" class="logo d-flex align-items-center">
+                        <img src="{{ asset('img/logo.png') }}" alt="">
+                        <span class="d-none d-lg-block">{% block company_name %}{{ app.user.company }}{% endblock %}</span>
+                    </a>
+                    <i class="bi bi-list toggle-sidebar-btn"></i>
+                </div><!-- End Logo -->
+
+                <div class="search-bar">
+                    <form class="search-form d-flex align-items-center" method="POST" action="#">
+                        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+                        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+                    </form>
+                </div><!-- End Search Bar -->
+
+                <a href="{{ path('zoho_connect') }}" class="btn btn-warning" data-turbo-frame="main" data-turbo-action="advance">
+                    Zoho
                 </a>
-                <i class="bi bi-list toggle-sidebar-btn"></i>
-            </div><!-- End Logo -->
-
-            <div class="search-bar">
-                <form class="search-form d-flex align-items-center" method="POST" action="#">
-                    <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-                    <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-                </form>
-            </div><!-- End Search Bar -->
-
-            <a href="{{ path('zoho_connect') }}" class="btn btn-warning" data-turbo-frame="main" data-turbo-action="advance">
-                Zoho
-            </a>
-            <turbo-frame id="header-turbo" class="header-nav ms-auto" src="{{ path('app_header') }}">
+                <turbo-frame id="header-turbo" class="header-nav ms-auto" src="{{ path('app_header') }}">
                 <span class="spinner-border spinner-border-sm" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </span>
-            </turbo-frame><!-- End Icons Navigation -->
-
+                </turbo-frame><!-- End Icons Navigation -->
+            {% endblock %}
         </header><!-- End Header -->
 
-        <turbo-frame id="sidebar" class="sidebar" src="{{ path('app_left_sidebar') }}" data-turbo-prefetch="false">
-            Waiting...
-        </turbo-frame>
+        {% block sidebar %}
+            <turbo-frame id="sidebar" class="sidebar" src="{{ path('app_left_sidebar') }}" data-turbo-prefetch="false">
+                Waiting...
+            </turbo-frame>
+        {% endblock sidebar %}
 
         {% block main -%}
             <turbo-frame id="main" class="main" data-turbo-frame="main" data-turbo-action="advance" data-turbo-prefetch="false">

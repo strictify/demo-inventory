@@ -1,4 +1,13 @@
-{% block header -%}
+{% extends '_app_base.html.twig' %}
+
+{% block main %}
+    Admin not built
+{% endblock %}
+
+{% block sidebar %}{% endblock %}
+{% block company_name %}qweqwe{% endblock %}
+
+{% block header %}
     <turbo-frame id="header-turbo" class="header-nav ms-auto">
         <ul class="d-flex align-items-center">
 
@@ -109,47 +118,5 @@
                 </ul><!-- End Profile Dropdown Items -->
             </li><!-- End Profile Nav -->
         </ul>
-    </turbo-frame><!-- End Icons Navigation -->
-{%- endblock header %}
-
-{% block left_sidebar -%}
-    <turbo-frame id="sidebar" class="sidebar" data-turbo-prefetch="false">
-        <ul class="sidebar-nav" id="sidebar-nav" {{ stimulus_controller('app/left-sidebar') }}>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ path('app_entry') }}" data-turbo-frame="main" data-turbo-action="advance" {{ stimulus_action('app/left-sidebar', 'select') }}>
-                    <i class="bi bi-grid"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li><!-- End Dashboard Nav -->
-
-            <li class="nav-heading">Pages</li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ path('app_users_list') }}" data-turbo-frame="main" data-turbo-action="advance" {{ stimulus_action('app/left-sidebar', 'select') }}>
-                    <i class="bi bi-person"></i>
-                    <span>Users</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ path('app_products_list') }}" data-turbo-frame="main" data-turbo-action="advance" {{ stimulus_action('app/left-sidebar', 'select') }}>
-                    <i class="bi bi-person"></i>
-                    <span>Products</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ path('app_warehouses_list') }}" data-turbo-frame="main" data-turbo-action="advance" {{ stimulus_action('app/left-sidebar', 'select') }}>
-                    <i class="bi bi-person"></i>
-                    <span>Warehouses</span>
-                </a>
-            </li>
-        </ul>
-    </turbo-frame><!-- End Sidebar-->
-{%- endblock %}
-
-{%- block mercure_listener -%}
-    <turbo-frame id="mercure">
-        <div {{ turbo_stream_listen(topic) }}></div>
     </turbo-frame>
-{%- endblock %}
+{% endblock %}

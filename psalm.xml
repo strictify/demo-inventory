@@ -35,7 +35,6 @@
         <file name="stubs/Symfony/Form/Extension/Core/Type/TextType.stubphp"/>
         <file name="stubs/Symfony/FrameworkBundle/Controller/AbstractController.stubphp"/>
         <file name="stubs/Doctrine/Bundle/DoctrineBundle/Repository/ServiceEntityRepositoryProxy.stubphp"/>
-        <!--        <file name="stubs/Doctrine/ORM/ServiceEntityRepositoryProxy.stubphp"/>-->
     </stubs>
 
     <issueHandlers>
@@ -52,11 +51,14 @@
             </errorLevel>
         </PossiblyUnusedProperty>
 
+        <!--
+            The following suppressions are either because Doctrine is still not fully psalmified, or things that are outside of users control like controllers being reported as unused.
+        -->
         <PossiblyUnusedMethod>
             <errorLevel type="suppress">
                 <!-- Controllers are the "magic" of every framework -->
                 <directory name="src/Controller"/>
-                <!-- During MVP, some methods will be unused -->
+                <!-- We cannot statically analyze Twig files -->
                 <directory name="src/Entity"/>
                 <!-- cuyz/valinor-bundle takes care of these -->
                 <directory name="src/DTO/Zoho"/>

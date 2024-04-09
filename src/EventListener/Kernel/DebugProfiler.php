@@ -29,7 +29,7 @@ class DebugProfiler
             return;
         }
 
-        $response = $event->getResponse();
-        $response->headers->set('Symfony-Debug-Toolbar-Replace', '1');
+        $_response = $event->getResponse();
+        $_response->headers->set('Symfony-Debug-Toolbar-Replace', '1');
     }
 }
