@@ -16,6 +16,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture implements DependentFixtureInterface
 {
+    public const string USER_1 = 'user:1';
+
     public function __construct(
         private UserRepository $userRepository,
         private UserPasswordHasherInterface $passwordHasher,
@@ -37,6 +39,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
             $user->setPassword($hashedPassword);
             $this->userRepository->persist($user);
+            $this->setReference(self::USER_1, $user);
         }
 
         $manager->flush();

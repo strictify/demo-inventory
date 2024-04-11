@@ -2,25 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\Entity\Warehouse;
+namespace App\Entity\Category;
 
 use Override;
 use Stringable;
 use App\Entity\IdTrait;
-use App\Entity\ZohoAwareTrait;
 use App\Entity\Company\Company;
 use App\Entity\TenantAwareTrait;
-use App\Entity\ZohoAwareInterface;
 use App\Entity\TenantAwareInterface;
 use function is_string;
 
-class Warehouse implements TenantAwareInterface, Stringable, ZohoAwareInterface
+class Category implements TenantAwareInterface, Stringable
 {
-    use IdTrait, TenantAwareTrait, ZohoAwareTrait;
+    use IdTrait, TenantAwareTrait;
 
     public function __construct(
         protected readonly Company $company,
         private string $name,
+        private ?string $description,
     )
     {
     }
@@ -41,11 +40,18 @@ class Warehouse implements TenantAwareInterface, Stringable, ZohoAwareInterface
         $this->name = $name;
     }
 
-    #[Override]
-    public function getZohoId(): ?string
+    /**
+     * @return non-empty-string|null
+     */
+    public function getDescription(): ?string
     {
-        $zohoId = $this->zohoId;
+        $description = $this->description;
 
-        return is_string($zohoId) && $zohoId !== '' ? $zohoId : null;
+        return is_string($description) && $description !== '' ? $description : null;
+    }
+
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
     }
 }

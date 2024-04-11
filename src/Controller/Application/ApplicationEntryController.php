@@ -8,12 +8,13 @@ use App\Service\Security;
 use App\Attribute\TurboFrame;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use function sprintf;
 
 class ApplicationEntryController extends AbstractController
 {
-    #[Route('/', name: 'app_entry', methods: ['GET'])]
+    #[Route('/dashboard', name: 'app_entry', methods: ['GET'])]
     public function index(#[TurboFrame] ?string $frame): Response
     {
         return $this->render('app/dashboard.html.twig', [
@@ -22,9 +23,14 @@ class ApplicationEntryController extends AbstractController
     }
 
     #[Route('/left_sidebar', name: 'app_left_sidebar', methods: ['GET'])]
-    public function leftSidebar(): Response
+    public function leftSidebar(RequestStack $requestStack): Response
     {
-        return $this->renderBlock('app/_app_partials.html.twig', 'left_sidebar');
+        $mainRequest = $requestStack->getMainRequest();
+        $routeName = $mainRequest?->attributes->getString('_route');
+
+        return $this->renderBlock('app/_app_partials.html.twig', 'left_sidebar', [
+            'route' => $routeName,
+        ]);
     }
 
     #[Route('/header', name: 'app_header', methods: ['GET'])]

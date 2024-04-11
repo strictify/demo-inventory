@@ -29,6 +29,13 @@
             <join-column on-delete="SET NULL"/>
         </many-to-one>
 
+        <one-to-many field="categoryReferences" target-entity="App\Entity\Product\ProductCategoryReference" mapped-by="product" orphan-removal="true">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
+
+
     </entity>
 
 </doctrine-mapping>

@@ -9,6 +9,7 @@ use Money\Money;
 use App\Entity\Tax\Tax;
 use App\Service\Security;
 use App\Entity\Product\Product;
+use App\Entity\Category\Category;
 use App\Form\Type\QuillTextAreaType;
 use App\DTO\Form\ProductInventoryDTO;
 use Symfony\Component\Form\AbstractType;
@@ -19,6 +20,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Callback;
+use App\Form\Autocomplete\CategoriesAutocompleteType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Repository\Warehouse\WarehouseInventoryRepository;
@@ -82,6 +84,13 @@ class ProductType extends AbstractType
             ],
             'get_value' => fn(Product $product) => $product->getPrice(),
             'update_value' => fn(Money $price, Product $product) => $product->setPrice($price),
+        ]);
+
+        $builder->add('categories', CategoriesAutocompleteType::class, [
+            'multiple' => true,
+            'get_value' => fn(Product $product) => $product->getCategories(),
+            'add_value' => fn(Category $category, Product $product) => $product->addCategory($category, $this->security->getUser()),
+            'remove_value' => fn(Category $category, Product $product) => $product->removeCategory($category),
         ]);
 
         $builder->add('inventory', CollectionType::class, [

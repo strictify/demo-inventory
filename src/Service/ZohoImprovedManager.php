@@ -198,14 +198,15 @@ class ZohoImprovedManager implements ResetInterface, PreUpdateEventListenerInter
         $company = $entity->getCompany();
         foreach ($this->syncs->getProvidedServices() as $serviceName) {
             $sync = $this->syncs->get($serviceName);
-            if (is_a($entity, $sync->getEntityClass(), true)) {
-                $mapperClass = $sync->getMappingClass();
-                $data = $this->zohoClient->get($company, $url, $mapperClass);
-                $item = $data->getOne();
-                $sync->map($entity, $item);
-                // bail out, no need to lookup anymore
-                return;
+            if (!is_a($entity, $sync->getEntityClass(), true)) {
+                continue;
             }
+            $mapperClass = $sync->getMappingClass();
+            $data = $this->zohoClient->get($company, $url, $mapperClass);
+            $item = $data->getOne();
+            $sync->map($entity, $item);
+            // bail out, no need to lookup anymore
+            return;
         }
     }
 

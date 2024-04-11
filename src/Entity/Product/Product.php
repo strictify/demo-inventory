@@ -10,30 +10,71 @@ use Money\Money;
 use Money\Currency;
 use App\Entity\IdTrait;
 use App\Entity\Tax\Tax;
+use App\Entity\User\User;
 use App\Entity\ZohoAwareTrait;
 use App\Entity\Company\Company;
 use App\Entity\TenantAwareTrait;
+use App\Entity\Category\Category;
 use App\Entity\ZohoAwareInterface;
 use App\Entity\TenantAwareInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use function array_values;
 
 class Product implements TenantAwareInterface, ZohoAwareInterface, Stringable
 {
     use IdTrait, TenantAwareTrait, ZohoAwareTrait;
 
+    /**
+     * @var Collection<array-key, ProductCategoryReference>
+     */
+    private Collection $categoryReferences;
+
     public function __construct(
-        private readonly Company $company,
+        protected readonly Company $company,
         private string $name,
         private ?string $description = null,
         private ?Money $price = null,
         private ?Tax $tax = null,
     )
     {
+        $this->categoryReferences = new ArrayCollection();
     }
 
     #[Override]
     public function __toString(): string
     {
         return $this->getName();
+    }
+
+    /**
+     * @return list<Category>
+     */
+    public function getCategories(): array
+    {
+        $categories = $this->categoryReferences->map(fn(ProductCategoryReference $reference) => $reference->getCategory());
+
+        return array_values($categories->toArray());
+    }
+
+    public function addCategory(Category $category, User $creator): void
+    {
+        if ($this->findReferenceToCategory($category)) {
+            return;
+        }
+
+        $this->categoryReferences->add(new ProductCategoryReference(
+            product: $this,
+            category: $category,
+            creator: $creator,
+        ));
+    }
+
+    public function removeCategory(Category $category): void
+    {
+        if ($reference = $this->findReferenceToCategory($category)) {
+            $this->categoryReferences->removeElement($reference);
+        }
     }
 
     public function getName(): string
@@ -74,5 +115,10 @@ class Product implements TenantAwareInterface, ZohoAwareInterface, Stringable
     public function setDescription(?string $description): void
     {
         $this->description = $description;
+    }
+
+    private function findReferenceToCategory(Category $category): ?ProductCategoryReference
+    {
+        return $this->categoryReferences->findFirst(fn($_key, ProductCategoryReference $reference) => $reference->getCategory() === $category);
     }
 }

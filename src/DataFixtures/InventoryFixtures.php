@@ -31,6 +31,7 @@ class InventoryFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
+            ProductFixtures::class,
             WarehouseFixtures::class,
         ];
     }

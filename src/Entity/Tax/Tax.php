@@ -18,7 +18,7 @@ class Tax implements TenantAwareInterface, Stringable, ZohoAwareInterface
     use IdTrait, TenantAwareTrait, ZohoAwareTrait;
 
     public function __construct(
-        private readonly Company $company,
+        protected readonly Company $company,
         private string $name,
         private float $value,
     )

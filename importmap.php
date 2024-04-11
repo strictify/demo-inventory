@@ -88,4 +88,7 @@ return [
     'sweetalert2' => [
         'version' => '11.10.7',
     ],
+    'stimulus-autocomplete' => [
+        'version' => '3.1.0',
+    ],
 ];

@@ -25,7 +25,7 @@ class ApplicationFilterEnabler
     public function appFilter(RequestEvent $event): void
     {
         $uri = $event->getRequest()->getRequestUri();
-        if (!str_starts_with($uri, '/app')) {
+        if (!str_starts_with($uri, '/app') || $uri === '/app') {
             return;
         }
 
