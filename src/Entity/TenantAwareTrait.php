@@ -12,7 +12,7 @@ use App\Entity\Company\Company;
  */
 trait TenantAwareTrait
 {
-    private readonly Company $company;
+    protected readonly Company $company;
 
     #[Override]
     public function getCompany(): Company

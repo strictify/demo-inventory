@@ -20,6 +20,12 @@ HTML;
     }
 
     #[Override]
+    protected function getStreamTarget(): string
+    {
+        return 'streams';
+    }
+
+    #[Override]
     protected function getAction(): string
     {
         return 'append';

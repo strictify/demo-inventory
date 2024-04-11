@@ -8,6 +8,7 @@
         <link href="{{ asset('img/apple-touch-icon.png') }}" rel="apple-touch-icon">
         <meta name="turbo-prefetch" content="false">
         <meta name="turbo-cache-control" content="no-cache">
+        <meta name="turbo-refresh-method" content="morph">
         {% block head %}{% endblock %}
 
         <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -37,12 +38,19 @@
                     <i class="bi bi-list toggle-sidebar-btn"></i>
                 </div><!-- End Logo -->
 
-                <div class="search-bar">
-                    <form class="search-form d-flex align-items-center" method="POST" action="#">
-                        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-                        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+                <div class="search-bar"
+                     data-controller="autocomplete app--top-search"
+                     data-autocomplete-url-value="{{ path('su_suggestions_top_search') }}"
+                        {#                     data-autocomplete-skip-hidden-property-value="1" #}
+                     data-action="autocomplete.change->app--top-search#change"
+                >
+                    <form class="search-form d-flex align-items-center" method="POST" action="#" autocomplete="off">
+                        <input type="text" name="query" value="" placeholder="Search" title="Enter search keyword" data-autocomplete-target="input" id="top-search-query" autocomplete="off">
                     </form>
-                </div><!-- End Search Bar -->
+
+                    <input type="hidden" name="search_id" data-autocomplete-target="hidden"/>
+                    <ul class="list-group" data-autocomplete-target="results" style="margin-top: 200px;"></ul>
+                </div>
 
                 <a href="{{ path('zoho_connect') }}" class="btn btn-warning" data-turbo-frame="main" data-turbo-action="advance">
                     Zoho
@@ -56,8 +64,8 @@
         </header><!-- End Header -->
 
         {% block sidebar %}
-            <turbo-frame id="sidebar" class="sidebar" src="{{ path('app_left_sidebar') }}" data-turbo-prefetch="false">
-                Waiting...
+            <turbo-frame id="sidebar" class="sidebar" ddsrc="{{ path('app_left_sidebar') }}" data-turbo-prefetch="false">
+                {{ render(url('app_left_sidebar')) }}
             </turbo-frame>
         {% endblock sidebar %}
 
@@ -84,6 +92,7 @@
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     {% endblock body %}
+    <div id="streams"></div>
     </body>
     </html>
 {%- endblock all %}

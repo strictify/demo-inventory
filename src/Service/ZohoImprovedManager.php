@@ -7,6 +7,7 @@ namespace App\Service;
 use Override;
 use Generator;
 use Throwable;
+use Psr\Log\LoggerInterface;
 use InvalidArgumentException;
 use App\Entity\Company\Company;
 use App\Service\Zoho\ZohoClient;
@@ -55,6 +56,7 @@ class ZohoImprovedManager implements ResetInterface, PreUpdateEventListenerInter
         private MessageBusInterface $messageBus,
         private ZohoClient $zohoClient,
         private StreamBuilder $streamBuilder,
+        private LoggerInterface $logger,
     )
     {
     }
@@ -85,6 +87,10 @@ class ZohoImprovedManager implements ResetInterface, PreUpdateEventListenerInter
             $this->companyRepository->flush();
             $this->streamBuilder->pushToApp($company, new ReloadStream(sprintf('app-%s', $entity->getId())));
         } catch (Throwable $e) {
+            $this->logger->critical($e->getMessage(), [
+                'exception' => $e,
+                'stack_trace' => $e->getTraceAsString(),
+            ]);
             throw new UnrecoverableMessageHandlingException(previous: $e);
         } finally {
             $this->syncEnabled = true;
@@ -162,15 +168,18 @@ class ZohoImprovedManager implements ResetInterface, PreUpdateEventListenerInter
                 $sync = $this->syncs->get($serviceName);
                 $mapperClass = $sync->getMappingClass();
                 $data = $this->zohoClient->get($company, $sync->getBaseUrl(), $mapperClass);
+                $streams = [];
                 foreach ($data->getMany() as $item) {
                     $zohoId = $item->getId();
                     $entity = $sync->findEntityByZohoId($zohoId) ?? $sync->createNewEntity($company, $item);
                     $entity->setZohoId($item->getId());
                     $entity->setZohoStatus(ZohoStatusEnum::SYNCED);
                     $sync->map($entity, $item);
+                    $streams[] = new ReloadStream(sprintf('app-%s', $entity->getId()));
                 }
                 // in case tagged service didn't flush its entities, do it here
                 $this->companyRepository->flush();
+                $this->streamBuilder->pushToApp($company, ...$streams);
             }
         } finally {
             $this->syncEnabled = true;
@@ -189,14 +198,15 @@ class ZohoImprovedManager implements ResetInterface, PreUpdateEventListenerInter
         $company = $entity->getCompany();
         foreach ($this->syncs->getProvidedServices() as $serviceName) {
             $sync = $this->syncs->get($serviceName);
-            if (is_a($entity, $sync->getEntityClass(), true)) {
-                $mapperClass = $sync->getMappingClass();
-                $data = $this->zohoClient->get($company, $url, $mapperClass);
-                $item = $data->getOne();
-                $sync->map($entity, $item);
-                // bail out, no need to lookup anymore
-                return;
+            if (!is_a($entity, $sync->getEntityClass(), true)) {
+                continue;
             }
+            $mapperClass = $sync->getMappingClass();
+            $data = $this->zohoClient->get($company, $url, $mapperClass);
+            $item = $data->getOne();
+            $sync->map($entity, $item);
+            // bail out, no need to lookup anymore
+            return;
         }
     }
 

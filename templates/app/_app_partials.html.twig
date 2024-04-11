@@ -116,7 +116,7 @@
     <turbo-frame id="sidebar" class="sidebar" data-turbo-prefetch="false">
         <ul class="sidebar-nav" id="sidebar-nav" {{ stimulus_controller('app/left-sidebar') }}>
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ path('app_entry') }}" data-turbo-frame="main" data-turbo-action="advance" {{ stimulus_action('app/left-sidebar', 'select') }}>
+                <a class="nav-link {{ route starts with 'app_entry' ? 'active' : 'collapsed' }}" href="{{ path('app_entry') }}" data-turbo-frame="main" data-turbo-action="advance" {{ stimulus_action('app/left-sidebar', 'select') }}>
                     <i class="bi bi-grid"></i>
                     <span>Dashboard</span>
                 </a>
@@ -125,21 +125,21 @@
             <li class="nav-heading">Pages</li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ path('app_users_list') }}" data-turbo-frame="main" data-turbo-action="advance" {{ stimulus_action('app/left-sidebar', 'select') }}>
+                <a class="nav-link {{ route starts with 'app_users' ? 'active' : 'collapsed' }}" href="{{ path('app_users_list') }}" data-turbo-frame="main" data-turbo-action="advance" {{ stimulus_action('app/left-sidebar', 'select') }}>
                     <i class="bi bi-person"></i>
                     <span>Users</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ path('app_products_list') }}" data-turbo-frame="main" data-turbo-action="advance" {{ stimulus_action('app/left-sidebar', 'select') }}>
+                <a class="nav-link {{ route starts with 'app_products' ? 'active' : 'collapsed' }}" href="{{ path('app_products_list') }}" data-turbo-frame="main" data-turbo-action="advance" {{ stimulus_action('app/left-sidebar', 'select') }}>
                     <i class="bi bi-person"></i>
                     <span>Products</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ path('app_warehouses_list') }}" data-turbo-frame="main" data-turbo-action="advance" {{ stimulus_action('app/left-sidebar', 'select') }}>
+                <a class="nav-link {{ route starts with 'app_warehouse' ? 'active' : 'collapsed' }}" href="{{ path('app_warehouses_list') }}" data-turbo-frame="main" data-turbo-action="advance" {{ stimulus_action('app/left-sidebar', 'select') }}>
                     <i class="bi bi-person"></i>
                     <span>Warehouses</span>
                 </a>

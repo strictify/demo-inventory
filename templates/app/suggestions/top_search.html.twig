@@ -1,0 +1,11 @@
+{% for group, items in results %}
+
+    {% for item in items %}
+        {# if there are any results, render the header first. This allows us to use generators, not just arrays. #}
+        {% if loop.first %}
+            <li class="list-group-item disabled text-center" role="option" aria-disabled="true">{{ group }}</li>
+        {% endif %}
+
+        <li class="list-group-item" role="option" data-autocomplete-value="{{ item.url }}">{{ item.name }}</li>
+    {% endfor %}
+{% endfor %}

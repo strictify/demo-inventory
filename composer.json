@@ -16,6 +16,7 @@
         "doctrine/doctrine-bundle": "*",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "dev-psalmify-query-builder as 3.1.1",
+        "loilo/fuse": "^7.0",
         "pagerfanta/doctrine-orm-adapter": "^4.4",
         "pagerfanta/twig": "^4.4",
         "ramsey/uuid-doctrine": "^2.0",

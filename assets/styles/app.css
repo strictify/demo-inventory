@@ -1,8 +1,47 @@
 @import url('../../vendor/babdev/pagerfanta-bundle/public/css/pagerfanta.css');
 
 table colgroup col.xxx {
- /*display: none;*/
+    /*display: none;*/
     visibility: collapse;
     width: 0;
     /*background-color: red;*/
+}
+
+
+[data-controller=autocomplete] {
+    margin: 1em;
+
+    .list-group {
+        margin: 0;
+        padding: 0;
+    }
+
+    .list-group-item {
+        position: relative;
+        display: block;
+        padding: 0.75rem 1.25rem;
+        margin-bottom: -1px;
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, .125);
+        width: 30em;
+
+        &:hover {
+            z-index: 2;
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+    }
+
+    .list-group-item.active {
+        z-index: 2;
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .list-group-item:first-child {
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+    }
 }

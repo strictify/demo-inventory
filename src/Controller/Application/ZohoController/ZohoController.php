@@ -83,7 +83,7 @@ class ZohoController extends AbstractController
         ]);
 
         return $this->streamBuilder->createResponse(
-            new ReplaceStream('app-' . $company->getId(), $html)
+            new ReplaceStream('main', $html)
         );
     }
 }

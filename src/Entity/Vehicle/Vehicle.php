@@ -16,7 +16,7 @@ class Vehicle implements TenantAwareInterface, Stringable
     use IdTrait, TenantAwareTrait;
 
     public function __construct(
-        private readonly Company $company,
+        protected readonly Company $company,
         private string $name,
     )
     {
