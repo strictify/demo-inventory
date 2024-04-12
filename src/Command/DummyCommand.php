@@ -10,7 +10,6 @@ use App\Turbo\Stream\ReloadStream;
 use App\Service\ZohoImprovedManager;
 use App\Service\Mercure\StreamBuilder;
 use Symfony\Component\Mercure\HubInterface;
-use App\Message\Zoho\ZohoDownloadAllMessage;
 use App\Repository\Company\CompanyRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -40,12 +39,12 @@ class DummyCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $company = $this->companyRepository->findOneBy(['name' => 'Strictify']) ?? throw new LogicException();
-        $this->messageBus->dispatch(new ZohoDownloadAllMessage($company));
+        $company = $this->companyRepository->findOneBy(['name' => 'Demo Company 1']) ?? throw new LogicException();
+//        $this->messageBus->dispatch(new ZohoDownloadAllMessage($company));
 
         $this->streamBuilder->pushToApp(
             $company,
-            new ReloadStream('product-1c5fb58e-a2eb-451d-b95f-ad0149ea3837'),
+            new ReloadStream('584a1dd5-6dbd-4d42-8595-0f4fea8f68c3'),
         );
 
 //        $company = $this->companyRepository->findOneBy(['name' => 'Strictify']) ?? throw new LogicException();

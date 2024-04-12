@@ -64,9 +64,9 @@
         </header><!-- End Header -->
 
         {% block sidebar %}
-            <turbo-frame id="sidebar" class="sidebar" ddsrc="{{ path('app_left_sidebar') }}" data-turbo-prefetch="false">
-                {{ render(url('app_left_sidebar')) }}
-            </turbo-frame>
+            {#            <turbo-frame id="sidebar" class="sidebar" ddsrc="{{ path('app_left_sidebar') }}" data-turbo-prefetch="false"> #}
+            {{ render(url('app_left_sidebar')) }}
+            {#            </turbo-frame> #}
         {% endblock sidebar %}
 
         {% block main -%}

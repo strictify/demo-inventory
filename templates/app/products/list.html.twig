@@ -49,7 +49,7 @@
 
 {% block tr %}
     {# @var \App\Entity\Product\Product product #}
-    <tr id="app-{{ product.id }}" data-reload-src="{{ path('app_products_list_one', {'id': product.id}) }}" is="turbo-frame">
+    <tr id="{{ product.id }}" data-reload-src="{{ path('app_products_list_one', {'id': product.id}) }}" is="turbo-frame">
         <td>
             <a href="{{ path('app_products_update', {'id': product.id, '_filters': true}) }}" data-turbo-action="advance">
                 {{ product.name }}

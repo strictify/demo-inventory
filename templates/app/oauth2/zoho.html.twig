@@ -3,7 +3,7 @@
 {% block main -%}
     {# @var company \App\Entity\Company\Company #}
     <turbo-frame id="main" class="main" data-turbo-frame="main" data-turbo-prefetch="false" data-turbo-action="visit">
-        <div id="app-{{ company.id }}" data-reload-src="{{ path('zoho_refresh') }}">
+        <div id="{{ company.id }}" data-reload-src="{{ path('zoho_refresh') }}">
 
             {# Avoid complex if-else statements by making smaller blocks, until Twig gets `match` equivalent #}
             {{ is_connected ? block('_connected') : block('_not_connected') }}
