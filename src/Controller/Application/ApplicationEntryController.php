@@ -28,7 +28,7 @@ class ApplicationEntryController extends AbstractController
         $mainRequest = $requestStack->getMainRequest();
         $routeName = $mainRequest?->attributes->getString('_route');
 
-        return $this->renderBlock('app/_app_partials.html.twig', 'left_sidebar', [
+        return $this->renderBlock('app/_app_partials.html.twig', 'sidebar', [
             'route' => $routeName,
         ]);
     }

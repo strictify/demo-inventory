@@ -71,7 +71,7 @@ class ProductCrudController extends AbstractController
         ]);
 
         return $this->streamBuilder->createResponse(
-            new ReplaceStream(sprintf('app-%s', $product->getId()), $html),
+            new ReplaceStream(sprintf('%s', $product->getId()), $html),
         );
     }
 
